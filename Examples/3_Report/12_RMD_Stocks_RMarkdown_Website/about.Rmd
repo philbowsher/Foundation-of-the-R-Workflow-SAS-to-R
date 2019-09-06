@@ -1,0 +1,16 @@
+---
+title: About
+output: 
+  html_document
+---
+
+The following tools were used to develop this site:
+
+* [`R`](https://www.r-project.org/): `R` is a software language and programming environment for statistical computing and for the graphical analysis of data.
+* [`Rmarkdown`](http://rmarkdown.rstudio.com/index.html): `Rmarkdown` is a package for `R` that combines simple `markdown` authoring tools for formatting text with chunks of `R` code; when compiled using [`knitr`](http://yihui.name/knitr/) the resulting output is a formatted document that contains the results of executing the embedded `R` code. Although `Rmarkdown` can produce files in a variety of formats, the two of particular interest in this project are `html` and `pdf` formats. 
+* [`RStudio`](https://www.rstudio.com/home/): `RStudio` is an integrated development environment that, among other features, provides a console for running `R`, a window for editing files, a window for managing files, a window for viewing plots, a window for viewing help files, and an internal browser window of viewing dynamic content. `RStudio` also provides tools for automating many tasks. Although `RStudio` is a convenient way to manage this project, it is not a requirement as it simply provides a way to work with `R` and `Rmarkdown`.
+* `R Packages`: One of the strengths of `R` is the availability of packages of `R` functions that are designed to work with data. The materials in this project, for example, use the [`flexdashboard`](http://rmarkdown.rstudio.com/flexdashboard/index.html) package to create some dashboards, [`quantmod`](https://cran.r-project.org/web/packages/quantmod/index.html) and the [`dygraphs`](https://rstudio.github.io/dygraphs/) packages to create interactive stock reports.
+
+See the link below for more info:
+
+http://rmarkdown.rstudio.com/rmarkdown_websites.html

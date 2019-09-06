@@ -1,0 +1,13 @@
+"","sex","health_status","drug_treatment","mmse_mean","mmse_se"
+"1","Male","Healthy","Placebo",24.9318372085614,0.202639385250035
+"2","Male","Healthy","Low dose",24.9375064217349,0.196194587141181
+"3","Male","Healthy","High Dose",25.7080781675166,0.148529653000919
+"4","Male","Alzheimer's","Placebo",12.1278228414267,0.241040120821165
+"5","Male","Alzheimer's","Low dose",14.6521526065836,0.216339249473991
+"6","Male","Alzheimer's","High Dose",23.1362897911207,0.166434902669065
+"7","Female","Healthy","Placebo",24.9429488597267,0.225387853608663
+"8","Female","Healthy","Low dose",24.9721556224063,0.213810961885059
+"9","Female","Healthy","High Dose",25.367898072863,0.134868824642391
+"10","Female","Alzheimer's","Placebo",11.9219208961963,0.256580335375262
+"11","Female","Alzheimer's","Low dose",15.3238044099184,0.188300823539039
+"12","Female","Alzheimer's","High Dose",22.8329543846377,0.161186145647171

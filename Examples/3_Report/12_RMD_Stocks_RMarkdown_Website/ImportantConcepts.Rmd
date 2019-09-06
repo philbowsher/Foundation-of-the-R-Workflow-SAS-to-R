@@ -1,0 +1,57 @@
+---
+title: "Three Important Concepts"
+output: 
+  html_document: 
+    toc: yes
+    toc_depth: 6
+---
+
+Below are a few key notes:
+
+* RMD files need to have the right metadata section.
+* _site.yml is an important file.
+* Knit processing.
+* Flexdashboard causes some issues and probably best to use either or for creating your RMD website.
+* I liked to use the clean site command often.
+
+#### RMD files need to the right metadata section
+
+Keep it simple - just include:
+
+title: About
+output: 
+  html_document
+
+
+#### _site.yml is an important file
+
+This is where your menu is and other output options such as:
+
+type: inverse
+
+theme: paper
+
+#### Knit processing
+
+I would probably connect this tool to some type of nightly job to generate the files daily using the rmarkdown::render_site function similar how I've used rmarkdown::render.
+
+#### Flexdashboard causes some issues. I left this in for awarness.
+
+As of April 2016, the menu is gone. *Update, Aug 16, I saw some comments online about this... https://github.com/rstudio/flexdashboard/issues/72
+
+#### Use the clean site command
+
+This will flush out the folders and have remove any cache issues.
+
+#### No Shiny and will need to use include_app()
+
+Just static pages but you can call a external shiny app with an iframe like this:
+
+```{r}
+knitr::include_app("https://beta.rstudioconnect.com/philbowsher/050-kmeans-example/", 
+  height = "600px")
+  
+```
+
+Need to turn off Jekyll for github.
+

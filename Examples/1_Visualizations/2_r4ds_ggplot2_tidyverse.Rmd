@@ -1,0 +1,440 @@
+---
+title: "Introduction to Tidyverse"
+output: html_notebook
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+The tidyverse is a collection of packages for doing data science:
+
+![](notebooks-tidyverse.png)
+
+It includes a website: http://tidyverse.org and a book: http://r4ds.had.co.nz
+
+At the heart of the tidyverse is tidy data. Every variable is a column, every row is a case.
+
+Base R - we could use built-in functions like aggregate(), by(), ave()
+
+Data are here for this example:
+
+http://datatoolkits.lincolninst.edu/subcenters/land-values/land-prices-by-state.asp
+
+These tutorials are largely based on the book *R for Data Science*, which is also available for free online at [`https://r4ds.had.co.nz`](https://r4ds.had.co.nz) by Garrett and Hadley. Also based on Tidyverse training by Garrett.
+
+Adaption of examples by Keith H. Turner Monsanto
+St. Louis, MO & Harvard University by Data Science Services at IQSS
+
+Read data via readr
+
+```{r}
+# Run this code!
+library(tidyverse)
+housing <- read_csv("~/Foundation-of-the-R-Workflow-workshop-2019-09-06/Examples/data/landdata-states.csv")
+housing
+```
+
+Base graphics histogram
+
+```{r}
+hist(housing$Home.Value)
+```
+ggplot2 histogram example
+
+The grammar of graphics
+========================================================
+* Helpful to think through visualization in this order
+  + data (`data = mtcars`)
+  + **aesthetic mapping (`aes()`)**
+  + **geometric object (`geom_*()`)**
+  + statistical transformations (`stat_*()`)
+  + scales (`scale_*()`)
+  + coordinate system (`coord_*()`)
+  + faceting (`facet_*()`)
+  + themes (`theme_*()`)
+
+```{r}
+ggplot(housing, aes(x = Home.Value)) + geom_histogram()
+```
+
+Base R example
+
+```{r}
+plot(Home.Value ~ Date, data=subset(housing, State == "MA"))
+points(Home.Value ~ Date, col="red", data=subset(housing, State == "TX"))
+legend(1975, 400000,
+       c("MA", "TX"), title="State",
+       col=c("black", "red"),
+       pch=c(1, 1))
+
+```
+
+Tidyverse Example - piping and colored scatter plot.
+
+We'll learn about piping soon
+
+```{r}
+housing %>%
+  filter(State %in% c("IN", "TX")) %>%
+  ggplot(aes(Date, Home.Value, color = State)) +
+  geom_point()
+```
+
+Color region
+
+```{r}
+ggplot(housing, aes(Date, Home.Value)) +
+  geom_point(aes(color = region))
+```
+Geom_point
+
+```{r}
+housing %>% filter(Year == 2008) %>%
+  # Variables can be transformed in aes() calls
+  ggplot(aes(log10(Land.Value), Structure.Cost, color = Qrtr)) + geom_point()
+```
+
+Lines (Prediction Line)
+
+A plot constructed with ggplot can have more than one geom.
+
+```{r}
+hp2001Q1 <- subset(housing, Date == 2001.25) 
+hp2001Q1$pred.SC <- predict(lm(Structure.Cost ~ log(Land.Value), data = hp2001Q1))
+
+p1 <- ggplot(hp2001Q1, aes(x = log(Land.Value), y = Structure.Cost))
+
+p1 + geom_point(aes(color = Home.Value)) +
+  geom_line(aes(y = pred.SC))
+```
+
+Mapping Variables To Other Aesthetics
+
+```{r}
+p1 +
+  geom_point(aes(color=Home.Value, shape = region))
+```
+
+Text (Label Points)
+
+```{r}
+housing %>% filter(Year == 2008) %>%
+  # Variables can be transformed in aes() calls
+  ggplot(aes(log10(Land.Value), Structure.Cost, color = Qrtr, label = State)) + geom_text()
+```
+
+Smoothers
+
+Not all geometric objects are simple shapes–the smooth geom includes a line and a ribbon.
+
+```{r}
+housing %>% filter(Year == 2008, Qrtr == 1) %>%
+  ggplot(aes(log10(Land.Value), Structure.Cost)) +
+  geom_point() +
+  geom_smooth()
+```
+Geom_point
+
+```{r}
+housing %>% filter(Year == 2008, Qrtr == 1) %>%
+  ggplot(aes(log10(Land.Value), Structure.Cost, color = region)) +
+  geom_point() +
+  geom_smooth()
+```
+More than one geom
+
+```{r}
+housing %>% filter(Year == 2008, Qrtr == 1) %>%
+  ggplot(aes(log10(Land.Value), Structure.Cost)) +
+  geom_point(aes(color = region)) +
+  geom_smooth()
+```
+
+Aesthetic Mapping VS Assignment
+
+```{r}
+housing %>% filter(Year == 2008, Qrtr == 1) %>%
+  ggplot(aes(log10(Land.Value), Structure.Cost)) +
+  geom_point(aes(size = 2), color = "red")
+```
+Faceting is ggplot2 parlance for small multiples and for creating separate graphs for subsets of data
+
+```{r}
+p5 <- ggplot(housing, aes(x = Date, y = Home.Value))
+p5 + geom_line(aes(color = State))
+```
+
+plot for the `Midwest` region
+
+```{r}
+housing %>%
+  filter(region == "Midwest") %>%
+  ggplot(aes(Date, Home.Price.Index)) +
+  geom_point(aes(color = State)) +
+  geom_smooth()
+```
+
+Setting Statistical Transformation Arguments
+
+```{r}
+ggplot(housing, aes(Home.Value)) + geom_histogram()
+
+ggplot(housing, aes(Home.Value)) + geom_histogram(binwidth = 5000)
+```
+telling geom_bar to use a different statistical transformation function
+
+```{r}
+housing.sum <- aggregate(housing["Home.Value"], housing["State"], FUN=mean)
+rbind(head(housing.sum), tail(housing.sum))
+
+ggplot(housing.sum, aes(x=State, y=Home.Value)) + 
+  geom_bar(stat="identity")
+```
+Changing the default statistical transformation
+
+* The default stat for `geom_bar` is `stat_count` but the below will show  the `y` value itself
+  
+```{r}
+housing %>%
+  group_by(Year, region) %>%
+  summarize(mean_hpi = mean(Home.Price.Index)) %>%
+  ggplot(aes(Year, mean_hpi, fill = region)) +
+  geom_bar(stat = "identity", position = "dodge")
+```
+
+Plot a **line fit** with `geom_smooth` onto `Structure.Cost`, one for each `region`
+
+```{r}
+housing %>%
+  ggplot(aes(Date, Structure.Cost, color = region)) +
+  geom_smooth(method = "lm")
+```
+
+Scale Modification Examples
+
+```{r}
+p <- housing %>%
+  ggplot(aes(State, Home.Price.Index, color = Date)) +
+  geom_point(alpha = 0.5, position = position_jitter(width = 0.25, height = 0)) +
+  theme(legend.position = "top")
+p
+```
+
+```{r}
+p <- p + scale_x_discrete("State Abbreviation") # or xlab("xyz") to just change name
+p
+```
+low and high values to blue and red
+
+```{r}
+p + scale_color_continuous("",
+                           breaks = c(1976, 1992, 2008),
+                           labels = c("'76", "'92", "'08"),
+                           low = "blue", high = "red")
+```
+
+```{r}
+p + scale_color_distiller("", # _distiller for continuous, _brewer for discrete
+                          palette = "Spectral",
+                          breaks = c(1976, 1992, 2008),
+                          labels = c("'76", "'92", "'08"))
+```
+Faceting by state rather than mapping state to color.
+```{r}
+ggplot(housing, aes(Date, Home.Price.Index)) +
+  geom_line() +
+  facet_wrap(~State)
+```
+
+```{r}
+(p5 <- p5 + geom_line() +
+   facet_wrap(~State, ncol = 10))
+```
+
+ggplot2 Themes
+
+```{r}
+p5 + theme_linedraw()
+```
+```{r}
+p5 + theme_light()
+```
+
+```{r}
+p5 + theme_minimal() +
+  theme(text = element_text(color = "turquoise"))
+```
+
+Now let's add tidyr (gather) and use to map aesthetic to different columns, which will allow 2 variables in a data.frame to be plotted as separate points, with different color depending on which variable it is.
+
+```{r}
+library(tidyr)
+
+housing.byyear <- aggregate(cbind(Home.Value, Land.Value) ~ Date, data = housing, mean)
+
+home.land.byyear <- gather(housing.byyear,
+                           value = "value",
+                           key = "type",
+                           Home.Value, Land.Value)
+ggplot(home.land.byyear,
+       aes(x=Date,
+           y=value,
+           color=type)) +
+  geom_line()
+```
+
+Further examples for exploring data. Laying the groundwork for interactive reporting & dashboards...
+
+```{r}
+library(quantmod)
+library(ggplot2)
+getSymbols(c("DTB3","DGS10"),src="FRED")
+rates <- na.omit(cbind(DTB3,DGS10))
+rates.df <- data.frame(Date=index(rates),coredata(rates))
+cols <- c("3 month"="royalblue", "10 year"="red")
+g <- ggplot(rates.df, aes(x=Date, y=DTB3)) +
+geom_line(aes(color="3 month")) +
+geom_line(aes(y=DGS10, color="10 year")) +
+scale_color_manual(name=element_blank(), values=cols) +
+theme(axis.title.x=element_blank()) +
+labs(title="Historic Treasury Rates",y="Interest Rate")
+print(g)
+
+```
+
+```{r}
+z <- na.omit(merge(DGS10,DTB3))
+names(z) <- c("TBonds","TBills")
+autoplot(z,facet=NULL)+ggtitle("U.S. Treasury Rates")
+```
+
+```{r}
+autoplot(z) + labs(title="U.S. Treasury Rates", x="", y="(Percent)")
+```
+
+
+```{r}
+df <- read.csv('https://raw.githubusercontent.com/charleyferrari/CUNY_DATA608/master/lecture3/Sample%20Code/hpi.csv')
+df$DATE <- as.POSIXct(strptime(df$DATE, format = '%m/%d/%y'))
+
+data <- df %>%
+  filter(Seasonality == 'SA', Metro == 'Atlanta') %>%
+  select(DATE, Tier, HPI)
+
+ggplot(data, aes(x = DATE, y = HPI, color = Tier)) + geom_line()
+
+```
+
+```{r}
+library(plotly)
+
+# HPI Dataset in Plotly
+
+df <- read.csv('https://raw.githubusercontent.com/charleyferrari/CUNY_DATA608/master/lecture3/Sample%20Code/hpi.csv')
+df$DATE <- as.POSIXct(strptime(df$DATE, format = '%m/%d/%y'))
+
+data <- df %>%
+  filter(Seasonality == 'SA', Metro == 'Atlanta') %>%
+  select(DATE, Tier, HPI)
+
+plot_ly(data, x = ~DATE, y = ~HPI, color = ~Tier, type='scatter', mode='lines')
+```
+
+1. ggplot2 and gridExtra
+
+```{r}
+library(ggplot2)
+library(gridExtra)
+
+data(anscombe)
+
+sapply(1:4, function(x) cor(anscombe[, x], anscombe[, x+4]))
+sapply(5:8, function(x) var(anscombe[, x]))
+lm(y1 ~ x1, data = anscombe)
+
+p1 <- ggplot(anscombe) + geom_point(aes(x1, y1), color = "darkorange", size = 3) + theme_bw() + scale_x_continuous(breaks = seq(0, 20, 2)) + scale_y_continuous(breaks = seq(0, 12, 2)) + geom_abline(intercept = 3, slope = 0.5, color = "cornflowerblue") + expand_limits(x = 0, y = 0) + labs(title = "dataset 1")
+p2 <- ggplot(anscombe) + geom_point(aes(x2, y2), color = "darkorange", size = 3) + theme_bw() + scale_x_continuous(breaks = seq(0, 20, 2)) + scale_y_continuous(breaks = seq(0, 12, 2)) + geom_abline(intercept = 3, slope = 0.5, color = "cornflowerblue") + expand_limits(x = 0, y = 0) + labs(title = "dataset 2")
+p3 <- ggplot(anscombe) + geom_point(aes(x3, y3), color = "darkorange", size = 3) + theme_bw() + scale_x_continuous(breaks = seq(0, 20, 2)) + scale_y_continuous(breaks = seq(0, 12, 2)) + geom_abline(intercept = 3, slope = 0.5, color = "cornflowerblue") + expand_limits(x = 0, y = 0) + labs(title = "dataset 3")
+p4 <- ggplot(anscombe) + geom_point(aes(x4, y4), color = "darkorange", size = 3) + theme_bw() + scale_x_continuous(breaks = seq(0, 20, 2)) + scale_y_continuous(breaks = seq(0, 12, 2)) + geom_abline(intercept = 3, slope = 0.5, color = "cornflowerblue") + expand_limits(x = 0, y = 0) + labs(title = "dataset 4")
+
+grid.arrange(p1, p2, p3, p4, top = "Anscombe's Quartet")
+```
+
+2. HTML Widgets
+
+http://www.htmlwidgets.org
+
+2.A Dygraphs
+
+http://www.htmlwidgets.org/showcase_dygraphs.html
+
+
+```{r}
+library(quantmod)
+library(dygraphs)
+
+getSymbols("MSFT", src = "google", from = "2014-06-01", auto.assign=TRUE)
+
+ret = ROC(MSFT[, 4])
+mn = mean(ret, na.rm = TRUE)
+std = sd(ret, na.rm = TRUE)
+dygraph(ret, main = "Microsoft Share Price") %>% 
+  dySeries("MSFT.Close", label = "MSFT") %>%
+  dyShading(from = mn - std, to = mn + std, axis = "y")
+
+
+```
+```{r}
+getSymbols("MSFT", src = "google", from = "2014-06-01", auto.assign=TRUE)
+dygraph(MSFT[, 4], main = "Microsoft Share Price") %>% 
+  dySeries("MSFT.Close", label = "MSFT") %>%
+  dyLimit(as.numeric(MSFT[1, 4]), color = "red")
+```
+
+```{r}
+getSymbols(c("MSFT", "HPQ"), src = "google", from = "2014-06-01", auto.assign=TRUE)
+
+stocks <- cbind(MSFT[,2:4], HPQ[,2:4])
+dygraph(stocks, main = "Microsoft and HP Share Prices") %>% 
+  dySeries(c("MSFT.Low", "MSFT.Close", "MSFT.High"), label = "MSFT") %>%
+  dySeries(c("HPQ.Low", "HPQ.Close", "HPQ.High"), label = "HPQ")
+```
+
+2. Plotly
+
+http://www.htmlwidgets.org/showcase_plotly.html
+
+https://plot.ly/r/dashboard/
+
+https://plot.ly/r/shiny-tutorial/
+
+3. Interactive Plots - Shiny
+
+http://shiny.rstudio.com/gallery/
+
+4. shinydashboard
+
+https://rstudio.github.io/shinydashboard/
+
+5. flexdashboard
+
+http://rmarkdown.rstudio.com/flexdashboard/examples.html
+
+6. Crosstalk
+
+http://rstudio.github.io/crosstalk/index.html
+
+http://rstudio.github.io/crosstalk/shiny.html
+
+
+Modeling
+========================================================
+* Probably won't have time to get to this, so I'll just point you to a few resources and show an example or two here
+  + [`modelr`](https://github.com/tidyverse/modelr) - some nice functions like `add_residuals(model, df)`
+  + [`broom`](https://cran.r-project.org/web/packages/broom/vignettes/broom.html) - extract key metrics from a model: `tidy` for coefficients, `glance` for a one-row summary with r^2, AIC, etc.
+  + [`purrr`](https://purrr.tidyverse.org) - map function calls onto list-columns in tibbles (example later)
+  + The [R for Data Science chapter on modeling](http://r4ds.had.co.nz/model-intro.html)
+
+

@@ -1,0 +1,519 @@
+---
+title: "Introduction to Tidyverse"
+output: html_notebook
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+The tidyverse is a collection of packages for doing data science:
+
+![](notebooks-tidyverse.png)
+
+It includes a website: http://tidyverse.org and a book: http://r4ds.had.co.nz
+
+At the heart of the tidyverse is tidy data. Every variable is a column, every row is a case.
+
+Base R - we could use built-in functions like aggregate(), by(), ave()
+
+Data are here for this example:
+
+https://archive.ics.uci.edu/ml/datasets/Bank+Marketing
+
+https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank.zip
+
+Adaption of examples by nightrose Data Scientist AIG New York
+
+Read data via readr
+
+```{r}
+# getwd()
+library(dplyr)
+library(readr)
+bankData <- read_delim("~/Foundation-of-the-R-Workflow-workshop-2019-09-06/Examples/data/bank-full.csv", ";")
+bankData
+# let us explore the data set a bit
+View(bankData)# allows us to view the data set
+names(bankData)  # names of the variables
+dim(bankData)  # dimension (number of rows and columns)
+str(bankData)  # structure of the data set
+class(bankData)
+head(bankData, n = 5)
+tail(bankData, n = 5)
+summary(bankData)
+```
+
+```{r}
+hist(bankData$age,
+     main = "Histogram of Age",
+     xlab = "Age in Years")
+```
+
+```{r}
+boxplot(bankData$age,
+        main = toupper("Boxplot of Age"),
+        ylab = "Age in years",
+        col = "blue")
+```
+
+```{r}
+d <- density(bankData$age)
+plot(d, main = "Kernel density of Age")
+polygon(d, col = "red", border = "blue")
+```
+
+Seven dplyr verbs & description fundamental functions of data transformation
+select() select columns/variables
+filter() filter rows / provides basic filtering capabilities
+arrange() re-order or arrange rows /ordering data
+mutate() create new columns/variables
+summarise() summarise values/data by functions of choice
+group_by() allows for group operations in the “split-apply-combine” concept / groups data by categorical levels
+join() joining separate dataframes
+
+The filter verb takes conditions for filtering rows based on
+conditions
+
+Subsetting Example 1
+Filter
+
+```{r}
+filter(bankData, default == 'yes')
+```
+
+Subsetting Example 2
+Filter
+
+```{r}
+filter(bankData, balance < 1000)
+```
+
+Subsetting Example 3
+
+```{r}
+filter(bankData, month %in% c("april", "may", "jun"), 
+       default == "yes")
+```
+
+You can also extract particular rows by number using slice().
+
+```{r}
+slice(bankData, 5:10)
+```
+
+You can use the select() verb to specify which columns of a
+dataset you want
+
+Select Example 1
+
+```{r}
+select(bankData, age, job, default, balance, housing)
+```
+
+Select Example 2
+
+```{r}
+select(bankData, default:duration, contains("p"))
+```
+
+Rename verb to easily rename variables
+Select Example 3 
+
+
+```{r}
+select(bankData, bought_option=y)
+```
+
+Rename Example
+
+```{r}
+rename(bankData, bought_option=y)
+```
+
+
+You can reorder your dataset based on conditions using the
+arrange() verb
+
+Arrange Example 1
+
+
+```{r}
+arrange(bankData, job, default)
+```
+
+Arrange Example 2
+
+```{r}
+arrange(bankData, balance, default)
+```
+
+
+
+Arrange Example 3
+You can use desc() to sort in descending order.
+
+
+```{r}
+arrange(bankData, desc(balance), default)
+```
+
+Transformations
+
+The mutate() verb can be used to make new columns
+
+```{r}
+mutate(bankData, "DefaultFlag" = ifelse(default == 'yes', 1, 0))
+```
+
+Transformations 2
+
+```{r}
+mutate(bankData, "BalanceByDuration" = balance/duration)
+```
+
+mutate() retains all columns. If you only want to keep the new
+transforms, you can use transmute()
+
+Transmute Example
+
+
+```{r}
+transmute(bankData, "BalanceByDuration" = balance/duration)
+```
+
+
+Summarise Data by Groups
+The group_by verb creates a grouping by a categorical
+variable
+
+```{r}
+args(group_by)
+```
+
+Example group_by 1
+
+
+```{r}
+summarise(group_by(bankData, default), Num = n())
+```
+
+Example group_by 2
+
+
+```{r}
+summarise(group_by(bankData, default), Ave.Balance = mean(balance))
+```
+
+Example group_by 3
+
+
+```{r}
+summarise(group_by(bankData, default), Ave.Balance = mean(balance), Num = n())
+```
+
+
+Chaining/Piping
+The pipe operator %>%
+Passes result on left into first argument of function on right.
+Piping is not restricted to dplyr manipulation tasks
+
+Take the hflights data set and then…Add a variable named diff that is the result of subtracting TaxiIn from TaxiOut, and then… Pick all of the rows whose diff value does not equal NA, and then… Summarise the data set with a value named avg that is the mean diff value.
+hflights %>% mutate(diff=(TaxiIn-TaxiOut)) %>% filter(is.na(diff)) %>% summarise(avg=mean(diff))
+
+Standard
+
+```{r}
+arrange(filter(select(bankData, age, job, education, default), default == 'yes'), job, education, age)
+```
+
+With Pipes
+
+```{r}
+arrange(
+  filter(
+    select(bankData, age, job, education, default), 
+    default == 'yes'), 
+  job, education, age)
+```
+
+Piping example
+The pipe operator is very helpful for group by summaries
+
+
+```{r}
+bankData %>% 
+  select(age, job, education, default) %>%
+  filter(default == 'yes') %>%
+  arrange(job, education, age)
+```
+
+No Pipes
+
+```{r}
+x1 <- rnorm(10)
+x2 <- rnorm(10)
+sqrt(sum((x1 - x2)^2))
+```
+
+With Pipes
+
+```{r}
+(x1 - x2)^2 %>% sum() %>% sqrt()
+```
+Pipe + group_by()
+The pipe operator is very helpful for group by summaries
+
+
+```{r}
+bankData %>% group_by(job) %>%
+  summarise(Number = n(),
+            Average.Balance = mean(balance),
+            Number.Defaulted = sum(default == 'yes'),
+            Default.Rate = Number.Defaulted/Number)
+```
+
+Pipe and Ploting
+
+
+```{r}
+library(ggplot2)
+bankData %>% 
+  filter(job %in% c("management", "technician", "unemployed")) %>%
+  group_by(job, marital) %>% 
+  summarise(Counts = n() ) %>% 
+  ggplot() + 
+  geom_bar(aes(x = job, y = Counts, fill = marital),
+           stat = 'identity', position = 'dodge')
+```
+
+Piping: Unique Values
+Piping is also very helpful with identifying unique rows. You can also
+use distinct() to identify unique rows and is typically used with
+arrange().
+
+
+```{r}
+bankData %>% 
+  select(job, marital, education, default, housing, loan, contact) %>%
+  arrange(job, marital, education, default, housing, loan, contact) %>%
+  distinct()
+```
+
+
+Unique Keys
+You can specify variables that you only want unique values for.
+
+
+```{r}
+bankData %>% 
+  select(job, marital, education, default, housing, loan, contact) %>%
+  arrange(job, marital, education, default, housing, loan, contact) %>%
+  distinct(job, marital, education)
+```
+
+Unique Keys
+It will keep the first row with those particular key values.
+
+```{r}
+bankData %>% 
+  select(job, marital, education, default, housing, loan, contact) %>%
+  arrange(job, marital, education, desc(default), desc(housing), desc(loan), desc(contact)) %>%
+  distinct(job, marital, education)
+```
+
+
+Multiple Columns
+You can summarise or mutate multiple columns using the same
+grouping variable.
+summarise_each allows you to apply the same summary
+function to multiple columns
+mutate_each also does a similar manipulation for mutate
+
+
+```{r}
+help(summarise_each)
+
+```
+
+Summarise_each Example
+
+```{r}
+bankData %>%
+  group_by(education) %>%
+  summarise_each(funs(mean), balance, duration)
+```
+
+summarise_each Example 2
+You can also use multiple functions.
+
+```{r}
+bankData %>%
+  group_by(education) %>%
+  summarise_each(funs(min, mean, max), balance, duration)
+```
+
+mutate_each Example
+You can use the . to indicate where the variables go in an arbitrary
+function.
+
+```{r}
+bankData %>% 
+  group_by(month) %>% 
+  select(balance, duration) %>% 
+  mutate_each(funs(half = ./2))
+```
+
+Additional Helper Functions
+Helper functions n() and count() count the number of rows
+in a group
+Helper function n_distinct(vector) counts the number of
+unique items in that vector
+
+```{r}
+bankData %>% 
+  group_by(job, default) %>%
+  summarise(education_levels = n_distinct(education))
+```
+
+
+tally
+tally() is a shortcut for counting
+
+
+```{r}
+bankData %>% group_by(job) %>%
+  tally()
+```
+
+
+Without tally()
+
+
+```{r}
+bankData %>% group_by(job) %>%
+  summarise(n = n())
+```
+
+
+count
+count() makes it even easier.
+
+
+```{r}
+bankData %>% count(job)
+```
+
+
+
+Ranking Variables
+In base R, you can use rank.
+
+```{r}
+args(rank)
+```
+
+Rank Examples
+
+```{r}
+bankData %>% slice(1:10) %>% 
+  transmute(Job = job,
+            jobRankAvg = rank(job), 
+            jobRankRow = row_number(job), 
+            jobRankMin = min_rank(job),
+            jobRankDense = dense_rank(job),
+            jobRankPerc = percent_rank(job),
+            jobRankCume = cume_dist(job))
+```
+
+
+Applying custom functions
+You can also apply your own custom functions using do()
+
+
+```{r}
+set.seed(1)
+df <- data.frame(
+  houseID = rep(1:10, each = 10), 
+  year = 1995:2004, 
+  price = ifelse(runif(10 * 10) > 0.50, NA, exp(rnorm(10 * 10)))
+)
+head(df)
+```
+
+Grouped Tests
+
+
+```{r}
+bankData %>% 
+  filter(marital %in% c('married', 'single')) %>% 
+  group_by(job) %>% 
+  do(tTest = t.test(age ~ marital, data = .)) %>%
+  mutate("tTestPVal" = get("p.value",tTest), "tTestStat" = get("statistic", tTest))
+```
+
+Changing gears…
+Let's take a look at a new dataset:
+
+Data are from https://stat.duke.edu/~mc301/data/hdi.csv
+
+The Human Development Index (HDI) is a composite statistic of life expectancy, education, and per capita income indicators, which are used to rank countries into four tiers of human development.
+
+Adaption of example by Mine Cetinkaya-Rundel
+
+tidyr
+
+A package that reshapes the layout of tabular data.
+
+http://vita.had.co.nz/papers/tidy-data.html
+
+tidyr Operations
+
+There are four fundamental functions of data tidying:
+
+gather() takes multiple columns, and gathers them into key-value pairs: it makes “wide” data longer
+spread() takes two columns (key & value) and spreads in to multiple columns, it makes “long” data wider
+separate() splits a single column into multiple columns
+unite() combines multiple columns into a single column
+
+
+
+```{r}
+
+hdi <- read_csv("https://stat.duke.edu/~mc301/data/hdi.csv")
+
+View(hdi)
+
+```
+
+Wide to long data with gather
+
+```{r}
+library(tidyr)
+library(stringr)
+hdi_long <- gather(hdi, key = year, value = hd_index, hdi_1980:hdi_2011)
+
+View(hdi_long)
+
+```
+
+Let's do a little bit better…
+
+```{r}
+hdi_long2 <- hdi_long %>%
+  mutate(year = as.numeric(str_replace(year, "hdi_", "")))
+
+View(hdi_long2)
+```
+
+Long to wide data with spread
+
+```{r}
+hdi_wide <- spread(hdi_long2, key = year, value = hd_index)
+
+View(hdi_wide)
+```
+
+
+This is just a small peak at the functions and power of the tidyverse.

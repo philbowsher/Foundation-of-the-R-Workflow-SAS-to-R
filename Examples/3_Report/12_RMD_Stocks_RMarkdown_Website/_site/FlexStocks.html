@@ -1,0 +1,2629 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>FlexStocks</title>
+
+<meta property="og:title" content="FlexStocks" />
+
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+
+<link rel="icon" href="data:image/x-icon;" type="image/x-icon">
+
+
+<script type="text/javascript">
+window.FlexDashboardComponents = [];
+</script>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/stickytableheaders-0.1.19/jquery.stickytableheaders.min.js"></script>
+<script src="site_libs/htmlwidgets-0.7/htmlwidgets.js"></script>
+<link href="site_libs/dygraphs-1.1.1/dygraph.css" rel="stylesheet" />
+<script src="site_libs/dygraphs-1.1.1/dygraph-combined.js"></script>
+<script src="site_libs/moment-2.8.4/moment.js"></script>
+<script src="site_libs/moment-timezone-0.2.5/moment-timezone-with-data.js"></script>
+<script src="site_libs/dygraphs-binding-0.9/dygraphs.js"></script>
+<style type="text/css">
+
+/*
+ Dashboard CSS from Keen IO Dashboards
+ (https://github.com/keen/dashboards)
+*/
+
+body {
+  background: #f2f2f2;
+  padding: 60px 0 0 8px; /* padding-top overridden by theme */
+}
+
+body hr {
+  border-color: #d7d7d7;
+  margin: 10px 0;
+}
+
+.navbar-inverse .navbar-nav > li > a,
+.navbar .navbar-brand {
+  text-decoration: none;
+}
+
+.navbar-logo {
+  margin-top: 1px;
+}
+
+.navbar-logo img {
+  margin-right: 12px;
+}
+
+.navbar-author {
+  margin-left: 10px;
+  font-size: 15px;
+}
+
+.navbar .dropdown-menu .fa {
+  min-width: 20px;
+}
+
+.navbar .dropdown-menu {
+  min-width: 150px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.chart-wrapper,
+.nav-tabs-custom,
+.sbframe-commentary
+{
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+.chart-title {
+  border-bottom: 1px solid #d7d7d7;
+  color: #666;
+  font-size: 14px;
+  font-weight: 300;
+  padding: 7px 10px 4px;
+}
+
+.chart-wrapper .chart-title:empty {
+  display: none;
+}
+
+.chart-wrapper .chart-stage {
+  overflow: hidden;
+  padding: 5px 10px;
+  position: relative;
+}
+
+.chart-wrapper .chart-notes {
+  background: #fbfbfb;
+  border-top: 1px solid #e2e2e2;
+  color: #808080;
+  font-size: 12px;
+  padding: 8px 10px 5px;
+}
+
+/*
+ CSS for handling flexbox layout
+*/
+
+#dashboard-container {
+  visibility: hidden;
+}
+
+.tab-content>.dashboard-page-wrapper.active {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.dashboard-page-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.dashboard-row-orientation {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.dashboard-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.dashboard-row-flex {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.dashboard-column-orientation {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.dashboard-column {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.chart-wrapper-flex {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.chart-stage-flex {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  position: relative;
+}
+
+.chart-shim {
+  position: absolute;
+  left: 8px; top: 8px; right: 8px; bottom: 8px;
+}
+
+.no-padding .chart-shim {
+  left: 0; top: 0; right: 0; bottom: 0;
+}
+
+.flowing-content-shim {
+  overflow: auto;
+  left: 0; top: 0; right: 0; bottom: 0;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.flowing-content-container {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.chart-stage .table-bordered {
+  border: none;
+}
+
+.chart-stage .table-bordered > tbody > tr > th,
+.chart-stage .table-bordered > tfoot > tr > th,
+.chart-stage .table-bordered > tbody > tr > td,
+.chart-stage .table-bordered > tfoot > tr > td {
+  border: none;
+}
+
+.chart-stage .table-bordered > tbody > tr > td {
+  border-top: 1px solid #dddddd;
+}
+
+.chart-stage .table-bordered > thead > tr > th {
+  border: none;
+  border-bottom: 2px solid #dddddd;
+}
+
+.bootstrap-table table>thead {
+  background-color: #fff;
+}
+
+.bootstrap-table table.data,
+.bootstrap-table table.shiny-table {
+  width: inherit !important;
+}
+
+.bootstrap-table table.data>tbody>tr>th,
+.bootstrap-table table.shiny-table>tbody>tr>th {
+  border-top: none;
+  border-bottom: 2px solid #dddddd;
+  padding: 5px;
+}
+
+.bootstrap-table .data td[align=right] {
+  font-family: inherit;
+}
+
+.chart-wrapper form {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.shiny-input-container label {
+  font-weight: normal;
+}
+
+.chart-stage .html-widget {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-stage .html-widget-static-bound {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-stage .shiny-bound-output {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Omit display of empty paragraphs */
+
+.chart-shim>p:empty {
+  display: none;
+}
+
+.chart-stage>p:empty {
+  display: none;
+}
+
+/* Omit display of special knitr options div*/
+
+.chart-stage .knitr-options {
+  display: none;
+}
+
+/* Automatically resizing images */
+
+.image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+}
+
+.image-container img {
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* Value box */
+
+.value-box {
+  border-radius: 2px;
+  position: relative;
+  display: block;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.value-box > .inner {
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.value-box .value {
+  font-size: 38px;
+  font-weight: bold;
+  margin: 0 0 3px 0;
+  white-space: nowrap;
+  padding: 0;
+}
+
+.value-box .caption {
+  font-size: 15px;
+}
+.value-box .caption > small {
+  display: block;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.value-box .icon i {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 80px;
+  color: rgba(0, 0, 0, 0.15);
+}
+
+.linked-value:hover {
+  cursor: pointer;
+}
+
+.value-box.linked-value:hover {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* STORYBOARD */
+
+.storyboard-nav button {
+  background: transparent;
+  border: 0;
+  opacity: .3;
+  outline: none;
+  padding: 0;
+}
+
+.storyboard-nav button:hover,
+.storyboard-nav button:hover {
+  opacity: .5;
+}
+
+.storyboard-nav button:disabled,
+.storyboard-nav button:disabled {
+  opacity: .1;
+}
+
+.storyboard-nav .sbnext,
+.storyboard-nav .sbprev {
+  float: left;
+  width: 2%;
+  height: 120px;
+  font-size: 50px;
+}
+
+.storyboard-nav .sbprev {
+  text-align: left;
+  width: 2%;
+}
+
+.storyboard-nav .sbnext {
+  float: right;
+  text-align: right;
+  margin-right: 8px;
+}
+
+.storyboard-nav .sbframelist {
+  margin: 0 auto;
+  width: 94%;
+  height: 120px;
+  overflow: hidden;
+  text-shadow: none;
+  margin-bottom: 8px;
+}
+
+.storyboard-nav .sbframelist ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.storyboard-nav .sbframelist ul li {
+  float: left;
+  width: 270px;
+  height: 100%;
+  padding: 10px 10px 10px 10px;
+  margin-right: 8px;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+  color: #3a3c47;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.storyboard-nav .sbframelist ul li:last-child {
+  margin-right: 0px;
+}
+
+.storyboard-nav .sbframelist ul li.active {
+  color: #fff;
+  background: #B8B8B8;
+}
+
+.sbframe-commentary {
+  width: 300px;
+  background: #fbfbfb;
+  font-size: 14px;
+}
+
+.sbframe-commentary ul {
+  padding-left: 22px;
+}
+
+.sbframe.active {
+  display: flex;
+}
+
+.sbframe:not(.active) {
+  display: none;
+}
+
+/* NAV TABS */
+
+.nav-tabs-custom > .nav-tabs {
+  margin: 0;
+  border-bottom: 1px solid #d7d7d7;
+  color: #666;
+  font-size: 14px;
+  font-weight: 300;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.nav-tabs-custom > .nav-tabs > li {
+  border-top: 3px solid transparent;
+  margin-bottom: -1px;
+  margin-right: 5px;
+}
+.nav-tabs-custom > .nav-tabs > li > a,
+.nav-tabs-custom > .nav-tabs > li > a:active {
+  color: #666;
+  font-weight: 300;
+  font-size: 14px;
+  border-radius: 0;
+  padding: 3px 10px 5px;
+  text-transform: none;
+}
+
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a {
+  border-bottom-color: transparent;
+}
+
+.nav-tabs-custom > .nav-tabs > li > a.text-muted {
+  color: #999;
+}
+.nav-tabs-custom > .nav-tabs > li > a,
+.nav-tabs-custom > .nav-tabs > li > a:hover {
+  background: transparent;
+  margin: 0;
+}
+.nav-tabs-custom > .nav-tabs > li > a:hover {
+  color: #999;
+}
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a:hover,
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a:focus,
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a:active {
+  border-color: transparent;
+}
+.nav-tabs-custom > .nav-tabs > li.active {
+  border-top-color: #3c8dbc;
+}
+.nav-tabs-custom > .nav-tabs > li.active > a,
+.nav-tabs-custom > .nav-tabs > li.active:hover > a {
+  background-color: #fff;
+  color: #666;
+}
+.nav-tabs-custom > .nav-tabs > li.active > a {
+  border-top-color: transparent;
+  border-left-color: #d7d7d7;
+  border-right-color: #d7d7d7;
+}
+.nav-tabs-custom > .nav-tabs > li:first-of-type {
+  margin-left: 0;
+}
+.nav-tabs-custom > .nav-tabs > li:first-of-type.active > a {
+  border-left-color: transparent;
+}
+.nav-tabs-custom > .nav-tabs.pull-right {
+  float: none !important;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li {
+  float: right;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li:first-of-type {
+  margin-right: 0;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li:first-of-type > a {
+  border-left-width: 1px;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li:first-of-type.active > a {
+  border-left-color: #d7d7d7;
+  border-right-color: transparent;
+}
+.nav-tabs-custom > .nav-tabs > li.header {
+  line-height: 35px;
+  padding: 0 10px;
+  font-size: 20px;
+  color: #666;
+}
+.nav-tabs-custom > .nav-tabs > li.header > .fa,
+.nav-tabs-custom > .nav-tabs > li.header > .glyphicon,
+.nav-tabs-custom > .nav-tabs > li.header > .ion {
+  margin-right: 5px;
+}
+.nav-tabs-custom > .tab-content {
+  background: #fff;
+  padding: 0;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.nav-tabs-custom > .tab-content > .chart-wrapper {
+  background: #fff;
+  border: none;
+  margin: 0;
+}
+
+
+.nav-tabs-custom > .tab-content > .active {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.nav-tabs-custom .dropdown.open > a:active,
+.nav-tabs-custom .dropdown.open > a:focus {
+  background: transparent;
+  color: #999;
+}
+
+
+@media (max-width: 767px) {
+  .value-box {
+    text-align: center;
+    margin-right: 8px;
+  }
+  .value-box .icon {
+    display: none;
+  }
+}
+
+/* Fixed position sidebar */
+
+.section.sidebar {
+  position: fixed;
+  top: 51px; /* overridden by theme */
+  left: 0;
+  bottom: 0;
+  border-right: 1px solid #e2e2e2;
+  background-color: white; /* overridden by theme */
+  padding-left: 10px;
+  padding-right: 10px;
+  visibility: hidden;
+}
+
+.section.sidebar form p:first-child {
+  margin-top: 10px;
+}
+
+/* Embedded source code */
+
+#flexdashboard-source-code {
+  display: none;
+}
+
+.featherlight-content #flexdashboard-source-code {
+  display: inline-block;
+}
+
+.featherlight-content {
+  width: 80%;
+  max-width: 800px;
+  padding: 0 !important;
+  border-bottom: none !important;
+}
+
+.featherlight:last-of-type {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.featherlight-inner {
+  width: 100%;
+}
+
+.featherlight-content pre {
+  margin: 0;
+  border: 0;
+  background: #fff;
+  font-size: 12px;
+}
+
+.unselectable {
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: -moz-none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+#flexdashboard-source-code code {
+  -ms-user-select: text;
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -o-user-select: text;
+  user-select: text;
+}
+
+/* DataTables Tweaks */
+
+.dataTables_filter input[type="search"] {
+  -webkit-appearance: searchfield;
+  outline: none;
+}
+
+.dataTables_wrapper.no-footer
+.dataTables_info {
+  padding-top: 0;
+}
+
+
+table.dataTable thead th {
+  border-bottom: 1px solid #d7d7d7;
+}
+
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+  border-bottom: 1px solid #d7d7d7;
+}
+
+/* Mobile phone only CSS */
+
+.desktop-layout div.section.mobile {
+  display: none;
+}
+
+.mobile-layout div.section.no-mobile {
+  display: none;
+}
+
+.mobile-figure {
+  display: none;
+}
+
+
+
+body {
+  padding-top: 60px;
+}
+
+.section.sidebar {
+  top: 51px;
+  background-color: rgba(39, 128, 227, 0.1);
+}
+
+.value-box {
+  color: #f9f9f9;
+}
+
+.bg-primary {
+  background-color: rgba(39, 128, 227, 0.7);
+}
+
+.storyboard-nav .sbframelist ul li.active {
+  background-color: rgba(39, 128, 227, 0.7);
+}
+
+.nav-tabs-custom > .nav-tabs > li.active {
+  border-top-color: rgba(39, 128, 227, 0.7);
+}
+
+.bg-info {
+  background-color: rgba(153, 84, 187, 0.7);
+}
+
+.bg-warning {
+  background-color: rgba(255, 117, 24, 0.7);
+}
+
+.bg-danger {
+  background-color: rgba(255, 0, 57, 0.7);
+}
+
+.bg-success {
+  background-color: rgba(63, 182, 24, 0.7);
+}
+
+.chart-title {
+  font-weight: 500;
+}
+
+.nav-tabs-custom > .nav-tabs > li > a,
+.nav-tabs-custom > .nav-tabs > li > a:active {
+  font-weight: 500;
+}
+
+@media only screen and (min-width: 768px) {
+html, body {
+  height: 100%;
+}
+
+#dashboard-container {
+  height: 100%;
+}
+}
+</style>
+
+
+
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div class="container-fluid">
+<div class="navbar-header">
+
+<button id="navbar-button" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+
+<span class="navbar-logo pull-left">
+  
+</span>
+<span class="navbar-brand">
+  FlexStocks
+  <span class="navbar-author">
+        </span>
+</span>
+
+</div>
+<div id="navbar" class="navbar-collapse collapse">
+<ul class="nav navbar-nav navbar-left">
+</ul>
+<ul class="nav navbar-nav navbar-right">
+</ul>
+</div><!--/.nav-collapse-->
+</div><!--/.container-->
+</div><!--/.navbar-->
+
+<script type="text/javascript">
+
+
+var FlexDashboard = (function () {
+
+  // initialize options
+  var _options = {};
+
+  var FlexDashboard = function() {
+
+    // default options
+    _options = $.extend(_options, {
+      theme: "cosmo",
+      fillPage: false,
+      orientation: 'columns',
+      storyboard: false,
+      defaultFigWidth: 576,
+      defaultFigHeight: 461,
+      defaultFigWidthMobile: 360,
+      defaultFigHeightMobile: 461,
+      isMobile: false,
+      isPortrait: false
+    });
+  };
+
+  function init(options) {
+
+    // extend default options
+    $.extend(true, _options, options);
+
+    // find navbar items
+    var navbarItems = $('#flexdashboard-navbar');
+    if (navbarItems.length)
+      navbarItems = JSON.parse(navbarItems.html());
+    addNavbarItems(navbarItems);
+
+    // find the main dashboard container
+    var dashboardContainer = $('#dashboard-container');
+
+    // resolve mobile classes
+    resolveMobileClasses(dashboardContainer);
+
+    // one time global initialization for components
+    componentsInit(dashboardContainer);
+
+    // look for a global sidebar
+    var globalSidebar = dashboardContainer.find(".section.level1.sidebar");
+    if (globalSidebar.length > 0) {
+
+      // global layout for fullscreen displays
+      if (!isMobilePhone()) {
+
+         // hoist it up to the top level
+         globalSidebar.insertBefore(dashboardContainer);
+
+         // lay it out (set width/positions)
+         layoutSidebar(globalSidebar, dashboardContainer);
+
+      // tuck sidebar into first page for mobile phones
+      } else {
+
+        // convert it into a level3 section
+        globalSidebar.removeClass('sidebar');
+        globalSidebar.removeClass('level1');
+        globalSidebar.addClass('level3');
+        var h1 = globalSidebar.children('h1');
+        var h3 = $('<h3></h3>');
+        h3.html(h1.html());
+        h3.insertBefore(h1);
+        h1.remove();
+
+        // move it into the first page
+        var page = dashboardContainer.find('.section.level1').first();
+        if (page.length > 0)
+          page.prepend(globalSidebar);
+      }
+    }
+
+    // look for pages to layout
+    var pages = $('div.section.level1');
+    if (pages.length > 0) {
+
+        // find the navbar and collapse on clicked
+        var navbar = $('#navbar');
+        navbar.on("click", "a[data-toggle!=dropdown]", null, function () {
+           navbar.collapse('hide');
+        });
+
+        // envelop the dashboard container in a tab content div
+        dashboardContainer.wrapInner('<div class="tab-content"></div>');
+
+        pages.each(function(index) {
+
+          // lay it out
+          layoutDashboardPage($(this));
+
+          // add it to the navbar
+          addToNavbar($(this), index === 0);
+
+        });
+
+    } else {
+
+      // remove the navbar and navbar button if we don't
+      // have any navbuttons
+      if (navbarItems.length === 0) {
+        $('#navbar').remove();
+        $('#navbar-button').remove();
+      }
+
+      // add the storyboard class if requested
+      if (_options.storyboard)
+        dashboardContainer.addClass('storyboard');
+
+      // layout the entire page
+      layoutDashboardPage(dashboardContainer);
+    }
+
+    // if we are in shiny we need to trigger a window resize event to
+    // force correct layout of shiny-bound-output elements
+    if (isShinyDoc())
+      $(window).trigger('resize');
+
+    // make main components visible
+    $('.section.sidebar').css('visibility', 'visible');
+    dashboardContainer.css('visibility', 'visible');
+
+    // handle location hash
+    handleLocationHash();
+
+    // intialize prism highlighting
+    initPrismHighlighting();
+
+    // record mobile and orientation state then register a handler
+    // to refresh if it changes
+    _options.isMobile = isMobilePhone();
+    _options.isPortrait = isPortrait();
+    $(window).on('resize', function() {
+      if (_options.isMobile !== isMobilePhone() ||
+          _options.isPortrait !== isPortrait()) {
+        window.location.reload();
+      }
+    });
+
+    // trigger layoutcomplete event
+    dashboardContainer.trigger('flexdashboard:layoutcomplete');
+  }
+
+  function resolveMobileClasses(dashboardContainer) {
+     // add top level layout class
+    dashboardContainer.addClass(isMobilePhone() ? 'mobile-layout' :
+                                                  'desktop-layout');
+
+    // look for .mobile sections and add .no-mobile to their peers
+    var mobileSections = $('.section.mobile');
+    mobileSections.each(function() {
+       var id = $(this).attr('id');
+       var nomobileId = id.replace(/-\d+$/, '');
+       $('#' + nomobileId).addClass('no-mobile');
+    });
+  }
+
+  function addNavbarItems(navbarItems) {
+
+    var navbarLeft = $('ul.navbar-left');
+    var navbarRight = $('ul.navbar-right');
+
+    for (var i = 0; i<navbarItems.length; i++) {
+
+      // get the item
+      var item = navbarItems[i];
+
+      // determine the container
+      var container = null;
+      if (item.align === "left")
+        container = navbarLeft;
+      else
+        container = navbarRight;
+
+      // navbar menu if we have multiple items
+      if (item.items) {
+        var menu = navbarMenu(null, item.icon, item.title, container);
+        for (var j = 0; j<item.items.length; j++) {
+          var subItem = item.items[j];
+          var li = $('<li></li>');
+          li.append(navbarLink(subItem.icon, subItem.title, subItem.href));
+          menu.append(li);
+        }
+      } else {
+        var li = $('<li></li>');
+        li.append(navbarLink(item.icon, item.title, item.href));
+        container.append(li);
+      }
+    }
+  }
+
+  // create or get a reference to an existing dropdown menu
+  function navbarMenu(id, icon, title, container) {
+    var existingMenu = [];
+    if (id)
+      existingMenu = container.children('#' + id);
+    if (existingMenu.length > 0) {
+      return existingMenu.children('ul');
+    } else {
+      var li = $('<li></li>');
+      if (id)
+        li.attr('id', id);
+      li.addClass('dropdown');
+      // auto add "Share" title on mobile if necessary
+      if (!title && icon && (icon === "fa-share-alt") && isMobilePhone())
+        title = "Share";
+      if (title) {
+        title = title + ' <span class="caret"></span>';
+      }
+      var a = navbarLink(icon, title, "#");
+      a.addClass('dropdown-toggle');
+      a.attr('data-toggle', 'dropdown');
+      a.attr('role', 'button');
+      a.attr('aria-expanded', 'false');
+      li.append(a);
+      var ul = $('<ul class="dropdown-menu"></ul>');
+      ul.attr('role', 'menu');
+      li.append(ul);
+      container.append(li);
+      return ul;
+    }
+  }
+
+  function addToNavbar(page, active) {
+
+    // capture the id and data-icon attribute (if any)
+    var id = page.attr('id');
+    var icon = page.attr('data-icon');
+    var navmenu = page.attr('data-navmenu');
+
+    // get the wrapper
+    var wrapper = page.closest('.dashboard-page-wrapper');
+
+    // move the id to the wrapper
+    page.removeAttr('id');
+    wrapper.attr('id', id);
+
+    // add the tab-pane class to the wrapper
+    wrapper.addClass('tab-pane');
+    if (active)
+      wrapper.addClass('active');
+
+    // get a reference to the h1, discover it's id and title, then remove it
+    var h1 = wrapper.find('h1').first();
+    var title = h1.html();
+    h1.remove();
+
+    // create a navbar item
+    var li = $('<li></li>');
+    var a = navbarLink(icon, title, '#' + id);
+    a.attr('data-toggle', 'tab');
+    li.append(a);
+
+    // add it to the navbar (or navbar menu if specified)
+    var container = $('ul.navbar-left');
+    if (navmenu) {
+      var menuId = navmenu.replace(/\s+/g, '');
+      var menu = navbarMenu(menuId, null, navmenu, container);
+      menu.append(li);
+    } else {
+      container.append(li);
+    }
+  }
+
+  function navbarLink(icon, title, href) {
+
+    var a = $('<a></a>');
+    if (icon) {
+
+      // get the name of the icon set and icon
+      var dashPos = icon.indexOf("-");
+      var iconSet = icon.substring(0, dashPos);
+      var iconName = icon.substring(dashPos + 1);
+
+      // create the icon
+      var iconElement = $('<span class="' + iconSet + ' ' + icon + '"></span>');
+      if (title)
+        iconElement.css('margin-right', '7px');
+      a.append(iconElement);
+      // if href is null see if we can auto-generate based on icon (e.g. social)
+      if (!href)
+        maybeGenerateLinkFromIcon(iconName, a);
+    }
+    if (title)
+      a.append(title);
+
+    // add the href.
+    if (href) {
+      if (href === "source_embed") {
+        a.attr('href', '#');
+        a.attr('data-featherlight', "#flexdashboard-source-code");
+        a.featherlight({
+            beforeOpen: function(event){
+              $('body').addClass('unselectable');
+            },
+            afterClose: function(event){
+              $('body').removeClass('unselectable');
+            }
+        });
+      } else {
+        a.attr('href', href);
+      }
+    }
+
+    return a;
+  }
+
+  // auto generate a link from an icon name (e.g. twitter) when possible
+  function maybeGenerateLinkFromIcon(iconName, a) {
+
+     var serviceLinks = {
+      "twitter": "https://twitter.com/share?text=" + encodeURIComponent(document.title) + "&url="+encodeURIComponent(location.href),
+      "facebook": "https://www.facebook.com/sharer/sharer.php?s=100&p[url]="+encodeURIComponent(location.href),
+      "google-plus": "https://plus.google.com/share?url="+encodeURIComponent(location.href),
+      "linkedin": "https://www.linkedin.com/shareArticle?mini=true&url="+encodeURIComponent(location.href) + "&title=" + encodeURIComponent(document.title),
+      "pinterest": "https://pinterest.com/pin/create/link/?url="+encodeURIComponent(location.href) + "&description=" + encodeURIComponent(document.title)
+    };
+
+    var makeSocialLink = function(a, href) {
+      a.attr('href', '#');
+      a.on('click', function(e) {
+        e.preventDefault();
+        window.open(href);
+      });
+    };
+
+    $.each(serviceLinks, function(key, value) {
+      if (iconName.indexOf(key) !== -1)
+        makeSocialLink(a, value);
+    });
+  }
+
+  // layout a dashboard page
+  function layoutDashboardPage(page) {
+
+    // use a page wrapper so that free form content above the
+    // dashboard appears at the top rather than the side (as it
+    // would without the wrapper in a column orientation)
+    var wrapper = $('<div class="dashboard-page-wrapper"></div>');
+    page.wrap(wrapper);
+
+    // if there are no level2 or level3 headers synthesize a level3
+    // header to contain the (e.g. frame it, scroll container, etc.)
+    var headers = page.find('h2,h3');
+    if (headers.length === 0)
+      page.wrapInner('<div class="section level3"></div>');
+
+    // hoist up any content before level 2 or level 3 headers
+    var children = page.children();
+    children.each(function(index) {
+      if ($(this).hasClass('level2') || $(this).hasClass('level3'))
+        return false;
+      $(this).insertBefore(page);
+    });
+
+    // determine orientation and fillPage behavior for distinct media
+    var orientation, fillPage, storyboard;
+
+    // media: mobile phone
+    if (isMobilePhone()) {
+
+      // if there is a sidebar we need to ensure it's content
+      // is properly framed as an h3
+      var sidebar = page.find('.section.sidebar');
+      sidebar.removeClass('sidebar');
+      sidebar.wrapInner('<div class="section level3"></div>');
+      var h2 = sidebar.find('h2');
+      var h3 = $('<h3></h3>');
+      h3.html(h2.html());
+      h3.insertBefore(h2);
+      h2.remove();
+
+      // wipeout h2 elements then enclose them in a single h2
+      var level2 = page.find('div.section.level2');
+      level2.each(function() {
+        level2.children('h2').remove();
+        level2.children().unwrap();
+      });
+      page.wrapInner('<div class="section level2"></div>');
+
+      // substitute mobile images
+      if (isPortrait()) {
+        var mobileFigures = $('img.mobile-figure');
+        mobileFigures.each(function() {
+          // get the src (might be base64 encoded)
+          var src = $(this).attr('src');
+
+          // find it's peer
+          var id = $(this).attr('data-mobile-figure-id');
+          var img = $('img[data-figure-id=' + id + "]");
+          img.attr('src', src)
+             .attr('width', _options.defaultFigWidthMobile)
+             .attr('height', _options.defaultFigHeightMobile);
+        });
+      }
+
+      // hoist storyboard commentary into it's own section
+      if (page.hasClass('storyboard')) {
+        var commentaryHR = page.find('div.section.level3 hr');
+        if (commentaryHR.length) {
+          var commentary = commentaryHR.nextAll().detach();
+          var commentarySection = $('<div class="section level3"></div>');
+          commentarySection.append(commentary);
+          commentarySection.insertAfter(commentaryHR.closest('div.section.level3'));
+          commentaryHR.remove();
+        }
+      }
+
+      // force a non full screen layout by columns
+      orientation = _options.orientation = 'columns';
+      fillPage = _options.fillPage = false;
+      storyboard = _options.storyboard = false;
+
+    // media: desktop
+    } else {
+
+      // determine orientation
+      orientation = page.attr('data-orientation');
+      if (orientation !== 'rows' && orientation != 'columns')
+        orientation = _options.orientation;
+
+      // determine storyboard mode
+      storyboard = page.hasClass('storyboard');
+
+      // fillPage based on options (force for storyboard)
+      fillPage = _options.fillPage || storyboard;
+
+      // handle sidebar
+      var sidebar = page.find('.section.level2.sidebar');
+      if (sidebar.length > 0)
+        layoutSidebar(sidebar, page);
+    }
+
+    // give it and it's parent divs height: 100% if we are in fillPage mode
+    if (fillPage) {
+      page.addClass('vertical-layout-fill');
+      page.css('height', '100%');
+      page.parents('div').css('height', '100%');
+    } else {
+      page.addClass('vertical-layout-scroll');
+    }
+
+    // perform the layout
+    if (storyboard)
+      layoutPageAsStoryboard(page);
+    else if (orientation === 'rows')
+      layoutPageByRows(page, fillPage);
+    else if (orientation === 'columns')
+      layoutPageByColumns(page, fillPage);
+  }
+
+  function layoutSidebar(sidebar, content) {
+
+    // get it out of the header hierarchy
+    sidebar = sidebar.first();
+    if (sidebar.hasClass('level1')) {
+      sidebar.removeClass('level1');
+      sidebar.children('h1').remove();
+    } else if (sidebar.hasClass('level2')) {
+      sidebar.removeClass('level2');
+      sidebar.children('h2').remove();
+    }
+
+    // determine width
+    var sidebarWidth = isTablet() ? 220 : 250;
+    var dataWidth = parseInt(sidebar.attr('data-width'));
+    if (dataWidth)
+      sidebarWidth = dataWidth;
+
+    // set the width and shift the page right to accomodate the sidebar
+    sidebar.css('width', sidebarWidth + 'px');
+    content.css('padding-left', sidebarWidth + 'px');
+
+    // wrap it's contents in a form
+    sidebar.wrapInner($('<form></form>'));
+  }
+
+  function layoutPageAsStoryboard(page) {
+
+    // create storyboard navigation
+    var nav = $('<div class="storyboard-nav"></div>');
+
+    // add navigation buttons
+    var prev = $('<button class="sbprev"><i class="fa fa-angle-left"></i></button>');
+    nav.append(prev);
+    var next= $('<button class="sbnext"><i class="fa fa-angle-right"></i></button>');
+    nav.append(next);
+
+    // add navigation frame
+    var frameList = $('<div class="sbframelist"></div>');
+    nav.append(frameList);
+    var ul = $('<ul></ul>');
+    frameList.append(ul);
+
+     // find all the level3 sections (those are the storyboard frames)
+    var frames = page.find('div.section.level3');
+    frames.each(function() {
+
+      // mark it
+      $(this).addClass('sbframe');
+
+      // divide it into chart content and (optional) commentary
+      $(this).addClass('dashboard-column-orientation');
+
+      // stuff the chart into it's own div w/ flex
+      $(this).wrapInner('<div class="sbframe-component"></div>');
+      setFlex($(this), 1);
+      var frame = $(this).children('.sbframe-component');
+
+      // extract the title from the h3
+      var li = $('<li></li>');
+      var h3 = frame.children('h3');
+      li.html(h3.html());
+      h3.remove();
+      ul.append(li);
+
+      // extract commentary
+      var hr = frame.children('hr');
+      if (hr.length) {
+        var commentary = hr.nextAll().detach();
+        hr.remove();
+        var commentaryFrame = $('<div class="sbframe-commentary"></div>');
+        commentaryFrame.addClass('flowing-content-shim');
+        commentaryFrame.addClass('flowing-content-container');
+        commentaryFrame.append(commentary);
+        $(this).append(commentaryFrame);
+
+        // look for a data-commentary-width attribute
+        var commentaryWidth = $(this).attr('data-commentary-width');
+        if (commentaryWidth)
+          commentaryFrame.css('width', commentaryWidth + 'px');
+      }
+
+      // layout the chart (force flex)
+      var result = layoutChart(frame, true);
+
+      // ice the notes if there are none
+      if (!result.notes)
+        frame.find('.chart-notes').remove();
+
+      // set flex on chart
+      setFlex(frame, 1);
+    });
+
+    // create a div to hold all the frames
+    var frameContent = $('<div class="sbframe-content"></div>');
+    frameContent.addClass('dashboard-row-orientation');
+    frameContent.append(frames.detach());
+
+    // row orientation to stack nav and frame content
+    page.addClass('dashboard-row-orientation');
+    page.append(nav);
+    page.append(frameContent);
+    setFlex(frameContent, 1);
+
+    // initialize sly
+    var sly = new Sly(frameList, {
+    		horizontal: true,
+    		itemNav: 'basic',
+    		smart: true,
+    		activateOn: 'click',
+    		startAt: 0,
+    		scrollBy: 1,
+    		activatePageOn: 'click',
+    		speed: 200,
+    		moveBy: 600,
+    		dragHandle: true,
+    		dynamicHandle: true,
+    		clickBar: true,
+    		keyboardNavBy: 'items',
+    		next: next,
+    		prev: prev
+    	}).init();
+
+    // make first frame active
+    frames.removeClass('active');
+    frames.first().addClass('active');
+
+    // subscribe to frame changed events
+    sly.on('active', function (eventName, itemIndex) {
+      frames.removeClass('active');
+      frames.eq(itemIndex).addClass('active')
+                          .trigger('shown');
+    });
+  }
+
+  function layoutPageByRows(page, fillPage) {
+
+    // row orientation
+    page.addClass('dashboard-row-orientation');
+
+    // find all the level2 sections (those are the rows)
+    var rows = page.find('div.section.level2');
+
+    // if there are no level2 sections then treat the
+    // entire page as if it's a level 2 section
+    if (rows.length === 0) {
+      page.wrapInner('<div class="section level2"></div>');
+      rows = page.find('div.section.level2');
+    }
+
+    rows.each(function () {
+
+      // flags
+      var haveNotes = false;
+      var haveFlexHeight = true;
+
+      // remove the h2
+      $(this).children('h2').remove();
+
+      // check for a tabset
+      var isTabset = $(this).hasClass('tabset');
+      if (isTabset)
+        layoutTabset($(this));
+
+      // give it row layout semantics if it's not a tabset
+      if (!isTabset)
+        $(this).addClass('dashboard-row');
+
+      // find all of the level 3 subheads
+      var columns = $(this).find('div.section.level3');
+
+      // determine figureSizes sizes
+      var figureSizes = chartFigureSizes(columns);
+
+      // fixup the columns
+      columns.each(function(index) {
+
+        // layout the chart (force flex if we are in a tabset)
+        var result = layoutChart($(this), isTabset);
+
+        // update flexHeight state
+        if (!result.flex)
+          haveFlexHeight = false;
+
+        // update state
+        if (result.notes)
+          haveNotes = true;
+
+        // set the column flex based on the figure width
+        // (value boxes will just get the default figure width)
+        var chartWidth = figureSizes[index].width;
+        setFlex($(this), chartWidth + ' ' + chartWidth + ' 0px');
+
+      });
+
+      // remove empty chart note divs
+      if (isTabset)
+        $(this).find('.chart-notes').filter(function() {
+            return $(this).html() === "&nbsp;";
+        }).remove();
+      if (!haveNotes)
+        $(this).find('.chart-notes').remove();
+
+       // make it a flexbox row
+      if (haveFlexHeight)
+        $(this).addClass('dashboard-row-flex');
+
+      // now we can set the height on all the wrappers (based on maximum
+      // figure height + room for title and notes, or data-height on the
+      // container if specified). However, don't do this if there is
+      // no flex on any of the constituent columns
+      var flexHeight = null;
+      var dataHeight = parseInt($(this).attr('data-height'));
+      if (dataHeight)
+        flexHeight = adjustedHeight(dataHeight, columns.first());
+      else if (haveFlexHeight)
+        flexHeight = maxChartHeight(figureSizes, columns);
+      if (flexHeight) {
+        if (fillPage)
+          setFlex($(this), flexHeight + ' ' + flexHeight + ' 0px');
+        else {
+          $(this).css('height', flexHeight + 'px');
+          setFlex($(this), '0 0 ' + flexHeight + 'px');
+        }
+      }
+
+    });
+  }
+
+  function layoutPageByColumns(page, fillPage) {
+
+    // column orientation
+    page.addClass('dashboard-column-orientation');
+
+    // find all the level2 sections (those are the columns)
+    var columns = page.find('div.section.level2');
+
+    // if there are no level2 sections then treat the
+    // entire page as if it's a level 2 section
+    if (columns.length === 0) {
+      page.wrapInner('<div class="section level2"></div>');
+      columns = page.find('div.section.level2');
+    }
+
+    // layout each column
+    columns.each(function (index) {
+
+      // remove the h2
+      $(this).children('h2').remove();
+
+      // make it a flexbox column
+      $(this).addClass('dashboard-column');
+
+      // check for a tabset
+      var isTabset = $(this).hasClass('tabset');
+      if (isTabset)
+        layoutTabset($(this));
+
+      // find all the h3 elements
+      var rows = $(this).find('div.section.level3');
+
+      // get the figure sizes for the rows
+      var figureSizes = chartFigureSizes(rows);
+
+      // column flex is the max row width (or data-width if specified)
+      var flexWidth;
+      var dataWidth = parseInt($(this).attr('data-width'));
+      if (dataWidth)
+        flexWidth = dataWidth;
+      else
+        flexWidth = maxChartWidth(figureSizes);
+      setFlex($(this), flexWidth + ' ' + flexWidth + ' 0px');
+
+      // layout each chart
+      rows.each(function(index) {
+
+        // perform the layout
+        var result = layoutChart($(this), false);
+
+        // ice the notes if there are none
+        if (!result.notes)
+          $(this).find('.chart-notes').remove();
+
+        // set flex height based on figHeight, then adjust
+        if (result.flex) {
+          var chartHeight = figureSizes[index].height;
+          chartHeight = adjustedHeight(chartHeight, $(this));
+          if (fillPage)
+            setFlex($(this), chartHeight + ' ' + chartHeight + ' 0px');
+          else {
+            $(this).css('height', chartHeight + 'px');
+            setFlex($(this), chartHeight + ' ' + chartHeight + ' ' + chartHeight + 'px');
+          }
+        }
+      });
+    });
+  }
+
+  function chartFigureSizes(charts) {
+
+    // sizes
+    var figureSizes = new Array(charts.length);
+
+    // check each chart
+    charts.each(function(index) {
+
+      // start with default
+      figureSizes[index] = {
+        width: _options.defaultFigWidth,
+        height: _options.defaultFigHeight
+      };
+
+      // look for data-height or data-width then knit options
+      var dataWidth = parseInt($(this).attr('data-width'));
+      var dataHeight = parseInt($(this).attr('data-height'));
+      var knitrOptions = $(this).find('.knitr-options:first');
+      var knitrWidth, knitrHeight;
+      if (knitrOptions) {
+        knitrWidth = parseInt(knitrOptions.attr('data-fig-width'));
+        knitrHeight =  parseInt(knitrOptions.attr('data-fig-height'));
+      }
+
+      // width
+      if (dataWidth)
+        figureSizes[index].width = dataWidth;
+      else if (knitrWidth)
+        figureSizes[index].width = knitrWidth;
+
+      // height
+      if (dataHeight)
+        figureSizes[index].height = dataHeight;
+      else if (knitrHeight)
+        figureSizes[index].height = knitrHeight;
+    });
+
+    // return sizes
+    return figureSizes;
+  }
+
+  function maxChartHeight(figureSizes, charts) {
+
+    // first compute the maximum height
+    var maxHeight = _options.defaultFigHeight;
+    for (var i = 0; i<figureSizes.length; i++)
+      if (figureSizes[i].height > maxHeight)
+        maxHeight = figureSizes[i].height;
+
+    // now add offests for chart title and chart notes
+    if (charts.length)
+      maxHeight = adjustedHeight(maxHeight, charts.first());
+
+    return maxHeight;
+  }
+
+  function adjustedHeight(height, chart) {
+    if (chart.length > 0) {
+      var chartTitle = chart.find('.chart-title');
+      if (chartTitle.length)
+        height += chartTitle.first().outerHeight();
+      var chartNotes = chart.find('.chart-notes');
+      if (chartNotes.length)
+        height += chartNotes.first().outerHeight();
+    }
+    return height;
+  }
+
+  function maxChartWidth(figureSizes) {
+    var maxWidth = _options.defaultFigWidth;
+    for (var i = 0; i<figureSizes.length; i++)
+      if (figureSizes[i].width > maxWidth)
+        maxWidth = figureSizes[i].width;
+    return maxWidth;
+  }
+
+  // layout a chart
+  function layoutChart(chart, forceFlex) {
+
+    // state to return
+    var result = {
+      notes: false,
+      flex: false
+    };
+
+    // extract the title
+    var title = extractTitle(chart);
+
+    // find components that apply to this container
+    var components = componentsFind(chart);
+
+    // if it's a custom component then call it and return
+    var customComponents = componentsCustom(components);
+    if (customComponents.length) {
+      componentsLayout(customComponents, title, chart);
+      result.notes = false;
+      result.flex = forceFlex || componentsFlex(customComponents);
+      return result;
+    }
+
+    // put all the content in a chart wrapper div
+    chart.addClass('chart-wrapper');
+    chart.wrapInner('<div class="chart-stage"></div>');
+    var chartContent = chart.children('.chart-stage');
+
+    // flex the content if appropriate
+    result.flex = forceFlex || componentsFlex(components);
+    if (result.flex) {
+      // add flex classes
+      chart.addClass('chart-wrapper-flex');
+      chartContent.addClass('chart-stage-flex');
+
+      // additional shim to break out of flexbox sizing
+      chartContent.wrapInner('<div class="chart-shim"></div>');
+      chartContent = chartContent.children('.chart-shim');
+    }
+
+    // set custom data-padding attribute
+    var pad = chart.attr('data-padding');
+    if (pad) {
+      if (pad === "0")
+        chart.addClass('no-padding');
+      else {
+        pad = pad + 'px';
+        chartContent.css('left', pad)
+                    .css('top', pad)
+                    .css('right', pad)
+                    .css('bottom', pad)
+      }
+    }
+
+    // call compoents
+    componentsLayout(components, title, chartContent);
+
+    // also activate components on shiny output
+    findShinyOutput(chartContent).on('shiny:value',
+      function(event) {
+        var element = $(event.target);
+        setTimeout(function() {
+
+          // see if we opted out of flex based on our output (for shiny
+          // we can't tell what type of output we have until after the
+          // value is bound)
+          var components = componentsFind(element);
+          var flex = forceFlex || componentsFlex(components);
+          if (!flex) {
+            chart.css('height', "");
+            setFlex(chart, "");
+            chart.removeClass('chart-wrapper-flex');
+            chartContent.removeClass('chart-stage-flex');
+            chartContent.children().unwrap();
+          }
+
+          // perform layout
+          componentsLayout(components, title, element.parent());
+        }, 10);
+      });
+
+    // add the title
+    var chartTitle = $('<div class="chart-title"></div>');
+    chartTitle.html(title);
+    chart.prepend(chartTitle);
+
+    // add the notes section
+    var chartNotes = $('<div class="chart-notes"></div>');
+    chartNotes.html('&nbsp;');
+    chart.append(chartNotes);
+
+    // attempt to extract notes if we have a component
+    if (components.length)
+      result.notes = extractChartNotes(chartContent, chartNotes);
+
+    // return result
+    return result;
+  }
+
+  // build a tabset from a section div with the .tabset class
+  function layoutTabset(tabset) {
+
+    // check for fade option
+    var fade = tabset.hasClass("tabset-fade");
+    var navClass = "nav-tabs";
+
+    // determine the heading level of the tabset and tabs
+    var match = tabset.attr('class').match(/level(\d) /);
+    if (match === null)
+      return;
+    var tabsetLevel = Number(match[1]);
+    var tabLevel = tabsetLevel + 1;
+
+    // find all subheadings immediately below
+    var tabs = tabset.find("div.section.level" + tabLevel);
+    if (!tabs.length)
+      return;
+
+    // create tablist and tab-content elements
+    var tabList = $('<ul class="nav ' + navClass + '" role="tablist"></ul>');
+    $(tabs[0]).before(tabList);
+    var tabContent = $('<div class="tab-content"></div>');
+    $(tabs[0]).before(tabContent);
+
+    // build the tabset
+    tabs.each(function(i) {
+
+      // get the tab div
+      var tab = $(tabs[i]);
+
+      // get the id then sanitize it for use with bootstrap tabs
+      var id = tab.attr('id');
+
+      // sanitize the id for use with bootstrap tabs
+      id = id.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_');
+      tab.attr('id', id);
+
+      // get the heading element within it and grab it's text
+      var heading = tab.find('h' + tabLevel + ':first');
+      var headingText = heading.html();
+
+      // build and append the tab list item
+      var a = $('<a role="tab" data-toggle="tab">' + headingText + '</a>');
+      a.attr('href', '#' + id);
+      a.attr('aria-controls', id);
+      var li = $('<li role="presentation"></li>');
+      li.append(a);
+      if (i === 0)
+        li.attr('class', 'active');
+      tabList.append(li);
+
+      // set it's attributes
+      tab.attr('role', 'tabpanel');
+      tab.addClass('tab-pane');
+      tab.addClass('tabbed-pane');
+      tab.addClass('no-title');
+      if (fade)
+        tab.addClass('fade');
+      if (i === 0) {
+        tab.addClass('active');
+        if (fade)
+          tab.addClass('in');
+      }
+
+      // move it into the tab content div
+      tab.detach().appendTo(tabContent);
+    });
+
+    // add nav-tabs-custom
+    tabset.addClass('nav-tabs-custom');
+
+    // internal layout is dashboard-column with tab-content flexing
+    tabset.addClass('dashboard-column');
+    setFlex(tabContent, 1);
+  }
+
+  // one time global initialization for components
+  function componentsInit(dashboardContainer) {
+    for (var i=0; i<window.FlexDashboardComponents.length; i++) {
+      var component = window.FlexDashboardComponents[i];
+      if (component.init)
+        component.init(dashboardContainer);
+    }
+  }
+
+  // find components that apply within a container
+  function componentsFind(container) {
+
+    // look for components
+    var components = [];
+    for (var i=0; i<window.FlexDashboardComponents.length; i++) {
+      var component = window.FlexDashboardComponents[i];
+      if (component.find(container).length)
+        components.push(component);
+    }
+
+    // if there were none then use a special flowing content component
+    // that just adds a scrollbar in fillPage mode
+    if (components.length == 0) {
+      components.push({
+        find: function(container) {
+          return container;
+        },
+
+        flex: function(fillPage) {
+          return fillPage;
+        },
+
+        layout: function(title, container, element, fillPage) {
+          if (fillPage) {
+            container.addClass('flowing-content-shim');
+            container.addClass('flowing-content-container');
+          }
+        }
+      });
+    }
+
+    return components;
+  }
+
+  // if there is a custom component then pick it out
+  function componentsCustom(components) {
+    var customComponent = [];
+    for (var i=0; i<components.length; i++)
+      if (components[i].type === "custom") {
+        customComponent.push(components[i]);
+        break;
+      }
+    return customComponent;
+  }
+
+  // query all components for flex
+  function componentsFlex(components) {
+
+    // no components at all means no flex
+    if (components.length === 0)
+      return false;
+
+    // otherwise query components (assume true unless we see false)
+    var isMobile = isMobilePhone();
+    for (var i=0; i<components.length; i++)
+      if (components[i].flex && !components[i].flex(_options.fillPage))
+        return false;
+    return true;
+  }
+
+  // layout all components
+  function componentsLayout(components, title, container) {
+    var isMobile = isMobilePhone();
+    for (var i=0; i<components.length; i++) {
+      var element = components[i].find(container);
+      if (components[i].layout) {
+        // call layout (don't call other components if it returns false)
+        var result = components[i].layout(title, container, element, _options.fillPage);
+        if (result === false)
+          return;
+      }
+    }
+  }
+
+  // get a reference to the h3, discover it's inner html, and remove it
+  function extractTitle(container) {
+    var h3 = container.children('h3').first();
+    var title = '';
+    if (!container.hasClass('no-title'))
+      title = h3.html();
+    h3.remove();
+    return title;
+  }
+
+  // extract chart notes
+  function extractChartNotes(chartContent, chartNotes) {
+    // look for a terminating blockquote or image caption
+    var blockquote = chartContent.children('blockquote:last-child');
+    var caption = chartContent.children('div.image-container')
+                              .children('p.caption');
+    if (blockquote.length) {
+      chartNotes.html(blockquote.children('p:first-child').html());
+      blockquote.remove();
+      return true;
+    } else if (caption.length) {
+      chartNotes.html(caption.html());
+      caption.remove();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function findShinyOutput(chartContent) {
+    return chartContent.find('.shiny-text-output, .shiny-html-output');
+  }
+
+  // safely detect rendering on a mobile phone
+  function isMobilePhone() {
+    try
+    {
+      return ! window.matchMedia("only screen and (min-width: 768px)").matches;
+    }
+    catch(e) {
+      return false;
+    }
+  }
+
+  function isFillPage() {
+    return _options.fillPage;
+  }
+
+  // detect portrait mode
+  function isPortrait() {
+    return ($(window).width() < $(window).height());
+  }
+
+  // safely detect rendering on a tablet
+  function isTablet() {
+    try
+    {
+      return window.matchMedia("only screen and (min-width: 769px) and (max-width: 992px)").matches;
+    }
+    catch(e) {
+      return false;
+    }
+  }
+
+  // test whether this is a shiny doc
+  function isShinyDoc() {
+    return (typeof(window.Shiny) !== "undefined" && !!window.Shiny.outputBindings);
+  }
+
+  // set flex using vendor specific prefixes
+  function setFlex(el, flex) {
+    el.css('-webkit-box-flex', flex)
+      .css('-webkit-flex', flex)
+      .css('-ms-flex', flex)
+      .css('flex', flex);
+  }
+
+  // support bookmarking of pages
+  function handleLocationHash() {
+
+    // restore tab/page from bookmark
+    var hash = window.location.hash;
+    if (hash.length > 0)
+      $('ul.nav a[href="' + hash + '"]').tab('show');
+    FlexDashboardUtils.manageActiveNavbarMenu();
+
+    // navigate to a tab when the history changes
+    window.addEventListener("popstate", function(e) {
+      var hash = window.location.hash;
+      var activeTab = $('ul.nav a[href="' + hash + '"]');
+      if (activeTab.length) {
+        activeTab.tab('show');
+      } else {
+        $('ul.nav a:first').tab('show');
+      }
+      FlexDashboardUtils.manageActiveNavbarMenu();
+    });
+
+    // add a hash to the URL when the user clicks on a tab/page
+    $('.navbar-nav a[data-toggle="tab"]').on('click', function(e) {
+      var baseUrl = FlexDashboardUtils.urlWithoutHash(window.location.href);
+      var hash = FlexDashboardUtils.urlHash($(this).attr('href'));
+      var href = baseUrl + hash;
+      FlexDashboardUtils.setLocation(href);
+    });
+
+    // handle clicks of other links that should activate pages
+    var navPages = $('ul.navbar-nav li a[data-toggle=tab]');
+    navPages.each(function() {
+      var href =  $(this).attr('href');
+      var links = $('a[href="' + href + '"][data-toggle!=tab]');
+      links.each(function() {
+        $(this).on('click', function(e) {
+          window.FlexDashboardUtils.showPage(href);
+        });
+      });
+    });
+  }
+
+  // tweak Prism highlighting
+  function initPrismHighlighting() {
+
+    if (window.Prism) {
+      Prism.languages.insertBefore('r', 'comment', {
+        'heading': [
+          {
+            // title 1
+        	  // =======
+
+        	  // title 2
+        	  // -------
+        	  pattern: /\w+.*(?:\r?\n|\r)(?:====+|----+)/,
+            alias: 'operator'
+          },
+          {
+            // ### title 3
+            pattern: /(^\s*)###[^#].+/m,
+            lookbehind: true,
+            alias: 'operator'
+          }
+        ]
+      });
+
+      // prism highlight
+      Prism.highlightAll();
+    }
+  }
+
+
+  // get theme color
+  var themeColors = {
+    bootstrap: {
+      primary: "rgba(51, 122, 183, 0.4)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    cerulean: {
+      primary: "rgb(47, 164, 231)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    journal: {
+      primary: "rgba(235, 104, 100, 0.70)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    flatly: {
+      primary: "rgba(44, 62, 80, 0.70)",
+      info: "rgba(52, 152, 219, 0.70)",
+      success: "rgba(24, 188, 156, 0.70)",
+      warning: "rgba(243, 156, 18, 0.70)",
+      danger: "rgba(231, 76, 60, 0.70)"
+    },
+    readable: {
+      primary: "rgba(69, 130, 236, 0.4)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    spacelab: {
+      primary: "rgba(68, 110, 155, 0.25)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    united: {
+      primary: "rgba(221, 72, 20, 0.30)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    cosmo: {
+      primary: "rgba(39, 128, 227, 0.7)",
+      info: "rgba(153, 84, 187, 0.7)",
+      success: "rgba(63, 182, 24, 0.7)",
+      warning: "rgba(255, 117, 24, 0.7)",
+      danger: "rgba(255, 0, 57, 0.7)"
+    },
+    lumen: {
+      primary: "rgba(21, 140, 186, 0.70)",
+      info: "rgba(117, 202, 235, 0.90)",
+      success: "rgba(40, 182, 44, 0.70)",
+      warning: "rgba(255, 133, 27, 0.70)",
+      danger: "rgba(255, 65, 54, 0.70)"
+    },
+    paper: {
+      primary: "rgba(33, 150, 243, 0.35)",
+      info: "rgb(225, 190, 231)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(255, 224, 178)",
+      danger: "rgb(249, 189, 187)"
+    },
+    sandstone: {
+      primary: "rgba(50, 93, 136, 0.3)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    simplex: {
+      primary: "rgba(217, 35, 15, 0.25)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    yeti: {
+      primary: "rgba(0, 140, 186, 0.298039)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    }
+  }
+  function themeColor(color) {
+    return themeColors[_options.theme][color];
+  }
+
+  FlexDashboard.prototype = {
+    constructor: FlexDashboard,
+    init: init,
+    isMobilePhone: isMobilePhone,
+    isFillPage: isFillPage,
+    themeColor: themeColor
+  };
+
+  return FlexDashboard;
+
+})();
+
+// utils
+window.FlexDashboardUtils = {
+  resizableImage: function(img) {
+    var src = img.attr('src');
+    var url = 'url("' + src + '")';
+    img.parent().css('background', url)
+                .css('background-size', 'contain')
+                .css('background-repeat', 'no-repeat')
+                .css('background-position', 'center')
+                .addClass('image-container');
+  },
+  setLocation: function(href) {
+    if (history && history.pushState) {
+      history.pushState(null, null, href);
+    } else {
+      window.location.replace(href);
+    }
+    setTimeout(function() {
+        window.scrollTo(0, 0);
+    }, 10);
+    this.manageActiveNavbarMenu();
+  },
+  showPage: function(href) {
+    $('ul.navbar-nav li a[href="' + href + '"]').tab('show');
+    var baseUrl = this.urlWithoutHash(window.location.href);
+    var loc = baseUrl + href;
+    this.setLocation(loc);
+  },
+  showLinkedValue: function(href) {
+    // check for a page link
+    if ($('ul.navbar-nav li a[data-toggle=tab][href="' + href + '"]').length > 0)
+      this.showPage(href);
+    else
+      window.open(href);
+  },
+  urlWithoutHash: function(url) {
+    var hashLoc = url.indexOf('#');
+    if (hashLoc != -1)
+      return url.substring(0, hashLoc);
+    else
+      return url;
+  },
+  urlHash: function(url) {
+    var hashLoc = url.indexOf('#');
+    if (hashLoc != -1)
+      return url.substring(hashLoc);
+    else
+      return "";
+  },
+  manageActiveNavbarMenu: function () {
+    // remove active from anyone currently active
+    $('.navbar ul.nav').find('li').removeClass('active');
+    // find the active tab
+    var activeTab = $('.dashboard-page-wrapper.tab-pane.active');
+    if (activeTab.length > 0) {
+      var tabId = activeTab.attr('id');
+      if (tabId)
+        $(".navbar ul.nav a[href='#" + tabId + "']").parents('li').addClass('active');
+    }
+  }
+};
+
+window.FlexDashboard = new FlexDashboard();
+
+// empty content
+window.FlexDashboardComponents.push({
+  find: function(container) {
+    if (container.find('p').length == 0)
+      return container;
+    else
+      return $();
+  }
+})
+
+// plot image
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.children('p')
+                    .children('img:only-child');
+  },
+
+  layout: function(title, container, element, fillPage) {
+    FlexDashboardUtils.resizableImage(element);
+  }
+});
+
+// plot image (figure style)
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.children('div.figure').children('img');
+  },
+
+  layout: function(title, container, element, fillPage) {
+    FlexDashboardUtils.resizableImage(element);
+  }
+});
+
+// htmlwidget
+window.FlexDashboardComponents.push({
+
+  init: function(dashboardContainer) {
+    // trigger "shown" after initial layout to force static htmlwidgets
+    // in runtime: shiny to be resized after the dom has been transformed
+    dashboardContainer.on('flexdashboard:layoutcomplete', function(event) {
+      setTimeout(function() {
+        dashboardContainer.trigger('shown');
+      }, 200);
+    });
+  },
+
+  find: function(container) {
+    return container.children('div[id^="htmlwidget-"],div.html-widget');
+  }
+});
+
+// gauge
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.children('div.html-widget.gauge');
+  },
+
+  flex: function(fillPage) {
+    return false;
+  },
+
+  layout: function(title, container, element, fillPage) {
+
+
+  }
+
+});
+
+// shiny output
+window.FlexDashboardComponents.push({
+  find: function(container) {
+    return container.children('div[class^="shiny-"]');
+  }
+});
+
+// datatables
+window.FlexDashboardComponents.push({
+  find: function(container) {
+    return container.find('.datatables');
+  },
+  flex: function(fillPage) {
+    return fillPage;
+  }
+});
+
+// bootstrap table
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    var bsTable = container.find('table.table');
+    if (bsTable.length !== 0)
+      return bsTable;
+    else
+      return container.find('tr.header').parent('thead').parent('table');
+  },
+
+  flex: function(fillPage) {
+    return fillPage;
+  },
+
+  layout: function(title, container, element, fillPage) {
+
+    // alias variables
+    var bsTable = element;
+
+    // fixup xtable generated tables with a proper thead
+    var headerRow = bsTable.find('tbody > tr:first-child > th').parent();
+    if (headerRow.length > 0) {
+      var thead = $('<thead></thead>');
+      bsTable.prepend(thead);
+      headerRow.detach().appendTo(thead);
+    }
+
+    // improve appearance
+    container.addClass('bootstrap-table');
+
+    // for fill page provide scrolling w/ sticky headers
+    if (fillPage) {
+      // force scrollbar on overflow
+      container.addClass('flowing-content-shim');
+
+      // stable table headers when scrolling
+      bsTable.stickyTableHeaders({
+        scrollableArea: container
+      });
+    }
+  }
+});
+
+// embedded shiny app
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.find('iframe.shiny-frame');
+  },
+
+  flex: function(fillPage) {
+    return fillPage;
+  },
+
+  layout: function(title, container, element, fillPage) {
+    if (fillPage) {
+      element.attr('height', '100%');
+    } else {
+      // provide default height if necessary
+      var height = element.get(0).style.height;
+      if (!height)
+        height = element.attr('height');
+      if (!height)
+        element.attr('height', 500);
+    }
+  }
+});
+
+// shiny fillRow or fillCol
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.find('.flexfill-container');
+  },
+
+  flex: function(fillPage) {
+    return fillPage;
+  },
+
+  layout: function(title, container, element, fillPage) {
+    if (fillPage)
+      element.css('height', '100%');
+    else {
+      // provide default height if necessary
+      var height = element.get(0).style.height;
+      if (height === "100%" || height === "auto" || height === "initial" ||
+          height === "inherit" || !height) {
+        element.css('height', 500);
+      }
+    }
+  }
+});
+
+// valueBox
+window.FlexDashboardComponents.push({
+
+  type: "custom",
+
+  find: function(container) {
+    if (container.find('span.value-output, .shiny-valuebox-output').length)
+      return container;
+    else
+      return $();
+  },
+
+  flex: function(fillPage) {
+    return false;
+  },
+
+  layout: function(title, container, element, fillPage) {
+
+    // alias variables
+    var chartTitle = title;
+    var valueBox = element;
+
+    // add value-box class to container
+    container.addClass('value-box');
+
+    // value paragraph
+    var value = $('<p class="value"></p>');
+
+    // if we have shiny-text-output then just move it in
+    var valueOutputSpan = [];
+    var shinyOutput = valueBox.find('.shiny-valuebox-output').detach();
+    if (shinyOutput.length) {
+      valueBox.children().remove();
+      shinyOutput.html("&mdash;");
+      value.append(shinyOutput);
+    } else {
+      // extract the value (remove leading vector index)
+      var chartValue = valueBox.text().trim();
+      chartValue = chartValue.replace("[1] ", "");
+      valueOutputSpan = valueBox.find('span.value-output').detach();
+      valueBox.children().remove();
+      value.text(chartValue);
+    }
+
+    // caption
+    var caption = $('<p class="caption"></p>');
+    caption.html(chartTitle);
+
+    // build inner div for value box and add it
+    var inner = $('<div class="inner"></div>');
+    inner.append(value);
+    inner.append(caption);
+    valueBox.append(inner);
+
+    // add icon if specified
+    var icon = $('<div class="icon"><i></i></div>');
+    valueBox.append(icon);
+    function setIcon(chartIcon) {
+      var iconLib = "";
+      var components = chartIcon.split("-");
+      if (components.length > 1)
+        iconLib = components[0];
+      icon.children('i').attr('class', iconLib + ' ' + chartIcon);
+    }
+    var chartIcon = valueBox.attr('data-icon');
+    if (chartIcon)
+      setIcon(chartIcon);
+
+    // set color based on data-background if necessary
+    var dataBackground = valueBox.attr('data-background');
+    if (dataBackground)
+      valueBox.css('background-color', bgColor);
+    else {
+      // default to bg-primary if no other background is specified
+      if (!valueBox.hasClass('bg-primary') &&
+          !valueBox.hasClass('bg-info') &&
+          !valueBox.hasClass('bg-warning') &&
+          !valueBox.hasClass('bg-success') &&
+          !valueBox.hasClass('bg-danger')) {
+        valueBox.addClass('bg-primary');
+      }
+    }
+
+    // handle data attributes in valueOutputSpan
+    function handleValueOutput(valueOutput) {
+
+      // caption
+      var dataCaption = valueOutput.attr('data-caption');
+      if (dataCaption)
+        caption.html(dataCaption);
+
+      // icon
+      var dataIcon = valueOutput.attr('data-icon');
+      if (dataIcon)
+        setIcon(dataIcon);
+
+      // color
+      var dataColor = valueOutput.attr('data-color');
+      if (dataColor) {
+        if (dataColor.indexOf('bg-') === 0) {
+          valueBox.css('background-color', '');
+          if (!valueBox.hasClass(dataColor)) {
+             valueBox.removeClass('bg-primary bg-info bg-warning bg-info bg-success');
+             valueBox.addClass(dataColor);
+          }
+        } else {
+          valueBox.removeClass('bg-primary bg-info bg-warning bg-info bg-success');
+          valueBox.css('background-color', dataColor);
+        }
+      }
+
+      // url
+      var dataHref = valueOutput.attr('data-href');
+      if (dataHref) {
+        valueBox.addClass('linked-value');
+        valueBox.on('click', function(e) {
+          window.FlexDashboardUtils.showLinkedValue(dataHref);
+        });
+      }
+    }
+
+    // check for a valueOutputSpan
+    if (valueOutputSpan.length > 0) {
+      handleValueOutput(valueOutputSpan);
+    }
+
+    // if we have a shinyOutput then bind a listener to handle
+    // new valueOutputSpan values
+    shinyOutput.on('shiny:value',
+      function(event) {
+        var element = $(event.target);
+        setTimeout(function() {
+          var valueOutputSpan = element.find('span.value-output');
+          if (valueOutputSpan.length > 0)
+            handleValueOutput(valueOutputSpan);
+        }, 10);
+      }
+    );
+  }
+});
+
+
+</script>
+<script type="text/javascript">
+$(document).ready(function () {
+  FlexDashboard.init({
+    theme: "cosmo",
+    fillPage: true,
+    orientation: "columns",
+    storyboard: false,
+    defaultFigWidth: 576,
+    defaultFigHeight: 460,
+    defaultFigWidthMobile: 360,
+    defaultFigHeightMobile: 460
+  });
+});
+</script>
+
+<div id="dashboard-container">
+
+<div id="microsoft" class="section level3">
+<h3>Microsoft</h3>
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="htmlwidget-cc0b0f78b72c99437c3a" style="width:576px;height:460.8px;" class="dygraphs html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cc0b0f78b72c99437c3a">{"x":{"attrs":{"labels":["day","MSFT"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}},"customBars":true,"series":{"MSFT":{"axis":"y"}}},"scale":"daily","group":"stocks","annotations":[],"shadings":[],"events":[],"format":"date","data":[["2014-01-02T00:00:00Z","2014-01-03T00:00:00Z","2014-01-06T00:00:00Z","2014-01-07T00:00:00Z","2014-01-08T00:00:00Z","2014-01-09T00:00:00Z","2014-01-10T00:00:00Z","2014-01-13T00:00:00Z","2014-01-14T00:00:00Z","2014-01-15T00:00:00Z","2014-01-16T00:00:00Z","2014-01-17T00:00:00Z","2014-01-21T00:00:00Z","2014-01-22T00:00:00Z","2014-01-23T00:00:00Z","2014-01-24T00:00:00Z","2014-01-27T00:00:00Z","2014-01-28T00:00:00Z","2014-01-29T00:00:00Z","2014-01-30T00:00:00Z","2014-01-31T00:00:00Z","2014-02-03T00:00:00Z","2014-02-04T00:00:00Z","2014-02-05T00:00:00Z","2014-02-06T00:00:00Z","2014-02-07T00:00:00Z","2014-02-10T00:00:00Z","2014-02-11T00:00:00Z","2014-02-12T00:00:00Z","2014-02-13T00:00:00Z","2014-02-14T00:00:00Z","2014-02-18T00:00:00Z","2014-02-19T00:00:00Z","2014-02-20T00:00:00Z","2014-02-21T00:00:00Z","2014-02-24T00:00:00Z","2014-02-25T00:00:00Z","2014-02-26T00:00:00Z","2014-02-27T00:00:00Z","2014-02-28T00:00:00Z","2014-03-03T00:00:00Z","2014-03-04T00:00:00Z","2014-03-05T00:00:00Z","2014-03-06T00:00:00Z","2014-03-07T00:00:00Z","2014-03-10T00:00:00Z","2014-03-11T00:00:00Z","2014-03-12T00:00:00Z","2014-03-13T00:00:00Z","2014-03-14T00:00:00Z","2014-03-17T00:00:00Z","2014-03-18T00:00:00Z","2014-03-19T00:00:00Z","2014-03-20T00:00:00Z","2014-03-21T00:00:00Z","2014-03-24T00:00:00Z","2014-03-25T00:00:00Z","2014-03-26T00:00:00Z","2014-03-27T00:00:00Z","2014-03-28T00:00:00Z","2014-03-31T00:00:00Z","2014-04-01T00:00:00Z","2014-04-02T00:00:00Z","2014-04-03T00:00:00Z","2014-04-04T00:00:00Z","2014-04-07T00:00:00Z","2014-04-08T00:00:00Z","2014-04-09T00:00:00Z","2014-04-10T00:00:00Z","2014-04-11T00:00:00Z","2014-04-14T00:00:00Z","2014-04-15T00:00:00Z","2014-04-16T00:00:00Z","2014-04-17T00:00:00Z","2014-04-21T00:00:00Z","2014-04-22T00:00:00Z","2014-04-23T00:00:00Z","2014-04-24T00:00:00Z","2014-04-25T00:00:00Z","2014-04-28T00:00:00Z","2014-04-29T00:00:00Z","2014-04-30T00:00:00Z","2014-05-01T00:00:00Z","2014-05-02T00:00:00Z","2014-05-05T00:00:00Z","2014-05-06T00:00:00Z","2014-05-07T00:00:00Z","2014-05-08T00:00:00Z","2014-05-09T00:00:00Z","2014-05-12T00:00:00Z","2014-05-13T00:00:00Z","2014-05-14T00:00:00Z","2014-05-15T00:00:00Z","2014-05-16T00:00:00Z","2014-05-19T00:00:00Z","2014-05-20T00:00:00Z","2014-05-21T00:00:00Z","2014-05-22T00:00:00Z","2014-05-23T00:00:00Z","2014-05-27T00:00:00Z","2014-05-28T00:00:00Z","2014-05-29T00:00:00Z","2014-05-30T00:00:00Z","2014-06-02T00:00:00Z","2014-06-03T00:00:00Z","2014-06-04T00:00:00Z","2014-06-05T00:00:00Z","2014-06-06T00:00:00Z","2014-06-09T00:00:00Z","2014-06-10T00:00:00Z","2014-06-11T00:00:00Z","2014-06-12T00:00:00Z","2014-06-13T00:00:00Z","2014-06-16T00:00:00Z","2014-06-17T00:00:00Z","2014-06-18T00:00:00Z","2014-06-19T00:00:00Z","2014-06-20T00:00:00Z","2014-06-23T00:00:00Z","2014-06-24T00:00:00Z","2014-06-25T00:00:00Z","2014-06-26T00:00:00Z","2014-06-27T00:00:00Z","2014-06-30T00:00:00Z","2014-07-01T00:00:00Z","2014-07-02T00:00:00Z","2014-07-03T00:00:00Z","2014-07-07T00:00:00Z","2014-07-08T00:00:00Z","2014-07-09T00:00:00Z","2014-07-10T00:00:00Z","2014-07-11T00:00:00Z","2014-07-14T00:00:00Z","2014-07-15T00:00:00Z","2014-07-16T00:00:00Z","2014-07-17T00:00:00Z","2014-07-18T00:00:00Z","2014-07-21T00:00:00Z","2014-07-22T00:00:00Z","2014-07-23T00:00:00Z","2014-07-24T00:00:00Z","2014-07-25T00:00:00Z","2014-07-28T00:00:00Z","2014-07-29T00:00:00Z","2014-07-30T00:00:00Z","2014-07-31T00:00:00Z","2014-08-01T00:00:00Z","2014-08-04T00:00:00Z","2014-08-05T00:00:00Z","2014-08-06T00:00:00Z","2014-08-07T00:00:00Z","2014-08-08T00:00:00Z","2014-08-11T00:00:00Z","2014-08-12T00:00:00Z","2014-08-13T00:00:00Z","2014-08-14T00:00:00Z","2014-08-15T00:00:00Z","2014-08-18T00:00:00Z","2014-08-19T00:00:00Z","2014-08-20T00:00:00Z","2014-08-21T00:00:00Z","2014-08-22T00:00:00Z","2014-08-25T00:00:00Z","2014-08-26T00:00:00Z","2014-08-27T00:00:00Z","2014-08-28T00:00:00Z","2014-08-29T00:00:00Z","2014-09-02T00:00:00Z","2014-09-03T00:00:00Z","2014-09-04T00:00:00Z","2014-09-05T00:00:00Z","2014-09-08T00:00:00Z","2014-09-09T00:00:00Z","2014-09-10T00:00:00Z","2014-09-11T00:00:00Z","2014-09-12T00:00:00Z","2014-09-15T00:00:00Z","2014-09-16T00:00:00Z","2014-09-17T00:00:00Z","2014-09-18T00:00:00Z","2014-09-19T00:00:00Z","2014-09-22T00:00:00Z","2014-09-23T00:00:00Z","2014-09-24T00:00:00Z","2014-09-25T00:00:00Z","2014-09-26T00:00:00Z","2014-09-29T00:00:00Z","2014-09-30T00:00:00Z","2014-10-01T00:00:00Z","2014-10-02T00:00:00Z","2014-10-03T00:00:00Z","2014-10-06T00:00:00Z","2014-10-07T00:00:00Z","2014-10-08T00:00:00Z","2014-10-09T00:00:00Z","2014-10-10T00:00:00Z","2014-10-13T00:00:00Z","2014-10-14T00:00:00Z","2014-10-15T00:00:00Z","2014-10-16T00:00:00Z","2014-10-17T00:00:00Z","2014-10-20T00:00:00Z","2014-10-21T00:00:00Z","2014-10-22T00:00:00Z","2014-10-23T00:00:00Z","2014-10-24T00:00:00Z","2014-10-27T00:00:00Z","2014-10-28T00:00:00Z","2014-10-29T00:00:00Z","2014-10-30T00:00:00Z","2014-10-31T00:00:00Z","2014-11-03T00:00:00Z","2014-11-04T00:00:00Z","2014-11-05T00:00:00Z","2014-11-06T00:00:00Z","2014-11-07T00:00:00Z","2014-11-10T00:00:00Z","2014-11-11T00:00:00Z","2014-11-12T00:00:00Z","2014-11-13T00:00:00Z","2014-11-14T00:00:00Z","2014-11-17T00:00:00Z","2014-11-18T00:00:00Z","2014-11-19T00:00:00Z","2014-11-20T00:00:00Z","2014-11-21T00:00:00Z","2014-11-24T00:00:00Z","2014-11-25T00:00:00Z","2014-11-26T00:00:00Z","2014-11-28T00:00:00Z","2014-12-01T00:00:00Z","2014-12-02T00:00:00Z","2014-12-03T00:00:00Z","2014-12-04T00:00:00Z","2014-12-05T00:00:00Z","2014-12-08T00:00:00Z","2014-12-09T00:00:00Z","2014-12-10T00:00:00Z","2014-12-11T00:00:00Z","2014-12-12T00:00:00Z","2014-12-15T00:00:00Z","2014-12-16T00:00:00Z","2014-12-17T00:00:00Z","2014-12-18T00:00:00Z","2014-12-19T00:00:00Z","2014-12-22T00:00:00Z","2014-12-23T00:00:00Z","2014-12-24T00:00:00Z","2014-12-26T00:00:00Z","2014-12-29T00:00:00Z","2014-12-30T00:00:00Z","2014-12-31T00:00:00Z","2015-01-02T00:00:00Z","2015-01-05T00:00:00Z","2015-01-06T00:00:00Z","2015-01-07T00:00:00Z","2015-01-08T00:00:00Z","2015-01-09T00:00:00Z","2015-01-12T00:00:00Z","2015-01-13T00:00:00Z","2015-01-14T00:00:00Z","2015-01-15T00:00:00Z","2015-01-16T00:00:00Z","2015-01-20T00:00:00Z","2015-01-21T00:00:00Z","2015-01-22T00:00:00Z","2015-01-23T00:00:00Z","2015-01-26T00:00:00Z","2015-01-27T00:00:00Z","2015-01-28T00:00:00Z","2015-01-29T00:00:00Z","2015-01-30T00:00:00Z","2015-02-02T00:00:00Z","2015-02-03T00:00:00Z","2015-02-04T00:00:00Z","2015-02-05T00:00:00Z","2015-02-06T00:00:00Z","2015-02-09T00:00:00Z","2015-02-10T00:00:00Z","2015-02-11T00:00:00Z","2015-02-12T00:00:00Z","2015-02-13T00:00:00Z","2015-02-17T00:00:00Z","2015-02-18T00:00:00Z","2015-02-19T00:00:00Z","2015-02-20T00:00:00Z","2015-02-23T00:00:00Z","2015-02-24T00:00:00Z","2015-02-25T00:00:00Z","2015-02-26T00:00:00Z","2015-02-27T00:00:00Z","2015-03-02T00:00:00Z","2015-03-03T00:00:00Z","2015-03-04T00:00:00Z","2015-03-05T00:00:00Z","2015-03-06T00:00:00Z","2015-03-09T00:00:00Z","2015-03-10T00:00:00Z","2015-03-11T00:00:00Z","2015-03-12T00:00:00Z","2015-03-13T00:00:00Z","2015-03-16T00:00:00Z","2015-03-17T00:00:00Z","2015-03-18T00:00:00Z","2015-03-19T00:00:00Z","2015-03-20T00:00:00Z","2015-03-23T00:00:00Z","2015-03-24T00:00:00Z","2015-03-25T00:00:00Z","2015-03-26T00:00:00Z","2015-03-27T00:00:00Z","2015-03-30T00:00:00Z","2015-03-31T00:00:00Z","2015-04-01T00:00:00Z","2015-04-02T00:00:00Z","2015-04-06T00:00:00Z","2015-04-07T00:00:00Z","2015-04-08T00:00:00Z","2015-04-09T00:00:00Z","2015-04-10T00:00:00Z","2015-04-13T00:00:00Z","2015-04-14T00:00:00Z","2015-04-15T00:00:00Z","2015-04-16T00:00:00Z","2015-04-17T00:00:00Z","2015-04-20T00:00:00Z","2015-04-21T00:00:00Z","2015-04-22T00:00:00Z","2015-04-23T00:00:00Z","2015-04-24T00:00:00Z","2015-04-27T00:00:00Z","2015-04-28T00:00:00Z","2015-04-29T00:00:00Z","2015-04-30T00:00:00Z","2015-05-01T00:00:00Z","2015-05-04T00:00:00Z","2015-05-05T00:00:00Z","2015-05-06T00:00:00Z","2015-05-07T00:00:00Z","2015-05-08T00:00:00Z","2015-05-11T00:00:00Z","2015-05-12T00:00:00Z","2015-05-13T00:00:00Z","2015-05-14T00:00:00Z","2015-05-15T00:00:00Z","2015-05-18T00:00:00Z","2015-05-19T00:00:00Z","2015-05-20T00:00:00Z","2015-05-21T00:00:00Z","2015-05-22T00:00:00Z","2015-05-26T00:00:00Z","2015-05-27T00:00:00Z","2015-05-28T00:00:00Z","2015-05-29T00:00:00Z","2015-06-01T00:00:00Z","2015-06-02T00:00:00Z","2015-06-03T00:00:00Z","2015-06-04T00:00:00Z","2015-06-05T00:00:00Z","2015-06-08T00:00:00Z","2015-06-09T00:00:00Z","2015-06-10T00:00:00Z","2015-06-11T00:00:00Z","2015-06-12T00:00:00Z","2015-06-15T00:00:00Z","2015-06-16T00:00:00Z","2015-06-17T00:00:00Z","2015-06-18T00:00:00Z","2015-06-19T00:00:00Z","2015-06-22T00:00:00Z","2015-06-23T00:00:00Z","2015-06-24T00:00:00Z","2015-06-25T00:00:00Z","2015-06-26T00:00:00Z","2015-06-29T00:00:00Z","2015-06-30T00:00:00Z","2015-07-01T00:00:00Z","2015-07-02T00:00:00Z","2015-07-06T00:00:00Z","2015-07-07T00:00:00Z","2015-07-08T00:00:00Z","2015-07-09T00:00:00Z","2015-07-10T00:00:00Z","2015-07-13T00:00:00Z","2015-07-14T00:00:00Z","2015-07-15T00:00:00Z","2015-07-16T00:00:00Z","2015-07-17T00:00:00Z","2015-07-20T00:00:00Z","2015-07-21T00:00:00Z","2015-07-22T00:00:00Z","2015-07-23T00:00:00Z","2015-07-24T00:00:00Z","2015-07-27T00:00:00Z","2015-07-28T00:00:00Z","2015-07-29T00:00:00Z","2015-07-30T00:00:00Z","2015-07-31T00:00:00Z","2015-08-03T00:00:00Z","2015-08-04T00:00:00Z","2015-08-05T00:00:00Z","2015-08-06T00:00:00Z","2015-08-07T00:00:00Z","2015-08-10T00:00:00Z","2015-08-11T00:00:00Z","2015-08-12T00:00:00Z","2015-08-13T00:00:00Z","2015-08-14T00:00:00Z","2015-08-17T00:00:00Z","2015-08-18T00:00:00Z","2015-08-19T00:00:00Z","2015-08-20T00:00:00Z","2015-08-21T00:00:00Z","2015-08-24T00:00:00Z","2015-08-25T00:00:00Z","2015-08-26T00:00:00Z","2015-08-27T00:00:00Z","2015-08-28T00:00:00Z","2015-08-31T00:00:00Z","2015-09-01T00:00:00Z","2015-09-02T00:00:00Z","2015-09-03T00:00:00Z","2015-09-04T00:00:00Z","2015-09-08T00:00:00Z","2015-09-09T00:00:00Z","2015-09-10T00:00:00Z","2015-09-11T00:00:00Z","2015-09-14T00:00:00Z","2015-09-15T00:00:00Z","2015-09-16T00:00:00Z","2015-09-17T00:00:00Z","2015-09-18T00:00:00Z","2015-09-21T00:00:00Z","2015-09-22T00:00:00Z","2015-09-23T00:00:00Z","2015-09-24T00:00:00Z","2015-09-25T00:00:00Z","2015-09-28T00:00:00Z","2015-09-29T00:00:00Z","2015-09-30T00:00:00Z","2015-10-01T00:00:00Z","2015-10-02T00:00:00Z","2015-10-05T00:00:00Z","2015-10-06T00:00:00Z","2015-10-07T00:00:00Z","2015-10-08T00:00:00Z","2015-10-09T00:00:00Z","2015-10-12T00:00:00Z","2015-10-13T00:00:00Z","2015-10-14T00:00:00Z","2015-10-15T00:00:00Z","2015-10-16T00:00:00Z","2015-10-19T00:00:00Z","2015-10-20T00:00:00Z","2015-10-21T00:00:00Z","2015-10-22T00:00:00Z","2015-10-23T00:00:00Z","2015-10-26T00:00:00Z","2015-10-27T00:00:00Z","2015-10-28T00:00:00Z","2015-10-29T00:00:00Z","2015-10-30T00:00:00Z","2015-11-02T00:00:00Z","2015-11-03T00:00:00Z","2015-11-04T00:00:00Z","2015-11-05T00:00:00Z","2015-11-06T00:00:00Z","2015-11-09T00:00:00Z","2015-11-10T00:00:00Z","2015-11-11T00:00:00Z","2015-11-12T00:00:00Z","2015-11-13T00:00:00Z","2015-11-16T00:00:00Z","2015-11-17T00:00:00Z","2015-11-18T00:00:00Z","2015-11-19T00:00:00Z","2015-11-20T00:00:00Z","2015-11-23T00:00:00Z","2015-11-24T00:00:00Z","2015-11-25T00:00:00Z","2015-11-27T00:00:00Z","2015-11-30T00:00:00Z","2015-12-01T00:00:00Z","2015-12-02T00:00:00Z","2015-12-03T00:00:00Z","2015-12-04T00:00:00Z","2015-12-07T00:00:00Z","2015-12-08T00:00:00Z","2015-12-09T00:00:00Z","2015-12-10T00:00:00Z","2015-12-11T00:00:00Z","2015-12-14T00:00:00Z","2015-12-15T00:00:00Z","2015-12-16T00:00:00Z","2015-12-17T00:00:00Z","2015-12-18T00:00:00Z","2015-12-21T00:00:00Z","2015-12-22T00:00:00Z","2015-12-23T00:00:00Z","2015-12-24T00:00:00Z","2015-12-28T00:00:00Z","2015-12-29T00:00:00Z","2015-12-30T00:00:00Z","2015-12-31T00:00:00Z","2016-01-04T00:00:00Z","2016-01-05T00:00:00Z","2016-01-06T00:00:00Z","2016-01-07T00:00:00Z","2016-01-08T00:00:00Z","2016-01-11T00:00:00Z","2016-01-12T00:00:00Z","2016-01-13T00:00:00Z","2016-01-14T00:00:00Z","2016-01-15T00:00:00Z","2016-01-19T00:00:00Z","2016-01-20T00:00:00Z","2016-01-21T00:00:00Z","2016-01-22T00:00:00Z","2016-01-25T00:00:00Z","2016-01-26T00:00:00Z","2016-01-27T00:00:00Z","2016-01-28T00:00:00Z","2016-01-29T00:00:00Z","2016-02-01T00:00:00Z","2016-02-02T00:00:00Z","2016-02-03T00:00:00Z","2016-02-04T00:00:00Z","2016-02-05T00:00:00Z","2016-02-08T00:00:00Z","2016-02-09T00:00:00Z","2016-02-10T00:00:00Z","2016-02-11T00:00:00Z","2016-02-12T00:00:00Z","2016-02-16T00:00:00Z","2016-02-17T00:00:00Z","2016-02-18T00:00:00Z","2016-02-19T00:00:00Z","2016-02-22T00:00:00Z","2016-02-23T00:00:00Z","2016-02-24T00:00:00Z","2016-02-25T00:00:00Z","2016-02-26T00:00:00Z","2016-02-29T00:00:00Z","2016-03-01T00:00:00Z","2016-03-02T00:00:00Z","2016-03-03T00:00:00Z","2016-03-04T00:00:00Z","2016-03-07T00:00:00Z","2016-03-08T00:00:00Z","2016-03-09T00:00:00Z","2016-03-10T00:00:00Z","2016-03-11T00:00:00Z","2016-03-14T00:00:00Z","2016-03-15T00:00:00Z","2016-03-16T00:00:00Z","2016-03-17T00:00:00Z","2016-03-18T00:00:00Z","2016-03-21T00:00:00Z","2016-03-22T00:00:00Z","2016-03-23T00:00:00Z","2016-03-24T00:00:00Z","2016-03-28T00:00:00Z","2016-03-29T00:00:00Z","2016-03-30T00:00:00Z","2016-03-31T00:00:00Z","2016-04-01T00:00:00Z","2016-04-04T00:00:00Z","2016-04-05T00:00:00Z","2016-04-06T00:00:00Z","2016-04-07T00:00:00Z","2016-04-08T00:00:00Z","2016-04-11T00:00:00Z","2016-04-12T00:00:00Z","2016-04-13T00:00:00Z","2016-04-14T00:00:00Z","2016-04-15T00:00:00Z","2016-04-18T00:00:00Z","2016-04-19T00:00:00Z","2016-04-20T00:00:00Z","2016-04-21T00:00:00Z","2016-04-22T00:00:00Z","2016-04-25T00:00:00Z","2016-04-26T00:00:00Z","2016-04-27T00:00:00Z","2016-04-28T00:00:00Z","2016-04-29T00:00:00Z","2016-05-02T00:00:00Z","2016-05-03T00:00:00Z","2016-05-04T00:00:00Z","2016-05-05T00:00:00Z","2016-05-06T00:00:00Z","2016-05-09T00:00:00Z","2016-05-10T00:00:00Z","2016-05-11T00:00:00Z","2016-05-12T00:00:00Z","2016-05-13T00:00:00Z","2016-05-16T00:00:00Z","2016-05-17T00:00:00Z","2016-05-18T00:00:00Z","2016-05-19T00:00:00Z","2016-05-20T00:00:00Z","2016-05-23T00:00:00Z","2016-05-24T00:00:00Z","2016-05-25T00:00:00Z","2016-05-26T00:00:00Z","2016-05-27T00:00:00Z","2016-05-31T00:00:00Z","2016-06-01T00:00:00Z","2016-06-02T00:00:00Z","2016-06-03T00:00:00Z","2016-06-06T00:00:00Z","2016-06-07T00:00:00Z","2016-06-08T00:00:00Z","2016-06-09T00:00:00Z","2016-06-10T00:00:00Z","2016-06-13T00:00:00Z","2016-06-14T00:00:00Z","2016-06-15T00:00:00Z","2016-06-16T00:00:00Z","2016-06-17T00:00:00Z","2016-06-20T00:00:00Z","2016-06-21T00:00:00Z","2016-06-22T00:00:00Z","2016-06-23T00:00:00Z","2016-06-24T00:00:00Z","2016-06-27T00:00:00Z","2016-06-28T00:00:00Z","2016-06-29T00:00:00Z","2016-06-30T00:00:00Z","2016-07-01T00:00:00Z","2016-07-05T00:00:00Z","2016-07-06T00:00:00Z","2016-07-07T00:00:00Z","2016-07-08T00:00:00Z","2016-07-11T00:00:00Z","2016-07-12T00:00:00Z","2016-07-13T00:00:00Z","2016-07-14T00:00:00Z","2016-07-15T00:00:00Z","2016-07-18T00:00:00Z","2016-07-19T00:00:00Z","2016-07-20T00:00:00Z","2016-07-21T00:00:00Z","2016-07-22T00:00:00Z","2016-07-25T00:00:00Z","2016-07-26T00:00:00Z","2016-07-27T00:00:00Z","2016-07-28T00:00:00Z","2016-07-29T00:00:00Z","2016-08-01T00:00:00Z","2016-08-02T00:00:00Z","2016-08-03T00:00:00Z","2016-08-04T00:00:00Z","2016-08-05T00:00:00Z","2016-08-08T00:00:00Z","2016-08-09T00:00:00Z","2016-08-10T00:00:00Z","2016-08-11T00:00:00Z","2016-08-12T00:00:00Z","2016-08-15T00:00:00Z","2016-08-16T00:00:00Z","2016-08-17T00:00:00Z","2016-08-18T00:00:00Z","2016-08-19T00:00:00Z","2016-08-22T00:00:00Z","2016-08-23T00:00:00Z","2016-08-24T00:00:00Z","2016-08-25T00:00:00Z","2016-08-26T00:00:00Z","2016-08-29T00:00:00Z","2016-08-30T00:00:00Z","2016-08-31T00:00:00Z","2016-09-01T00:00:00Z","2016-09-02T00:00:00Z","2016-09-06T00:00:00Z","2016-09-07T00:00:00Z","2016-09-08T00:00:00Z","2016-09-09T00:00:00Z","2016-09-12T00:00:00Z","2016-09-13T00:00:00Z","2016-09-14T00:00:00Z","2016-09-15T00:00:00Z","2016-09-16T00:00:00Z","2016-09-19T00:00:00Z","2016-09-20T00:00:00Z","2016-09-21T00:00:00Z","2016-09-22T00:00:00Z","2016-09-23T00:00:00Z","2016-09-26T00:00:00Z","2016-09-27T00:00:00Z","2016-09-28T00:00:00Z","2016-09-29T00:00:00Z","2016-09-30T00:00:00Z","2016-10-03T00:00:00Z","2016-10-04T00:00:00Z","2016-10-05T00:00:00Z","2016-10-06T00:00:00Z","2016-10-07T00:00:00Z","2016-10-10T00:00:00Z","2016-10-11T00:00:00Z","2016-10-12T00:00:00Z","2016-10-13T00:00:00Z","2016-10-14T00:00:00Z","2016-10-17T00:00:00Z","2016-10-18T00:00:00Z","2016-10-19T00:00:00Z","2016-10-20T00:00:00Z","2016-10-21T00:00:00Z","2016-10-24T00:00:00Z","2016-10-25T00:00:00Z","2016-10-26T00:00:00Z","2016-10-27T00:00:00Z","2016-10-28T00:00:00Z","2016-10-31T00:00:00Z","2016-11-01T00:00:00Z","2016-11-02T00:00:00Z","2016-11-03T00:00:00Z","2016-11-04T00:00:00Z","2016-11-07T00:00:00Z","2016-11-08T00:00:00Z","2016-11-09T00:00:00Z","2016-11-10T00:00:00Z","2016-11-11T00:00:00Z","2016-11-14T00:00:00Z","2016-11-15T00:00:00Z","2016-11-16T00:00:00Z","2016-11-17T00:00:00Z","2016-11-18T00:00:00Z","2016-11-21T00:00:00Z","2016-11-22T00:00:00Z","2016-11-23T00:00:00Z","2016-11-25T00:00:00Z","2016-11-28T00:00:00Z","2016-11-29T00:00:00Z","2016-11-30T00:00:00Z","2016-12-01T00:00:00Z","2016-12-02T00:00:00Z","2016-12-05T00:00:00Z","2016-12-06T00:00:00Z","2016-12-07T00:00:00Z","2016-12-08T00:00:00Z","2016-12-09T00:00:00Z","2016-12-12T00:00:00Z","2016-12-13T00:00:00Z","2016-12-14T00:00:00Z","2016-12-15T00:00:00Z","2016-12-16T00:00:00Z","2016-12-19T00:00:00Z","2016-12-20T00:00:00Z","2016-12-21T00:00:00Z","2016-12-22T00:00:00Z","2016-12-23T00:00:00Z","2016-12-27T00:00:00Z","2016-12-28T00:00:00Z","2016-12-29T00:00:00Z","2016-12-30T00:00:00Z","2017-01-03T00:00:00Z","2017-01-04T00:00:00Z","2017-01-05T00:00:00Z","2017-01-06T00:00:00Z","2017-01-09T00:00:00Z","2017-01-10T00:00:00Z","2017-01-11T00:00:00Z","2017-01-12T00:00:00Z","2017-01-13T00:00:00Z","2017-01-17T00:00:00Z","2017-01-18T00:00:00Z","2017-01-19T00:00:00Z","2017-01-20T00:00:00Z","2017-01-23T00:00:00Z","2017-01-24T00:00:00Z","2017-01-25T00:00:00Z","2017-01-26T00:00:00Z","2017-01-27T00:00:00Z","2017-01-30T00:00:00Z","2017-01-31T00:00:00Z","2017-02-01T00:00:00Z","2017-02-02T00:00:00Z","2017-02-03T00:00:00Z","2017-02-06T00:00:00Z","2017-02-07T00:00:00Z","2017-02-08T00:00:00Z","2017-02-09T00:00:00Z","2017-02-10T00:00:00Z","2017-02-13T00:00:00Z","2017-02-14T00:00:00Z","2017-02-15T00:00:00Z","2017-02-16T00:00:00Z","2017-02-17T00:00:00Z","2017-02-21T00:00:00Z","2017-02-22T00:00:00Z","2017-02-23T00:00:00Z","2017-02-24T00:00:00Z","2017-02-27T00:00:00Z","2017-02-28T00:00:00Z","2017-03-01T00:00:00Z","2017-03-02T00:00:00Z","2017-03-03T00:00:00Z","2017-03-06T00:00:00Z","2017-03-07T00:00:00Z","2017-03-08T00:00:00Z","2017-03-09T00:00:00Z","2017-03-10T00:00:00Z","2017-03-13T00:00:00Z","2017-03-14T00:00:00Z","2017-03-15T00:00:00Z","2017-03-16T00:00:00Z","2017-03-17T00:00:00Z","2017-03-20T00:00:00Z","2017-03-21T00:00:00Z","2017-03-22T00:00:00Z","2017-03-23T00:00:00Z","2017-03-24T00:00:00Z","2017-03-27T00:00:00Z","2017-03-28T00:00:00Z","2017-03-29T00:00:00Z","2017-03-30T00:00:00Z","2017-03-31T00:00:00Z","2017-04-03T00:00:00Z","2017-04-04T00:00:00Z","2017-04-05T00:00:00Z","2017-04-06T00:00:00Z","2017-04-07T00:00:00Z","2017-04-10T00:00:00Z","2017-04-11T00:00:00Z","2017-04-12T00:00:00Z"],[[37.099998,37.16,37.400002],[36.599998,36.91,37.220001],[36.110001,36.130001,36.889999],[36.209999,36.41,36.490002],[35.580002,35.759998,36.139999],[35.400002,35.529999,35.91],[35.75,36.040001,36.150002],[34.830002,34.98,36.02],[34.630001,35.779999,35.880001],[35.849998,36.759998,36.790001],[36.310001,36.889999,37],[36.150002,36.380001,36.830002],[36.060001,36.169998,36.82],[35.75,35.93,36.32],[35.52,36.060001,36.130001],[36.529999,36.810001,37.549999],[35.98,36.029999,36.889999],[35.75,36.27,36.389999],[35.900002,36.66,36.880001],[36.23,36.860001,36.880001],[36.560001,37.84,37.889999],[36.43,36.48,37.990002],[36.25,36.349998,37.189999],[35.799999,35.82,36.470001],[35.689999,36.18,36.25],[36.009998,36.560001,36.59],[36.290001,36.799999,36.799999],[36.860001,37.169998,37.259998],[37.299999,37.470001,37.599998],[37.330002,37.610001,37.860001],[37.330002,37.619999,37.779999],[37.41,37.419998,37.779999],[37.209999,37.509998,37.75],[37.400002,37.75,37.869999],[37.860001,37.98,38.349998],[37.540001,37.689999,37.98],[37.349998,37.540001,37.849998],[37.189999,37.470001,37.740002],[37.23,37.860001,37.889999],[37.82,38.310001,38.459999],[37.490002,37.779999,38.130001],[38.07,38.41,38.48],[37.93,38.110001,38.27],[37.889999,38.150002,38.240002],[37.689999,37.900002,38.360001],[37.720001,37.82,38.009998],[37.720001,38.02,38.23],[37.790001,38.27,38.43],[37.639999,37.889999,38.450001],[37.509998,37.700001,38.139999],[37.790001,38.049999,38.41],[38.220001,39.549999,39.900002],[38.91,39.27,39.549999],[39.240002,40.330002,40.650002],[40.009998,40.16,40.939999],[39.860001,40.5,40.639999],[39.959999,40.34,40.990002],[39.599998,39.790001,40.709999],[39.34,39.360001,39.970001],[39.68,40.299999,40.639999],[40.400002,40.990002,41.5],[41.07,41.419998,41.59],[41.169998,41.349998,41.66],[40.709999,41.009998,41.290001],[39.639999,39.869999,41.389999],[39.740002,39.799999,40.27],[39.200001,39.82,39.93],[39.880001,40.470001,40.549999],[39.09,39.360001,40.689999],[39,39.209999,39.790001],[38.900002,39.18,39.41],[39.049999,39.75,39.959999],[39.91,40.400002,40.419998],[39.509998,40.009998,40.200001],[39.790001,39.939999,40.150002],[39.830002,39.990002,40.139999],[39.470001,39.689999,39.990002],[39.299999,39.860001,39.970001],[39.75,39.91,40.68],[40.09,40.869999,41.290001],[40.389999,40.509998,41.189999],[40.169998,40.400002,40.5],[39.950001,40,40.360001],[39.66,39.689999,40.34],[39.299999,39.43,39.639999],[38.950001,39.060001,39.349998],[38.509998,39.419998,39.509998],[38.970001,39.639999,39.900002],[39.369999,39.540001,39.849998],[39.650002,39.970001,40.02],[39.849998,40.419998,40.5],[40.049999,40.240002,40.450001],[39.509998,39.599998,40.400002],[39.27,39.830002,39.84],[39.459999,39.75,39.82],[39.459999,39.68,39.939999],[39.740002,40.349998,40.349998],[39.849998,40.099998,40.349998],[40,40.119999,40.369999],[39.810001,40.189999,40.259998],[39.82,40.009998,40.189999],[39.91,40.34,40.349998],[40.25,40.939999,40.970001],[40.68,40.790001,41.09],[40.25,40.290001,40.68],[39.860001,40.32,40.369999],[40.400002,41.209999,41.25],[41.240002,41.48,41.66],[41.02,41.27,41.48],[40.860001,41.110001,41.16],[40.77,40.860001,41.07],[40.290001,40.580002,40.880001],[40.860001,41.23,41.57],[41.040001,41.5,41.610001],[40.34,41.68,41.91],[41.18,41.650002,41.740002],[41.330002,41.509998,41.77],[41.380001,41.68,41.830002],[41.689999,41.990002,42],[41.560001,41.75,41.939999],[41.459999,42.029999,42.049999],[41.43,41.720001,41.939999],[41.509998,42.25,42.290001],[41.700001,41.700001,42.209999],[41.689999,41.869999,42.150002],[41.529999,41.900002,41.900002],[41.560001,41.799999,41.990002],[41.709999,41.990002,42.119999],[41.610001,41.779999,42],[41.529999,41.669998,41.990002],[41.049999,41.689999,42],[41.48,42.09,42.09],[42.040001,42.139999,42.450001],[42.029999,42.450001,42.470001],[42.48,44.080002,44.310001],[44.25,44.529999,45.709999],[44.25,44.689999,44.84],[44.220001,44.84,45.16],[44.59,44.830002,45.150002],[44.619999,44.869999,45.450001],[44.32,44.400002,45],[44.299999,44.5,44.66],[43.93,43.970001,44.509998],[43.639999,43.889999,44.09],[43.290001,43.580002,44.099998],[43.080002,43.16,43.689999],[42.599998,42.860001,43.25],[42.810001,43.369999,43.470001],[42.830002,43.080002,43.459999],[42.209999,42.740002,43.169998],[42.650002,43.23,43.450001],[42.91,43.200001,43.32],[43.02,43.200001,43.450001],[43,43.52,43.59],[43.52,44.080002,44.18],[44.009998,44.27,44.419998],[44.400002,44.790001,44.900002],[44.68,45.110001,45.110001],[44.830002,45.330002,45.34],[44.900002,44.950001,45.400002],[44.830002,45.220001,45.25],[45.07,45.150002,45.470001],[45.040001,45.169998,45.439999],[44.939999,45.009998,45.400002],[44.759998,44.869999,45],[44.610001,44.880001,44.98],[44.860001,45.43,45.439999],[44.849998,45.09,45.459999],[44.529999,44.959999,45.110001],[44.720001,45.259998,45.27],[45.110001,45.91,45.93],[45.990002,46.470001,46.799999],[46.419998,46.759998,46.970001],[46.279999,46.84,46.939999],[46.470001,47,47],[46.599998,46.700001,47.02],[46.099998,46.240002,46.709999],[46.290001,46.759998,46.849998],[46.23,46.52,46.689999],[46.459999,46.68,46.830002],[46.599998,47.52,47.57],[46.98,47.060001,47.380001],[46.470001,46.560001,46.98],[46.34,47.080002,47.110001],[46.029999,46.040001,47.09],[45.759998,46.41,46.619999],[45.759998,46.439999,46.560001],[46.009998,46.360001,46.48],[45.849998,45.900002,46.529999],[45.639999,45.759998,46.099998],[45.610001,46.09,46.299999],[45.919998,46.09,46.299999],[45.419998,45.529999,45.93],[45.34,46.779999,46.889999],[45.740002,45.849998,46.799999],[43.950001,44.029999,46.119999],[43.490002,43.650002,44.560001],[43.560001,43.73,44.380001],[42.099998,43.220001,43.389999],[42.220001,42.740002,43.080002],[42.790001,43.630001,43.939999],[42.810001,44.080002,44.139999],[44.189999,44.880001,44.98],[44.23,44.380001,45.07],[44.529999,45.02,45.450001],[45.18,46.130001,46.900002],[45.709999,45.91,46.099998],[45.77,46.490002,46.5],[46.34,46.619999,46.700001],[45.77,46.049999,46.32],[46.48,46.950001,46.970001],[46.73,47.439999,47.459999],[47.25,47.57,47.73],[47.259998,47.860001,47.900002],[47.790001,48.700001,48.860001],[48.290001,48.68,48.919998],[48.549999,48.889999,49.150002],[48.650002,48.869999,48.950001],[48.52,48.779999,48.919998],[48.709999,49.610001,49.650002],[49.389999,49.580002,50.049999],[49.139999,49.459999,49.709999],[48.700001,48.740002,49.330002],[47.93,48.220001,48.75],[47.869999,48.700001,48.700001],[47.57,47.98,49.049999],[47.389999,47.59,48],[47.450001,47.470001,47.970001],[47.279999,47.75,47.990002],[47.610001,47.810001,48.200001],[47.709999,48.619999,48.779999],[48.200001,48.459999,49.049999],[47.810001,48.080002,48.5],[48.200001,48.84,49.060001],[48.380001,48.419998,48.970001],[47.450001,47.700001,48.349998],[47.049999,47.59,47.919998],[46.700001,46.900002,47.66],[46.68,47.169998,47.740002],[46.669998,46.950001,47.73],[46.549999,46.669998,47.669998],[45.130001,45.16,46.34],[44.900002,45.740002,45.950001],[46.34,47.52,47.52],[47.169998,47.66,48.099998],[47.709999,47.98,48.119999],[48.130001,48.450001,48.799999],[48.080002,48.139999,48.639999],[47.82,47.880001,48.41],[47.259998,47.450001,47.779999],[46.84,47.02,47.619999],[46.450001,46.450001,47.439999],[46.540001,46.759998,47.419998],[46.25,46.330002,46.73],[45.540001,45.650002,46.75],[45.490002,46.23,46.459999],[46.720001,47.59,47.75],[46.900002,47.189999,47.82],[46.360001,46.599998,47.540001],[46.060001,46.360001,47.91],[45.619999,45.959999,46.240002],[45.41,45.48,46.380001],[45.169998,46.240002,46.279999],[45.57,46.389999,46.650002],[45.48,45.919998,46.139999],[46.080002,47.130001,47.139999],[46.799999,47.18,47.389999],[46.240002,47.009998,47.130001],[42.110001,42.66,43.200001],[41.16,41.189999,42.790001],[40.790001,42.009998,42.119999],[40.349998,40.400002,41.580002],[40.23,41.279999,41.369999],[41.049999,41.599998,41.93],[41.360001,41.84,42.209999],[41.860001,42.450001,42.639999],[42.150002,42.41,42.790001],[42.209999,42.360001,42.740002],[42.18,42.599998,42.77],[42.209999,42.380001,42.650002],[42.509998,43.09,43.09],[43.150002,43.869999,43.869999],[43.189999,43.580002,44],[43.389999,43.529999,43.700001],[43.049999,43.5,43.529999],[43.290001,43.860001,43.880001],[43.650002,44.150002,44.189999],[43.919998,44.09,44.299999],[43.799999,43.990002,44.09],[43.889999,44.060001,44.23],[43.66,43.849998,44.200001],[43.549999,43.880001,44.189999],[43.09,43.279999,43.830002],[42.880001,43.060001,43.209999],[42.82,43.110001,43.240002],[42.150002,42.360001,43.110001],[42.189999,42.849998,43.130001],[42.029999,42.029999,42.709999],[41.84,41.98,42.369999],[40.860001,41.02,41.650002],[40.610001,41.380001,41.470001],[41.279999,41.560001,41.639999],[41.150002,41.700001,41.830002],[41.330002,42.5,42.830002],[42.220001,42.290001,42.59],[42.490002,42.880001,42.98],[42.779999,42.860001,43.130001],[42.75,42.900002,43.169998],[41.439999,41.459999,42.93],[40.919998,41.209999,41.610001],[40.830002,40.970001,41.43],[40.91,40.959999,41.540001],[40.540001,40.66,41.029999],[40.310001,40.720001,40.759998],[40.119999,40.290001,40.740002],[40.18,41.549999,41.779999],[41.310001,41.529999,41.91],[41.040001,41.419998,41.689999],[41.25,41.48,41.619999],[41.41,41.720001,41.950001],[41.389999,41.759998,42.060001],[41.389999,41.650002,42.029999],[41.68,42.259998,42.459999],[41.82,42.16,42.34],[41.16,41.619999,41.740002],[41.68,42.91,43.169998],[42.529999,42.639999,43.150002],[42.549999,42.990002,43.130001],[42.799999,43.34,43.610001],[45.650002,47.869999,48.139999],[47.220001,48.029999,48.130001],[47.700001,49.16,49.209999],[48.5,49.060001,49.310001],[48.599998,48.639999,49.540001],[48.400002,48.66,48.880001],[48.18,48.240002,48.869999],[47.310001,47.599998,48.16],[46.02,46.279999,47.77],[46.16,46.700001,47.09],[47.52,47.75,47.98],[47.369999,47.369999,47.91],[46.419998,47.349998,47.68],[47.57,47.630001,48.32],[48.029999,48.720001,48.82],[48.049999,48.299999,48.91],[47.610001,48.009998,48.220001],[47.18,47.580002,47.810001],[47.27,47.580002,47.93],[47.009998,47.419998,47.599998],[46.82,46.900002,47.349998],[46.189999,46.59,46.880001],[46.619999,47.610001,47.77],[47.389999,47.450001,48.02],[46.59,46.860001,47.57],[46.619999,47.23,47.77],[46.619999,46.919998,47.349998],[46.82,46.849998,47.740002],[46.200001,46.360001,47.16],[45.84,46.139999,46.52],[45.669998,45.73,46.43],[45.459999,45.650002,45.939999],[45.689999,46.610001,46.830002],[46.130001,46.439999,46.919998],[45.900002,45.970001,46.470001],[45.02,45.48,45.650002],[45.299999,45.830002,46.240002],[45.360001,45.970001,46.07],[46.169998,46.720001,46.799999],[45.990002,46.099998,46.830002],[46.16,46.23,46.720001],[45.619999,45.91,46.279999],[45.549999,45.639999,46.25],[45.5,45.650002,46.060001],[45.029999,45.259998,46.279999],[44.360001,44.369999,45.23],[43.939999,44.150002,44.720001],[44.099998,44.450001,45.23],[44.060001,44.400002,44.75],[43.950001,44.389999,44.48],[43.32,44.299999,44.490002],[44.029999,44.240002,44.900002],[44.5,44.52,45.220001],[44.57,44.610001,45.139999],[44.950001,45.540001,45.619999],[45.310001,45.619999,45.959999],[45.43,45.759998,45.889999],[45.970001,46.66,46.689999],[46.259998,46.619999,46.779999],[46.439999,46.919998,47.130001],[46.48,47.279999,47.330002],[45.200001,45.540001,46.93],[45.099998,46.110001,46.23],[45.799999,45.939999,46.32],[45.25,45.349998,46.009998],[44.790001,45.34,45.639999],[45.259998,46.290001,46.779999],[45.93,46.880001,47.400002],[46.5,46.700001,47.369999],[46.450001,46.810001,47],[46.68,47.540001,47.709999],[47.540001,47.580002,48.41],[46.330002,46.619999,47.77],[46.259998,46.740002,46.779999],[46.84,47.330002,47.490002],[45.900002,46.41,46.939999],[45.709999,46.740002,46.900002],[46.490002,46.73,47.099998],[46.52,47,47.099998],[46.57,47.32,47.450001],[46.700001,47.27,47.43],[46.299999,46.610001,47.080002],[45.66,45.66,46.470001],[43.07,43.07,45.48],[39.720001,41.68,42.689999],[40.389999,40.470001,43.240002],[41.060001,42.709999,42.84],[42.93,43.900002,43.950001],[43.389999,43.93,44.150002],[43.099998,43.52,43.93],[41.66,41.82,42.59],[41.880001,43.360001,43.380001],[43.279999,43.5,43.98],[42.200001,42.610001,43.040001],[43.200001,43.889999,44],[42.91,43.07,44.400002],[42.75,43.290001,43.790001],[42.939999,43.48,43.59],[42.860001,43.040001,43.439999],[43.080002,43.98,44.290001],[43.84,44.299999,44.380001],[44.080002,44.25,45],[43.330002,43.48,43.990002],[43.599998,44.110001,44.470001],[43.310001,43.900002,44.049999],[43.509998,43.869999,44.169998],[43.27,43.91,44.130001],[43.759998,43.939999,44.73],[43.209999,43.290001,44.09],[43.049999,43.439999,43.57],[43.66,44.259998,44.299999],[43.75,44.610001,44.75],[43.919998,45.57,45.57],[45.700001,46.630001,46.889999],[46.220001,46.75,47.18],[45.950001,46.799999,47.349998],[46.5,47.450001,47.52],[46.919998,47.110001,47.540001],[46.5,47,47.07],[46.560001,46.889999,47.130001],[46.529999,46.68,47.099998],[46.529999,47.009998,47.029999],[46.900002,47.509998,47.540001],[47.02,47.619999,47.880001],[47.02,47.77,47.810001],[47.110001,47.200001,47.990002],[47.09,48.029999,48.950001],[52.25,52.869999,54.07],[52.5,54.25,54.32],[53.580002,53.689999,54.369999],[52.860001,53.98,53.98],[53.220001,53.360001,53.830002],[52.619999,52.639999,53.990002],[52.619999,53.240002,53.360001],[52.900002,54.150002,54.389999],[54.060001,54.400002,54.880001],[54,54.380001,54.700001],[53.959999,54.919998,54.98],[53.560001,54.16,54.869999],[53.27,53.509998,54.130001],[53.459999,53.650002,54.200001],[53.189999,53.32,53.98],[52.529999,52.84,53.290001],[52.849998,53.77,53.889999],[52.849998,52.970001,53.529999],[52.98,53.849998,53.98],[53.779999,53.939999,54.66],[53.27,54.189999,54.299999],[53.75,54.189999,54.459999],[53.580002,54.25,54.439999],[53.689999,53.689999,54.23],[53.790001,53.93,54.080002],[54,54.349998,54.959999],[54.299999,55.220001,55.23],[55.060001,55.209999,55.959999],[53.93,54.200001,55.77],[54.099998,55.91,56.23],[55.290001,55.810001,55.970001],[54.990002,55.790001,56.099998],[54.509998,54.98,55.869999],[55.009998,55.27,55.66],[54.009998,54.060001,55.099998],[53.68,55.139999,55.209999],[55.09,55.200001,55.900002],[54.759998,56.130001,56.25],[55.529999,55.700001,56.790001],[54.029999,54.130001,56],[54.23,54.830002,55.349998],[54.5,55.349998,55.48],[55.439999,55.82,55.880001],[55.43,55.669998,55.959999],[54.98,55.950001,55.950001],[56.060001,56.549999,56.849998],[56.290001,56.310001,56.779999],[55.419998,55.48,56.189999],[53.389999,54.799999,54.799999],[54.540001,55.049999,55.389999],[53.639999,54.049999,54.400002],[52.07,52.169998,53.490002],[52.150002,52.330002,53.279999],[51.459999,52.299999,52.849998],[52.060001,52.779999,53.099998],[51.299999,51.639999,54.07],[51.57,53.110001,53.419998],[50.34,50.990002,51.970001],[50.060001,50.560001,51.68],[49.099998,50.790001,51.380001],[50.299999,50.48,51.580002],[51.259998,52.290001,52.330002],[51.650002,51.790001,52.650002],[51.549999,52.169998,52.439999],[51.02,51.220001,52.200001],[51.25,52.060001,52.209999],[54,55.09,55.09],[54.5,54.709999,55.09],[52.650002,53,54.259998],[51.259998,52.16,53.389999],[51.369999,52,52.810001],[49.560001,50.16,52],[48.189999,49.41,49.57],[48.669998,49.279999,50.240002],[49.52,49.709999,50.389999],[48.509998,49.689999,50.110001],[49.75,50.5,50.68],[50.130001,51.09,51.09],[51.450001,52.419998,52.77],[52.099998,52.189999,52.950001],[51.529999,51.82,52.279999],[52.279999,52.650002,53],[50.98,51.18,52.369999],[50.200001,51.360001,51.5],[50.610001,52.099998,52.099998],[51.099998,51.299999,52.68],[50.66,50.880001,51.650002],[50.919998,52.580002,52.59],[52.16,52.950001,52.959999],[51.779999,52.349998,52.970001],[51.709999,52.029999,52.450001],[50.580002,51.029999,51.799999],[50.599998,51.650002,52.130001],[51.860001,52.84,52.849998],[51.16,52.049999,52.939999],[52.380001,53.07,53.07],[52.630001,53.169998,53.59],[52.740002,53.59,53.59],[53.400002,54.349998,54.599998],[54,54.66,55],[53.450001,53.490002,54.970001],[52.93,53.860001,53.93],[53.459999,54.07,54.25],[53.740002,53.970001,54.240002],[53.73,54.209999,54.330002],[53.330002,53.540001,54.290001],[53.450001,54.709999,54.860001],[54.900002,55.049999,55.639999],[54.860001,55.23,55.59],[54.57,55.57,55.610001],[55,55.43,55.66],[54.459999,54.560001,55.299999],[54.209999,55.119999,55.200001],[54.23,54.459999,54.91],[54.32,54.419998,55.279999],[54.299999,54.310001,55.150002],[53.759998,54.650002,54.779999],[54.889999,55.349998,55.439999],[55.07,55.360001,55.580002],[55.110001,55.650002,55.919998],[55.209999,56.459999,56.59],[55.68,56.389999,56.77],[55.490002,55.59,56.5],[55.419998,55.779999,56.23],[50.77,51.779999,52.43],[51.630001,52.110001,52.130001],[51.09,51.439999,52.349998],[50.549999,50.939999,51.5],[49.560001,49.900002,50.77],[49.349998,49.869999,50.25],[49.779999,50.610001,50.75],[49.599998,49.779999,50.41],[49.459999,49.869999,50.060001],[49.73,49.939999,50.299999],[49.66,50.389999,50.389999],[50,50.07,50.59],[50.189999,51.02,51.099998],[51,51.049999,51.779999],[50.919998,51.509998,51.810001],[51.040001,51.080002,51.900002],[50.75,51.830002,51.959999],[50.360001,50.509998,51.73],[50.299999,50.810001,51.139999],[49.82,50.32,50.619999],[50.400002,50.619999,51.220001],[49.98,50.029999,50.68],[50.400002,51.59,51.709999],[51.790001,52.119999,52.490002],[51.360001,51.889999,51.98],[51.77,52.32,52.32],[52.080002,53,53],[52.439999,52.849998,52.950001],[51.84,52.48,52.740002],[51.599998,51.790001,52.419998],[51.889999,52.130001,52.349998],[52.099998,52.099998,52.73],[51.869999,52.040001,52.439999],[51.490002,51.619999,52],[51.040001,51.48,52.049999],[49.060001,50.139999,50.720001],[49.57,49.830002,50.099998],[49.689999,49.689999,50.119999],[49.509998,50.389999,50.470001],[49.82,50.130001,50.43],[50.029999,50.07,50.830002],[50.16,51.189999,51.43],[50.950001,50.990002,51.459999],[51.150002,51.91,52.060001],[49.52,49.830002,50.939999],[48.040001,48.43,49.150002],[48.669998,49.439999,49.470001],[49.799999,50.540001,50.720001],[50.5,51.169998,51.299999],[51.07,51.16,51.720001],[50.740002,51.169998,51.279999],[50.389999,51.380001,51.540001],[51.07,51.380001,51.610001],[51.549999,52.299999,52.360001],[52.470001,52.59,52.830002],[52.790001,53.209999,53.400002],[53.18,53.509998,53.860001],[53.580002,53.740002,53.990002],[53.209999,53.700001,54],[53.549999,53.959999,54.34],[52.93,53.09,53.900002],[55.529999,55.91,56.84],[55.759998,55.799999,56.23],[55.779999,56.57,56.630001],[56.259998,56.73,56.740002],[56.509998,56.759998,57.290001],[56.110001,56.189999,56.799999],[55.720001,56.209999,56.369999],[56.049999,56.68,56.759998],[56.139999,56.580002,56.75],[56.310001,56.580002,56.900002],[56.490002,56.970001,57.110001],[56.669998,57.389999,57.52],[57.450001,57.959999,58.209999],[57.779999,58.060001,58.09],[58.02,58.200001,58.5],[57.82,58.02,58.32],[58.029999,58.299999,58.450001],[57.619999,57.939999,58.189999],[57.959999,58.119999,58.5],[57.27,57.439999,57.619999],[57.23,57.560001,57.68],[57.27,57.599998,57.700001],[57.200001,57.619999,57.73],[57.259998,57.669998,57.75],[57.849998,57.889999,58.18],[57.720001,57.950001,58.040001],[57.779999,58.169998,58.290001],[57.689999,58.029999,58.700001],[58.099998,58.099998,58.599998],[57.610001,57.889999,58.189999],[57.299999,57.459999,57.799999],[57.009998,57.59,57.82],[57.419998,57.669998,58.189999],[57.209999,57.610001,57.799999],[57.41,57.66,57.84],[57.18,57.43,57.790001],[56.209999,56.209999,57.52],[55.610001,57.049999,57.209999],[56.049999,56.529999,56.650002],[56.029999,56.259998,56.630001],[55.98,57.189999,57.349998],[56.75,57.25,57.630001],[56.849998,56.93,57.75],[56.75,56.810001,57.349998],[57.080002,57.759998,57.849998],[57.630001,57.82,58],[57.380001,57.43,57.91],[56.830002,56.900002,57.139999],[56.68,57.950001,58.060001],[57.669998,58.029999,58.060001],[57.209999,57.400002,58.169998],[57.34,57.599998,57.77],[57.060001,57.419998,57.549999],[56.970001,57.240002,57.599998],[57.259998,57.639999,57.959999],[57.279999,57.740002,57.860001],[57.419998,57.799999,57.98],[57.869999,58.040001,58.389999],[56.889999,57.189999,58.02],[56.400002,57.110001,57.27],[56.32,56.919998,57.299999],[57.119999,57.419998,57.740002],[56.869999,57.220001,57.459999],[57.41,57.66,57.950001],[57.400002,57.529999,57.84],[56.66,57.25,57.52],[59.490002,59.66,60.450001],[59.93,61,61],[60.799999,60.990002,61.369999],[60.470001,60.630001,61.200001],[60.09,60.099998,60.830002],[59.580002,59.869999,60.52],[59.919998,59.919998,60.419998],[59.25,59.799999,60.02],[59.299999,59.43,59.93],[59.110001,59.209999,59.639999],[58.52,58.709999,59.279999],[59.779999,60.419998,60.52],[60.150002,60.470001,60.779999],[59.200001,60.169998,60.59],[57.630001,58.700001,60.490002],[58.009998,59.02,59.119999],[57.279999,58.119999,59.080002],[58.32,58.869999,59.490002],[58.810001,59.650002,59.66],[59.970001,60.639999,60.950001],[60.299999,60.349998,61.139999],[60.419998,60.860001,60.970001],[60.810001,61.119999,61.259998],[60.25,60.400002,61.099998],[60.130001,60.529999,60.529999],[60.209999,60.610001,61.02],[60.52,61.09,61.41],[60.220001,60.259998,61.18],[58.939999,59.200001,60.150002],[58.799999,59.25,59.470001],[59.560001,60.220001,60.59],[59.799999,59.950001,60.459999],[59.799999,61.369999,61.380001],[60.84,61.009998,61.580002],[61.130001,61.970001,61.990002],[61.720001,62.169998,62.299999],[62.240002,62.98,63.419998],[62.529999,62.68,63.450001],[62.299999,62.580002,63.150002],[62.119999,62.299999,62.950001],[62.419998,63.619999,63.77],[63.029999,63.540001,63.799999],[63.119999,63.540001,63.700001],[63.41,63.549999,64.099998],[62.799999,63.240002,63.540001],[63.209999,63.279999,64.07],[62.830002,62.990002,63.400002],[62.73,62.900002,63.200001],[62.029999,62.139999,62.990002],[62.130001,62.580002,62.84],[62.119999,62.299999,62.75],[62.029999,62.299999,62.66],[62.040001,62.84,63.150002],[62.540001,62.639999,63.080002],[62.279999,62.619999,63.07],[62.43,63.189999,63.23],[61.950001,62.610001,63.400002],[62.349998,62.700001,62.869999],[62.029999,62.529999,62.700001],[62.119999,62.5,62.700001],[62.200001,62.299999,62.98],[62.369999,62.740002,62.82],[62.57,62.959999,63.119999],[62.939999,63.52,63.740002],[63.450001,63.68,64.099998],[63.549999,64.269997,64.540001],[64.889999,65.779999,65.910004],[64.800003,65.129997,65.790001],[64.260002,64.650002,65.150002],[63.470001,63.580002,64.620003],[62.75,63.169998,63.41],[63.07,63.68,63.700001],[63.139999,63.639999,63.650002],[63.23,63.43,63.779999],[63.220001,63.34,63.810001],[63.32,64.059998,64.440002],[63.98,64,64.300003],[64.129997,64.720001,64.860001],[64.019997,64.57,64.720001],[64.160004,64.529999,64.57],[64.440002,64.519997,65.239998],[64.300003,64.620003,64.690002],[64.449997,64.489998,64.949997],[64.050003,64.360001,64.389999],[64.190002,64.620003,64.730003],[64.139999,64.620003,64.800003],[64.050003,64.230003,64.540001],[63.759998,63.98,64.199997],[64.019997,64.940002,64.989998],[63.880001,64.010002,64.75],[63.619999,64.25,64.279999],[63.810001,64.269997,64.559998],[64.190002,64.400002,64.779999],[64.25,64.989998,65.080002],[64.480003,64.730003,65.199997],[64.75,64.93,65.260002],[64.57,64.709999,65.190002],[64.150002,64.410004,64.550003],[64.25,64.75,64.919998],[64.300003,64.639999,64.760002],[64.68,64.870003,65.239998],[64.720001,64.93,65.18],[64.129997,64.209999,65.5],[64.120003,65.029999,65.139999],[64.769997,64.870003,65.239998],[64.760002,64.980003,65.449997],[64.349998,65.099998,65.220001],[64.650002,65.290001,65.470001],[64.949997,65.470001,65.5],[65.360001,65.709999,65.980003],[65.449997,65.860001,66.190002],[65.190002,65.550003,65.940002],[65.279999,65.730003,65.809998],[65.440002,65.559998,66.349998],[65.480003,65.730003,66.059998],[65.440002,65.68,65.959999],[65.360001,65.529999,65.82],[64.849998,65.480003,65.610001],[65.110001,65.230003,65.510002]]]},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="hp" class="section level3">
+<h3>HP</h3>
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="htmlwidget-af1de815ac917ef96298" style="width:576px;height:460.8px;" class="dygraphs html-widget"></div>
+<script type="application/json" data-for="htmlwidget-af1de815ac917ef96298">{"x":{"attrs":{"labels":["day","HPQ"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}},"customBars":true,"series":{"HPQ":{"axis":"y"}}},"scale":"daily","group":"stocks","annotations":[],"shadings":[],"events":[],"format":"date","data":[["2014-01-02T00:00:00Z","2014-01-03T00:00:00Z","2014-01-06T00:00:00Z","2014-01-07T00:00:00Z","2014-01-08T00:00:00Z","2014-01-09T00:00:00Z","2014-01-10T00:00:00Z","2014-01-13T00:00:00Z","2014-01-14T00:00:00Z","2014-01-15T00:00:00Z","2014-01-16T00:00:00Z","2014-01-17T00:00:00Z","2014-01-21T00:00:00Z","2014-01-22T00:00:00Z","2014-01-23T00:00:00Z","2014-01-24T00:00:00Z","2014-01-27T00:00:00Z","2014-01-28T00:00:00Z","2014-01-29T00:00:00Z","2014-01-30T00:00:00Z","2014-01-31T00:00:00Z","2014-02-03T00:00:00Z","2014-02-04T00:00:00Z","2014-02-05T00:00:00Z","2014-02-06T00:00:00Z","2014-02-07T00:00:00Z","2014-02-10T00:00:00Z","2014-02-11T00:00:00Z","2014-02-12T00:00:00Z","2014-02-13T00:00:00Z","2014-02-14T00:00:00Z","2014-02-18T00:00:00Z","2014-02-19T00:00:00Z","2014-02-20T00:00:00Z","2014-02-21T00:00:00Z","2014-02-24T00:00:00Z","2014-02-25T00:00:00Z","2014-02-26T00:00:00Z","2014-02-27T00:00:00Z","2014-02-28T00:00:00Z","2014-03-03T00:00:00Z","2014-03-04T00:00:00Z","2014-03-05T00:00:00Z","2014-03-06T00:00:00Z","2014-03-07T00:00:00Z","2014-03-10T00:00:00Z","2014-03-11T00:00:00Z","2014-03-12T00:00:00Z","2014-03-13T00:00:00Z","2014-03-14T00:00:00Z","2014-03-17T00:00:00Z","2014-03-18T00:00:00Z","2014-03-19T00:00:00Z","2014-03-20T00:00:00Z","2014-03-21T00:00:00Z","2014-03-24T00:00:00Z","2014-03-25T00:00:00Z","2014-03-26T00:00:00Z","2014-03-27T00:00:00Z","2014-03-28T00:00:00Z","2014-03-31T00:00:00Z","2014-04-01T00:00:00Z","2014-04-02T00:00:00Z","2014-04-03T00:00:00Z","2014-04-04T00:00:00Z","2014-04-07T00:00:00Z","2014-04-08T00:00:00Z","2014-04-09T00:00:00Z","2014-04-10T00:00:00Z","2014-04-11T00:00:00Z","2014-04-14T00:00:00Z","2014-04-15T00:00:00Z","2014-04-16T00:00:00Z","2014-04-17T00:00:00Z","2014-04-21T00:00:00Z","2014-04-22T00:00:00Z","2014-04-23T00:00:00Z","2014-04-24T00:00:00Z","2014-04-25T00:00:00Z","2014-04-28T00:00:00Z","2014-04-29T00:00:00Z","2014-04-30T00:00:00Z","2014-05-01T00:00:00Z","2014-05-02T00:00:00Z","2014-05-05T00:00:00Z","2014-05-06T00:00:00Z","2014-05-07T00:00:00Z","2014-05-08T00:00:00Z","2014-05-09T00:00:00Z","2014-05-12T00:00:00Z","2014-05-13T00:00:00Z","2014-05-14T00:00:00Z","2014-05-15T00:00:00Z","2014-05-16T00:00:00Z","2014-05-19T00:00:00Z","2014-05-20T00:00:00Z","2014-05-21T00:00:00Z","2014-05-22T00:00:00Z","2014-05-23T00:00:00Z","2014-05-27T00:00:00Z","2014-05-28T00:00:00Z","2014-05-29T00:00:00Z","2014-05-30T00:00:00Z","2014-06-02T00:00:00Z","2014-06-03T00:00:00Z","2014-06-04T00:00:00Z","2014-06-05T00:00:00Z","2014-06-06T00:00:00Z","2014-06-09T00:00:00Z","2014-06-10T00:00:00Z","2014-06-11T00:00:00Z","2014-06-12T00:00:00Z","2014-06-13T00:00:00Z","2014-06-16T00:00:00Z","2014-06-17T00:00:00Z","2014-06-18T00:00:00Z","2014-06-19T00:00:00Z","2014-06-20T00:00:00Z","2014-06-23T00:00:00Z","2014-06-24T00:00:00Z","2014-06-25T00:00:00Z","2014-06-26T00:00:00Z","2014-06-27T00:00:00Z","2014-06-30T00:00:00Z","2014-07-01T00:00:00Z","2014-07-02T00:00:00Z","2014-07-03T00:00:00Z","2014-07-07T00:00:00Z","2014-07-08T00:00:00Z","2014-07-09T00:00:00Z","2014-07-10T00:00:00Z","2014-07-11T00:00:00Z","2014-07-14T00:00:00Z","2014-07-15T00:00:00Z","2014-07-16T00:00:00Z","2014-07-17T00:00:00Z","2014-07-18T00:00:00Z","2014-07-21T00:00:00Z","2014-07-22T00:00:00Z","2014-07-23T00:00:00Z","2014-07-24T00:00:00Z","2014-07-25T00:00:00Z","2014-07-28T00:00:00Z","2014-07-29T00:00:00Z","2014-07-30T00:00:00Z","2014-07-31T00:00:00Z","2014-08-01T00:00:00Z","2014-08-04T00:00:00Z","2014-08-05T00:00:00Z","2014-08-06T00:00:00Z","2014-08-07T00:00:00Z","2014-08-08T00:00:00Z","2014-08-11T00:00:00Z","2014-08-12T00:00:00Z","2014-08-13T00:00:00Z","2014-08-14T00:00:00Z","2014-08-15T00:00:00Z","2014-08-18T00:00:00Z","2014-08-19T00:00:00Z","2014-08-20T00:00:00Z","2014-08-21T00:00:00Z","2014-08-22T00:00:00Z","2014-08-25T00:00:00Z","2014-08-26T00:00:00Z","2014-08-27T00:00:00Z","2014-08-28T00:00:00Z","2014-08-29T00:00:00Z","2014-09-02T00:00:00Z","2014-09-03T00:00:00Z","2014-09-04T00:00:00Z","2014-09-05T00:00:00Z","2014-09-08T00:00:00Z","2014-09-09T00:00:00Z","2014-09-10T00:00:00Z","2014-09-11T00:00:00Z","2014-09-12T00:00:00Z","2014-09-15T00:00:00Z","2014-09-16T00:00:00Z","2014-09-17T00:00:00Z","2014-09-18T00:00:00Z","2014-09-19T00:00:00Z","2014-09-22T00:00:00Z","2014-09-23T00:00:00Z","2014-09-24T00:00:00Z","2014-09-25T00:00:00Z","2014-09-26T00:00:00Z","2014-09-29T00:00:00Z","2014-09-30T00:00:00Z","2014-10-01T00:00:00Z","2014-10-02T00:00:00Z","2014-10-03T00:00:00Z","2014-10-06T00:00:00Z","2014-10-07T00:00:00Z","2014-10-08T00:00:00Z","2014-10-09T00:00:00Z","2014-10-10T00:00:00Z","2014-10-13T00:00:00Z","2014-10-14T00:00:00Z","2014-10-15T00:00:00Z","2014-10-16T00:00:00Z","2014-10-17T00:00:00Z","2014-10-20T00:00:00Z","2014-10-21T00:00:00Z","2014-10-22T00:00:00Z","2014-10-23T00:00:00Z","2014-10-24T00:00:00Z","2014-10-27T00:00:00Z","2014-10-28T00:00:00Z","2014-10-29T00:00:00Z","2014-10-30T00:00:00Z","2014-10-31T00:00:00Z","2014-11-03T00:00:00Z","2014-11-04T00:00:00Z","2014-11-05T00:00:00Z","2014-11-06T00:00:00Z","2014-11-07T00:00:00Z","2014-11-10T00:00:00Z","2014-11-11T00:00:00Z","2014-11-12T00:00:00Z","2014-11-13T00:00:00Z","2014-11-14T00:00:00Z","2014-11-17T00:00:00Z","2014-11-18T00:00:00Z","2014-11-19T00:00:00Z","2014-11-20T00:00:00Z","2014-11-21T00:00:00Z","2014-11-24T00:00:00Z","2014-11-25T00:00:00Z","2014-11-26T00:00:00Z","2014-11-28T00:00:00Z","2014-12-01T00:00:00Z","2014-12-02T00:00:00Z","2014-12-03T00:00:00Z","2014-12-04T00:00:00Z","2014-12-05T00:00:00Z","2014-12-08T00:00:00Z","2014-12-09T00:00:00Z","2014-12-10T00:00:00Z","2014-12-11T00:00:00Z","2014-12-12T00:00:00Z","2014-12-15T00:00:00Z","2014-12-16T00:00:00Z","2014-12-17T00:00:00Z","2014-12-18T00:00:00Z","2014-12-19T00:00:00Z","2014-12-22T00:00:00Z","2014-12-23T00:00:00Z","2014-12-24T00:00:00Z","2014-12-26T00:00:00Z","2014-12-29T00:00:00Z","2014-12-30T00:00:00Z","2014-12-31T00:00:00Z","2015-01-02T00:00:00Z","2015-01-05T00:00:00Z","2015-01-06T00:00:00Z","2015-01-07T00:00:00Z","2015-01-08T00:00:00Z","2015-01-09T00:00:00Z","2015-01-12T00:00:00Z","2015-01-13T00:00:00Z","2015-01-14T00:00:00Z","2015-01-15T00:00:00Z","2015-01-16T00:00:00Z","2015-01-20T00:00:00Z","2015-01-21T00:00:00Z","2015-01-22T00:00:00Z","2015-01-23T00:00:00Z","2015-01-26T00:00:00Z","2015-01-27T00:00:00Z","2015-01-28T00:00:00Z","2015-01-29T00:00:00Z","2015-01-30T00:00:00Z","2015-02-02T00:00:00Z","2015-02-03T00:00:00Z","2015-02-04T00:00:00Z","2015-02-05T00:00:00Z","2015-02-06T00:00:00Z","2015-02-09T00:00:00Z","2015-02-10T00:00:00Z","2015-02-11T00:00:00Z","2015-02-12T00:00:00Z","2015-02-13T00:00:00Z","2015-02-17T00:00:00Z","2015-02-18T00:00:00Z","2015-02-19T00:00:00Z","2015-02-20T00:00:00Z","2015-02-23T00:00:00Z","2015-02-24T00:00:00Z","2015-02-25T00:00:00Z","2015-02-26T00:00:00Z","2015-02-27T00:00:00Z","2015-03-02T00:00:00Z","2015-03-03T00:00:00Z","2015-03-04T00:00:00Z","2015-03-05T00:00:00Z","2015-03-06T00:00:00Z","2015-03-09T00:00:00Z","2015-03-10T00:00:00Z","2015-03-11T00:00:00Z","2015-03-12T00:00:00Z","2015-03-13T00:00:00Z","2015-03-16T00:00:00Z","2015-03-17T00:00:00Z","2015-03-18T00:00:00Z","2015-03-19T00:00:00Z","2015-03-20T00:00:00Z","2015-03-23T00:00:00Z","2015-03-24T00:00:00Z","2015-03-25T00:00:00Z","2015-03-26T00:00:00Z","2015-03-27T00:00:00Z","2015-03-30T00:00:00Z","2015-03-31T00:00:00Z","2015-04-01T00:00:00Z","2015-04-02T00:00:00Z","2015-04-06T00:00:00Z","2015-04-07T00:00:00Z","2015-04-08T00:00:00Z","2015-04-09T00:00:00Z","2015-04-10T00:00:00Z","2015-04-13T00:00:00Z","2015-04-14T00:00:00Z","2015-04-15T00:00:00Z","2015-04-16T00:00:00Z","2015-04-17T00:00:00Z","2015-04-20T00:00:00Z","2015-04-21T00:00:00Z","2015-04-22T00:00:00Z","2015-04-23T00:00:00Z","2015-04-24T00:00:00Z","2015-04-27T00:00:00Z","2015-04-28T00:00:00Z","2015-04-29T00:00:00Z","2015-04-30T00:00:00Z","2015-05-01T00:00:00Z","2015-05-04T00:00:00Z","2015-05-05T00:00:00Z","2015-05-06T00:00:00Z","2015-05-07T00:00:00Z","2015-05-08T00:00:00Z","2015-05-11T00:00:00Z","2015-05-12T00:00:00Z","2015-05-13T00:00:00Z","2015-05-14T00:00:00Z","2015-05-15T00:00:00Z","2015-05-18T00:00:00Z","2015-05-19T00:00:00Z","2015-05-20T00:00:00Z","2015-05-21T00:00:00Z","2015-05-22T00:00:00Z","2015-05-26T00:00:00Z","2015-05-27T00:00:00Z","2015-05-28T00:00:00Z","2015-05-29T00:00:00Z","2015-06-01T00:00:00Z","2015-06-02T00:00:00Z","2015-06-03T00:00:00Z","2015-06-04T00:00:00Z","2015-06-05T00:00:00Z","2015-06-08T00:00:00Z","2015-06-09T00:00:00Z","2015-06-10T00:00:00Z","2015-06-11T00:00:00Z","2015-06-12T00:00:00Z","2015-06-15T00:00:00Z","2015-06-16T00:00:00Z","2015-06-17T00:00:00Z","2015-06-18T00:00:00Z","2015-06-19T00:00:00Z","2015-06-22T00:00:00Z","2015-06-23T00:00:00Z","2015-06-24T00:00:00Z","2015-06-25T00:00:00Z","2015-06-26T00:00:00Z","2015-06-29T00:00:00Z","2015-06-30T00:00:00Z","2015-07-01T00:00:00Z","2015-07-02T00:00:00Z","2015-07-06T00:00:00Z","2015-07-07T00:00:00Z","2015-07-08T00:00:00Z","2015-07-09T00:00:00Z","2015-07-10T00:00:00Z","2015-07-13T00:00:00Z","2015-07-14T00:00:00Z","2015-07-15T00:00:00Z","2015-07-16T00:00:00Z","2015-07-17T00:00:00Z","2015-07-20T00:00:00Z","2015-07-21T00:00:00Z","2015-07-22T00:00:00Z","2015-07-23T00:00:00Z","2015-07-24T00:00:00Z","2015-07-27T00:00:00Z","2015-07-28T00:00:00Z","2015-07-29T00:00:00Z","2015-07-30T00:00:00Z","2015-07-31T00:00:00Z","2015-08-03T00:00:00Z","2015-08-04T00:00:00Z","2015-08-05T00:00:00Z","2015-08-06T00:00:00Z","2015-08-07T00:00:00Z","2015-08-10T00:00:00Z","2015-08-11T00:00:00Z","2015-08-12T00:00:00Z","2015-08-13T00:00:00Z","2015-08-14T00:00:00Z","2015-08-17T00:00:00Z","2015-08-18T00:00:00Z","2015-08-19T00:00:00Z","2015-08-20T00:00:00Z","2015-08-21T00:00:00Z","2015-08-24T00:00:00Z","2015-08-25T00:00:00Z","2015-08-26T00:00:00Z","2015-08-27T00:00:00Z","2015-08-28T00:00:00Z","2015-08-31T00:00:00Z","2015-09-01T00:00:00Z","2015-09-02T00:00:00Z","2015-09-03T00:00:00Z","2015-09-04T00:00:00Z","2015-09-08T00:00:00Z","2015-09-09T00:00:00Z","2015-09-10T00:00:00Z","2015-09-11T00:00:00Z","2015-09-14T00:00:00Z","2015-09-15T00:00:00Z","2015-09-16T00:00:00Z","2015-09-17T00:00:00Z","2015-09-18T00:00:00Z","2015-09-21T00:00:00Z","2015-09-22T00:00:00Z","2015-09-23T00:00:00Z","2015-09-24T00:00:00Z","2015-09-25T00:00:00Z","2015-09-28T00:00:00Z","2015-09-29T00:00:00Z","2015-09-30T00:00:00Z","2015-10-01T00:00:00Z","2015-10-02T00:00:00Z","2015-10-05T00:00:00Z","2015-10-06T00:00:00Z","2015-10-07T00:00:00Z","2015-10-08T00:00:00Z","2015-10-09T00:00:00Z","2015-10-12T00:00:00Z","2015-10-13T00:00:00Z","2015-10-14T00:00:00Z","2015-10-15T00:00:00Z","2015-10-16T00:00:00Z","2015-10-19T00:00:00Z","2015-10-20T00:00:00Z","2015-10-21T00:00:00Z","2015-10-22T00:00:00Z","2015-10-23T00:00:00Z","2015-10-26T00:00:00Z","2015-10-27T00:00:00Z","2015-10-28T00:00:00Z","2015-10-29T00:00:00Z","2015-10-30T00:00:00Z","2015-11-02T00:00:00Z","2015-11-03T00:00:00Z","2015-11-04T00:00:00Z","2015-11-05T00:00:00Z","2015-11-06T00:00:00Z","2015-11-09T00:00:00Z","2015-11-10T00:00:00Z","2015-11-11T00:00:00Z","2015-11-12T00:00:00Z","2015-11-13T00:00:00Z","2015-11-16T00:00:00Z","2015-11-17T00:00:00Z","2015-11-18T00:00:00Z","2015-11-19T00:00:00Z","2015-11-20T00:00:00Z","2015-11-23T00:00:00Z","2015-11-24T00:00:00Z","2015-11-25T00:00:00Z","2015-11-27T00:00:00Z","2015-11-30T00:00:00Z","2015-12-01T00:00:00Z","2015-12-02T00:00:00Z","2015-12-03T00:00:00Z","2015-12-04T00:00:00Z","2015-12-07T00:00:00Z","2015-12-08T00:00:00Z","2015-12-09T00:00:00Z","2015-12-10T00:00:00Z","2015-12-11T00:00:00Z","2015-12-14T00:00:00Z","2015-12-15T00:00:00Z","2015-12-16T00:00:00Z","2015-12-17T00:00:00Z","2015-12-18T00:00:00Z","2015-12-21T00:00:00Z","2015-12-22T00:00:00Z","2015-12-23T00:00:00Z","2015-12-24T00:00:00Z","2015-12-28T00:00:00Z","2015-12-29T00:00:00Z","2015-12-30T00:00:00Z","2015-12-31T00:00:00Z","2016-01-04T00:00:00Z","2016-01-05T00:00:00Z","2016-01-06T00:00:00Z","2016-01-07T00:00:00Z","2016-01-08T00:00:00Z","2016-01-11T00:00:00Z","2016-01-12T00:00:00Z","2016-01-13T00:00:00Z","2016-01-14T00:00:00Z","2016-01-15T00:00:00Z","2016-01-19T00:00:00Z","2016-01-20T00:00:00Z","2016-01-21T00:00:00Z","2016-01-22T00:00:00Z","2016-01-25T00:00:00Z","2016-01-26T00:00:00Z","2016-01-27T00:00:00Z","2016-01-28T00:00:00Z","2016-01-29T00:00:00Z","2016-02-01T00:00:00Z","2016-02-02T00:00:00Z","2016-02-03T00:00:00Z","2016-02-04T00:00:00Z","2016-02-05T00:00:00Z","2016-02-08T00:00:00Z","2016-02-09T00:00:00Z","2016-02-10T00:00:00Z","2016-02-11T00:00:00Z","2016-02-12T00:00:00Z","2016-02-16T00:00:00Z","2016-02-17T00:00:00Z","2016-02-18T00:00:00Z","2016-02-19T00:00:00Z","2016-02-22T00:00:00Z","2016-02-23T00:00:00Z","2016-02-24T00:00:00Z","2016-02-25T00:00:00Z","2016-02-26T00:00:00Z","2016-02-29T00:00:00Z","2016-03-01T00:00:00Z","2016-03-02T00:00:00Z","2016-03-03T00:00:00Z","2016-03-04T00:00:00Z","2016-03-07T00:00:00Z","2016-03-08T00:00:00Z","2016-03-09T00:00:00Z","2016-03-10T00:00:00Z","2016-03-11T00:00:00Z","2016-03-14T00:00:00Z","2016-03-15T00:00:00Z","2016-03-16T00:00:00Z","2016-03-17T00:00:00Z","2016-03-18T00:00:00Z","2016-03-21T00:00:00Z","2016-03-22T00:00:00Z","2016-03-23T00:00:00Z","2016-03-24T00:00:00Z","2016-03-28T00:00:00Z","2016-03-29T00:00:00Z","2016-03-30T00:00:00Z","2016-03-31T00:00:00Z","2016-04-01T00:00:00Z","2016-04-04T00:00:00Z","2016-04-05T00:00:00Z","2016-04-06T00:00:00Z","2016-04-07T00:00:00Z","2016-04-08T00:00:00Z","2016-04-11T00:00:00Z","2016-04-12T00:00:00Z","2016-04-13T00:00:00Z","2016-04-14T00:00:00Z","2016-04-15T00:00:00Z","2016-04-18T00:00:00Z","2016-04-19T00:00:00Z","2016-04-20T00:00:00Z","2016-04-21T00:00:00Z","2016-04-22T00:00:00Z","2016-04-25T00:00:00Z","2016-04-26T00:00:00Z","2016-04-27T00:00:00Z","2016-04-28T00:00:00Z","2016-04-29T00:00:00Z","2016-05-02T00:00:00Z","2016-05-03T00:00:00Z","2016-05-04T00:00:00Z","2016-05-05T00:00:00Z","2016-05-06T00:00:00Z","2016-05-09T00:00:00Z","2016-05-10T00:00:00Z","2016-05-11T00:00:00Z","2016-05-12T00:00:00Z","2016-05-13T00:00:00Z","2016-05-16T00:00:00Z","2016-05-17T00:00:00Z","2016-05-18T00:00:00Z","2016-05-19T00:00:00Z","2016-05-20T00:00:00Z","2016-05-23T00:00:00Z","2016-05-24T00:00:00Z","2016-05-25T00:00:00Z","2016-05-26T00:00:00Z","2016-05-27T00:00:00Z","2016-05-31T00:00:00Z","2016-06-01T00:00:00Z","2016-06-02T00:00:00Z","2016-06-03T00:00:00Z","2016-06-06T00:00:00Z","2016-06-07T00:00:00Z","2016-06-08T00:00:00Z","2016-06-09T00:00:00Z","2016-06-10T00:00:00Z","2016-06-13T00:00:00Z","2016-06-14T00:00:00Z","2016-06-15T00:00:00Z","2016-06-16T00:00:00Z","2016-06-17T00:00:00Z","2016-06-20T00:00:00Z","2016-06-21T00:00:00Z","2016-06-22T00:00:00Z","2016-06-23T00:00:00Z","2016-06-24T00:00:00Z","2016-06-27T00:00:00Z","2016-06-28T00:00:00Z","2016-06-29T00:00:00Z","2016-06-30T00:00:00Z","2016-07-01T00:00:00Z","2016-07-05T00:00:00Z","2016-07-06T00:00:00Z","2016-07-07T00:00:00Z","2016-07-08T00:00:00Z","2016-07-11T00:00:00Z","2016-07-12T00:00:00Z","2016-07-13T00:00:00Z","2016-07-14T00:00:00Z","2016-07-15T00:00:00Z","2016-07-18T00:00:00Z","2016-07-19T00:00:00Z","2016-07-20T00:00:00Z","2016-07-21T00:00:00Z","2016-07-22T00:00:00Z","2016-07-25T00:00:00Z","2016-07-26T00:00:00Z","2016-07-27T00:00:00Z","2016-07-28T00:00:00Z","2016-07-29T00:00:00Z","2016-08-01T00:00:00Z","2016-08-02T00:00:00Z","2016-08-03T00:00:00Z","2016-08-04T00:00:00Z","2016-08-05T00:00:00Z","2016-08-08T00:00:00Z","2016-08-09T00:00:00Z","2016-08-10T00:00:00Z","2016-08-11T00:00:00Z","2016-08-12T00:00:00Z","2016-08-15T00:00:00Z","2016-08-16T00:00:00Z","2016-08-17T00:00:00Z","2016-08-18T00:00:00Z","2016-08-19T00:00:00Z","2016-08-22T00:00:00Z","2016-08-23T00:00:00Z","2016-08-24T00:00:00Z","2016-08-25T00:00:00Z","2016-08-26T00:00:00Z","2016-08-29T00:00:00Z","2016-08-30T00:00:00Z","2016-08-31T00:00:00Z","2016-09-01T00:00:00Z","2016-09-02T00:00:00Z","2016-09-06T00:00:00Z","2016-09-07T00:00:00Z","2016-09-08T00:00:00Z","2016-09-09T00:00:00Z","2016-09-12T00:00:00Z","2016-09-13T00:00:00Z","2016-09-14T00:00:00Z","2016-09-15T00:00:00Z","2016-09-16T00:00:00Z","2016-09-19T00:00:00Z","2016-09-20T00:00:00Z","2016-09-21T00:00:00Z","2016-09-22T00:00:00Z","2016-09-23T00:00:00Z","2016-09-26T00:00:00Z","2016-09-27T00:00:00Z","2016-09-28T00:00:00Z","2016-09-29T00:00:00Z","2016-09-30T00:00:00Z","2016-10-03T00:00:00Z","2016-10-04T00:00:00Z","2016-10-05T00:00:00Z","2016-10-06T00:00:00Z","2016-10-07T00:00:00Z","2016-10-10T00:00:00Z","2016-10-11T00:00:00Z","2016-10-12T00:00:00Z","2016-10-13T00:00:00Z","2016-10-14T00:00:00Z","2016-10-17T00:00:00Z","2016-10-18T00:00:00Z","2016-10-19T00:00:00Z","2016-10-20T00:00:00Z","2016-10-21T00:00:00Z","2016-10-24T00:00:00Z","2016-10-25T00:00:00Z","2016-10-26T00:00:00Z","2016-10-27T00:00:00Z","2016-10-28T00:00:00Z","2016-10-31T00:00:00Z","2016-11-01T00:00:00Z","2016-11-02T00:00:00Z","2016-11-03T00:00:00Z","2016-11-04T00:00:00Z","2016-11-07T00:00:00Z","2016-11-08T00:00:00Z","2016-11-09T00:00:00Z","2016-11-10T00:00:00Z","2016-11-11T00:00:00Z","2016-11-14T00:00:00Z","2016-11-15T00:00:00Z","2016-11-16T00:00:00Z","2016-11-17T00:00:00Z","2016-11-18T00:00:00Z","2016-11-21T00:00:00Z","2016-11-22T00:00:00Z","2016-11-23T00:00:00Z","2016-11-25T00:00:00Z","2016-11-28T00:00:00Z","2016-11-29T00:00:00Z","2016-11-30T00:00:00Z","2016-12-01T00:00:00Z","2016-12-02T00:00:00Z","2016-12-05T00:00:00Z","2016-12-06T00:00:00Z","2016-12-07T00:00:00Z","2016-12-08T00:00:00Z","2016-12-09T00:00:00Z","2016-12-12T00:00:00Z","2016-12-13T00:00:00Z","2016-12-14T00:00:00Z","2016-12-15T00:00:00Z","2016-12-16T00:00:00Z","2016-12-19T00:00:00Z","2016-12-20T00:00:00Z","2016-12-21T00:00:00Z","2016-12-22T00:00:00Z","2016-12-23T00:00:00Z","2016-12-27T00:00:00Z","2016-12-28T00:00:00Z","2016-12-29T00:00:00Z","2016-12-30T00:00:00Z","2017-01-03T00:00:00Z","2017-01-04T00:00:00Z","2017-01-05T00:00:00Z","2017-01-06T00:00:00Z","2017-01-09T00:00:00Z","2017-01-10T00:00:00Z","2017-01-11T00:00:00Z","2017-01-12T00:00:00Z","2017-01-13T00:00:00Z","2017-01-17T00:00:00Z","2017-01-18T00:00:00Z","2017-01-19T00:00:00Z","2017-01-20T00:00:00Z","2017-01-23T00:00:00Z","2017-01-24T00:00:00Z","2017-01-25T00:00:00Z","2017-01-26T00:00:00Z","2017-01-27T00:00:00Z","2017-01-30T00:00:00Z","2017-01-31T00:00:00Z","2017-02-01T00:00:00Z","2017-02-02T00:00:00Z","2017-02-03T00:00:00Z","2017-02-06T00:00:00Z","2017-02-07T00:00:00Z","2017-02-08T00:00:00Z","2017-02-09T00:00:00Z","2017-02-10T00:00:00Z","2017-02-13T00:00:00Z","2017-02-14T00:00:00Z","2017-02-15T00:00:00Z","2017-02-16T00:00:00Z","2017-02-17T00:00:00Z","2017-02-21T00:00:00Z","2017-02-22T00:00:00Z","2017-02-23T00:00:00Z","2017-02-24T00:00:00Z","2017-02-27T00:00:00Z","2017-02-28T00:00:00Z","2017-03-01T00:00:00Z","2017-03-02T00:00:00Z","2017-03-03T00:00:00Z","2017-03-06T00:00:00Z","2017-03-07T00:00:00Z","2017-03-08T00:00:00Z","2017-03-09T00:00:00Z","2017-03-10T00:00:00Z","2017-03-13T00:00:00Z","2017-03-14T00:00:00Z","2017-03-15T00:00:00Z","2017-03-16T00:00:00Z","2017-03-17T00:00:00Z","2017-03-20T00:00:00Z","2017-03-21T00:00:00Z","2017-03-22T00:00:00Z","2017-03-23T00:00:00Z","2017-03-24T00:00:00Z","2017-03-27T00:00:00Z","2017-03-28T00:00:00Z","2017-03-29T00:00:00Z","2017-03-30T00:00:00Z","2017-03-31T00:00:00Z","2017-04-03T00:00:00Z","2017-04-04T00:00:00Z","2017-04-05T00:00:00Z","2017-04-06T00:00:00Z","2017-04-07T00:00:00Z","2017-04-10T00:00:00Z","2017-04-11T00:00:00Z","2017-04-12T00:00:00Z"],[[27.45,27.659999,28.219999],[27.699999,28.339999,28.499999],[27.899998,28.289998,28.499999],[27.869998,28.179998,28.549998],[27.359998,27.45,28.199999],[27.349998,27.609998,27.879998],[27.269999,27.699999,27.769998],[27.699999,28.12,28.79],[28.089999,28.849998,28.849998],[28.539998,28.839998,29.069998],[29.119998,29.559999,29.819999],[29.669999,29.799999,30.049998],[29.449999,29.899998,29.959999],[29.46,29.839999,30.13],[29.06,29.369998,29.73],[28.39,28.489999,29.2],[28.38,28.599999,29.089998],[28.489999,28.999999,29.079998],[28.749999,29.019999,29.149999],[29.079998,29.249998,29.419999],[28.739999,28.999999,29.19],[27.959999,28.039998,29.289999],[27.889998,28.329999,28.409998],[27.899998,28.009998,28.439998],[28.199999,28.489999,28.66],[28.689998,29.069998,29.159999],[28.639999,28.809998,29.229998],[28.8,29.359998,29.489998],[29.359998,29.419999,29.789998],[29.179999,29.829999,29.919998],[29.719999,30.019998,30.119999],[29.569999,29.579999,30.049998],[29.259999,29.449999,29.769998],[29.099998,30.189998,30.279998],[29.499998,29.789998,30.709998],[29.449999,29.919998,30.169998],[29.569999,29.879998,30],[29.809999,29.899998,30.199999],[29.629998,29.749998,29.889998],[29.649998,29.879998,30.359999],[28.819998,29.73,29.849999],[29.86,30.119999,30.239999],[29.849999,29.939999,30.149998],[29.849999,30.089999,30.199999],[30.039998,30.339999,30.479999],[29.849999,29.899998,30.259999],[29.779998,29.909998,30.259999],[29.409999,29.589999,29.839999],[28.749999,28.909999,29.849999],[28.829998,29.069998,29.379998],[29.229998,29.479998,29.689999],[29.899998,30.559998,30.629999],[30.569998,31.62,31.739999],[31.459999,31.48,32.409999],[31.649998,31.949998,32.209998],[31.599999,31.629998,32.209998],[31.75,32.56,32.56],[32.329998,32.349998,33.119998],[31.649998,31.929998,32.29],[31.939998,32.039998,32.549999],[32.249999,32.359999,32.589998],[32.29,33.23,33.449999],[33.009998,33.609999,33.659998],[32.839998,32.999998,33.639998],[32.409999,32.639999,33.479999],[32.509999,32.699998,33.099998],[31.939998,32.449998,32.779999],[32.279999,32.719998,32.879998],[32.789999,32.799999,33.9],[32.29,32.449998,32.939999],[32.56,32.899999,33.289998],[31.88,32.389999,32.999998],[32.29,32.489999,33.099998],[31.449999,31.929998,32.489999],[31.88,31.939998,32.439998],[31.629998,31.769998,32.069998],[31.589999,31.739999,31.959999],[31.75,31.999999,32.079998],[31.429999,31.579999,31.929998],[31.499998,32.189998,32.329998],[32.619998,32.96,33.089999],[32.639999,33.059999,33.269998],[32.519999,32.639999,33.279998],[32.389999,32.489999,32.789999],[32.029998,32.499999,32.579998],[32.099999,32.129999,32.599998],[31.849999,32.319998,32.459998],[32.089999,32.229999,32.809999],[31.999999,32.359999,32.399999],[32.379999,32.819999,32.889998],[32.809999,33.279998,33.339999],[32.899999,32.969998,33.339999],[32.349998,32.409999,33.089999],[32.189998,32.519999,32.519999],[32.479998,33.109998,33.169999],[32.69,32.799999,33.239998],[32.379999,32.519999,33.089999],[31.21,31.779998,33.359999],[32.239999,33.719999,34.089998],[32.799999,33.099998,33.649998],[32.999998,33.349999,33.579999],[33.329999,33.639998,33.829998],[33.359999,33.499997,33.799998],[33.049999,33.429998,33.639998],[33.23,33.689998,33.809998],[33.459999,33.759999,33.869999],[33.559998,33.869999,33.9],[33.769997,33.839999,33.989999],[33.449999,33.739999,33.919998],[33.479999,33.609999,33.839999],[33.139998,33.249998,33.629999],[33.289998,33.389998,34.299999],[33.809998,35.159998,35.199999],[34.629998,34.899998,35.059999],[34.719998,34.909998,35.069999],[34.409999,34.709997,34.979997],[34.339998,34.479998,34.799999],[34.209998,34.219998,34.549999],[34.009999,34.519999,34.539999],[33.929998,33.949998,34.569999],[33.449999,33.589999,33.849999],[33.579999,33.909998,33.949998],[33.669998,33.909998,34.019999],[33.639998,33.679998,34.019999],[33.679998,34.179998,34.419999],[33.859999,33.879999,34.239999],[33.919998,33.999999,34.119999],[33.669998,33.869999,33.999999],[33.429998,33.499997,33.929998],[33.509998,33.649998,33.789998],[33.239998,33.849999,34.009999],[33.889999,33.969999,34.179998],[34.009999,34.149999,34.339998],[33.999999,34.149999,34.469998],[34.419999,34.819999,35.119998],[34.329998,34.429999,34.689999],[34.439997,34.809999,34.839999],[34.389999,34.519999,34.839999],[34.519999,35.149998,35.29],[34.979997,34.979997,35.349997],[34.869998,35.039998,35.179998],[34.669999,35.429998,35.57],[35.25,35.599997,35.609997],[35.599997,35.939998,36.209998],[35.84,36.11,36.199998],[35.449998,35.609997,35.859996],[34.469998,35.189999,35.429998],[34.999998,35.329997,35.449998],[34.819999,35.069999,35.329997],[34.449998,35.039998,35.28],[34.659999,34.819999,35.379997],[34.629998,35.169998,35.219999],[35.119998,35.199999,35.53],[34.859998,35.119998,35.329997],[35.049999,35.3,35.429998],[34.959999,35.589996,35.619997],[34.909998,35.069999,35.749999],[35.219999,35.339997,35.54],[35.29,35.479999,35.769999],[34.869998,35.119998,35.719998],[35.27,36.999997,37.399999],[36.65,36.839999,37.069999],[36.779998,37.15,37.359999],[37.109999,37.829998,38.129998],[37.539997,38.159999,38.199999],[37.599998,37.99,38.089998],[37.819998,37.999996,38.179999],[37.659999,38.049997,38.069997],[38.039997,38.069997,38.25],[37.479997,37.659999,38.25],[37.17,37.579998,37.659999],[37.109999,37.279998,37.469996],[36.63,36.789998,37.15],[36.749998,37.029998,37.069999],[36.519998,36.759998,37.029998],[36.499998,36.559999,36.849999],[36.129996,36.249998,36.549999],[36.009999,36.259999,36.33],[36.269999,36.669997,36.87],[36.589999,37.009998,37.099999],[36.719997,36.789998,37.379999],[36.389996,36.469998,37.19],[35.779999,35.79,36.579999],[35.310001,35.949998,35.999999],[35.169998,35.27,35.989999],[35.029998,35.369997,35.499999],[34.629998,34.969999,35.139998],[35.059999,35.469999,35.649997],[34.399999,34.549999,35.399998],[33.929998,34.509999,34.789999],[34.659999,35.199999,35.28],[36.529999,36.87,37.529997],[35.139998,35.219999,36.859999],[34.699999,35.919997,36.029999],[34.269999,34.319998,35.859996],[33.479999,33.499997,34.509999],[32.229999,32.69,33.379998],[32.15,32.239999,32.979998],[31.62,32.799999,33.119998],[31.709999,33.999999,34.17],[33.789998,34.159999,34.479998],[32.979998,33.819998,33.959998],[34.179998,34.739998,34.819999],[34.449998,34.489998,34.899998],[34.709997,34.939999,35.209999],[34.739998,34.929999,35.419998],[34.799999,35.3,35.409998],[35.379997,35.54,35.769999],[35.039998,35.379997,35.999999],[35.209999,35.319996,35.769999],[35.479999,35.879997,35.949998],[35.769999,35.859996,36.149997],[35.779999,35.899997,36.399996],[35.859996,36.179997,36.33],[35.989999,36.149997,36.419997],[36.019999,36.38,36.419997],[36.499998,36.9,37.049998],[36.539999,36.759998,37.049998],[36.479998,36.509998,36.87],[36.219998,36.36,36.769998],[36.429997,36.92,37.059998],[36.719997,37.41,37.499997],[37.46,37.499997,37.799997],[37.089999,37.18,37.519997],[36.829999,36.929996,37.249997],[36.91,37.259997,37.45],[37.329998,37.499997,37.799997],[37.499997,37.629999,38.25],[37.249997,39.159998,39.279999],[38.649998,39.06,39.58],[38.439999,38.559997,39.169998],[38.089998,38.949998,39.33],[38.77,39.05,39.34],[38.679998,39.07,39.249999],[39.02,39.549999,39.649997],[38.109998,38.459999,38.899998],[37.339999,38.199999,38.369998],[37.279998,37.359999,38.189999],[37.299998,38.469999,38.899998],[37.869998,38.009996,38.579997],[37.41,37.609999,38.24],[37.109999,37.319998,38.309997],[37.909999,38.649998,38.76],[38.959999,39.819999,39.84],[39.679997,39.899996,40.259998],[39.519999,39.799999,40.41],[39.929997,40.359999,40.599999],[40.439997,40.539998,40.829998],[40.499997,40.699996,40.95],[40.4,40.709997,40.899999],[40.549998,40.719997,40.869999],[40.1,40.13,40.819998],[39.58,40.239998,40.479997],[39.269999,39.57,40.089999],[38.919998,39.269999,40.219997],[39.229999,39.729998,39.749998],[40.079999,40.68,40.889999],[40.219997,40.67,41.099998],[39.769999,39.919997,40.799998],[39.449998,39.809999,40.67],[38.79,39.459998,39.529999],[38.169999,38.189999,39.639997],[37.579998,38.339997,38.549996],[38.109998,38.619998,38.899998],[38.299997,38.569997,38.969999],[38.579997,40.059999,40.089999],[39.759999,40.079999,40.249998],[38.689999,38.839997,39.739998],[36.719997,37.359999,37.849998],[37.109999,37.16,38.109998],[36.749998,37.739996,37.889999],[36.06,36.129996,37.479997],[35.439998,36.469998,36.559999],[36.699997,37.769997,37.799997],[37.609999,37.899999,38.289997],[37.799997,37.95,38.179999],[37.829998,37.95,38.649998],[37.309998,37.639999,37.839998],[37.659999,37.889999,38.309997],[37.879999,38.179999,38.439999],[38.23,38.369998,38.849997],[38.139998,38.559997,38.579997],[38.299997,38.53,38.859997],[37.909999,38.149999,38.579997],[37.849998,38.379998,38.399998],[37.829998,38.389998,38.49],[37.919999,38.189999,38.5],[38.009996,38.49,38.709999],[34.419999,34.669999,35.689998],[33.689998,34.009999,34.649999],[33.919998,34.839999,34.989998],[34.499998,34.919999,35.129998],[34.449998,34.569999,35.039998],[34.009999,34.189998,34.489998],[33.839999,33.999999,34.329998],[33.109998,33.179999,33.949998],[32.619998,32.949999,33.089999],[32.489999,32.669999,33.209999],[32.409999,32.609998,32.979998],[31.509998,32.719998,32.799999],[31.999999,32.429998,32.589998],[32.189998,32.379999,32.709998],[32.199998,32.429998,32.469998],[32.159998,33.029999,33.159998],[32.629999,32.839998,33.039999],[32.859998,33.279998,33.589999],[33.239998,33.449999,33.739999],[33.109998,33.309999,33.499997],[32.199998,32.199998,33.499997],[31.569999,32.009999,32.599998],[31.029999,31.489998,32.329998],[31.48,31.569999,31.979999],[31.039999,31.159999,31.449999],[31.219998,31.289999,31.859999],[31.219998,31.399998,31.75],[30.999998,31.829999,31.88],[31.419999,31.419999,31.809998],[31.119998,31.519998,31.969999],[31.369998,31.549999,31.769998],[31.319999,32.109999,32.209998],[31.899998,32.699998,32.849998],[32.029998,32.519999,32.699998],[32.629999,33.039999,33.269998],[32.799999,32.809999,33.169999],[32.329998,32.529999,32.789999],[32.619998,33.409998,33.449999],[32.919999,33.209999,33.619999],[33.029999,33.509998,33.649998],[33.129998,33.379998,33.699998],[33.149998,33.259998,33.749999],[32.999998,33.069999,33.389998],[32.729998,33.239998,33.239998],[32.889998,33.319999,33.559998],[32.839998,32.969998,33.459999],[33.199999,33.799998,33.929998],[33.579999,33.649998,33.889999],[32.929999,33.159998,33.669998],[32.249999,32.499999,33.379998],[32.269999,32.819999,32.999998],[32.96,33.409998,33.499997],[33.329999,33.699998,33.819998],[32.899999,32.919999,33.369998],[32.969998,33.299999,33.479999],[33.399998,33.699998,33.729999],[33.289998,33.599999,33.729999],[33.009998,33.249998,33.519998],[33.209999,33.399998,33.489999],[32.779999,33.069999,33.449999],[33.019998,33.829998,33.939998],[34.259999,34.759998,35.599997],[33.259998,33.379998,34.619998],[33.219999,33.779998,33.819998],[33.469999,33.649998,33.909998],[33.259998,33.399998,33.699998],[33.309999,33.759999,33.989999],[33.329999,33.879999,34.279999],[33.849999,33.959998,34.259999],[33.179999,33.299999,33.829998],[32.819999,32.919999,33.439999],[32.399999,32.69,32.929999],[32.29,32.579998,32.849998],[32.659999,32.909999,33.149998],[32.469998,32.519999,33.099998],[32.199998,32.409999,32.679999],[31.649998,31.709999,32.269999],[31.48,31.649998,31.759998],[31.699999,32.209998,32.309998],[32.02,32.079998,32.56],[31.799998,31.799998,32.099999],[31.689999,31.699999,31.999999],[31.539998,31.629998,31.899998],[31.519998,31.539998,31.769998],[31.069999,31.21,31.709999],[30.27,30.529999,30.899999],[29.899998,29.969999,30.41],[29.519998,30.009998,30.209999],[29.949999,30.519999,30.549998],[30.639999,30.689998,31.009999],[29.719999,30.569998,30.629999],[30.209999,30.799999,31.099998],[30.319998,30.449998,30.68],[30.339999,30.389999,30.839998],[30.339999,30.649999,30.879999],[30.519999,30.739999,30.979998],[30.459998,30.509999,30.729998],[30.4,30.499999,30.689998],[30.339999,30.349999,30.749999],[29.949999,30.359999,30.449998],[30.099999,30.449998,30.54],[30.089999,30.659999,30.689998],[30.349999,30.769999,30.789999],[30.799999,31.229998,31.459999],[30.54,30.81,31.409998],[30.079999,30.249999,30.489999],[30.009998,30.27,30.529999],[30.089999,30.299998,30.449998],[30.079999,30.619999,30.67],[30.479999,30.519999,30.819998],[29.829999,30.019998,30.659999],[29.519998,29.759998,30.199999],[29.969999,30.299998,30.379999],[30.109999,30.14,30.779999],[29.399999,29.409999,30.209999],[29.46,30.239999,30.289998],[29.299999,29.319999,29.969999],[28.38,29.099998,29.129999],[28.439998,28.449999,29.409999],[28.409998,28.709998,28.829998],[28.279998,28.609999,28.8],[28.209999,28.39,28.579998],[27.609998,27.739998,28.369999],[27.209998,27.349998,27.86],[26.939998,27.469998,29.429999],[24.849999,26.599999,27.759998],[25.649999,25.69,27.379999],[25.97,27.099998,27.129999],[27.18,27.789999,27.86],[27.659999,28.029998,28.129998],[27.71,28.059999,28.12],[27.32,27.809999,28.149998],[27.409999,27.999998,28.159998],[27.939999,28.129998,28.699998],[26.969999,26.989999,27.58],[27.229998,27.59,27.629998],[27.209998,27.259999,28.009998],[26.849999,27.329998,27.499998],[26.92,27.149999,27.31],[26.959998,27.04,27.509999],[26.859999,27.109999,27.269999],[27.529999,28.469999,28.549998],[27.509999,27.569999,28.269998],[26.449999,26.539998,27.529999],[26.179999,26.439999,26.699999],[25.379999,25.649999,26.289998],[25.29,25.489999,25.759999],[24.939998,25.259999,25.329998],[24.76,25.009999,25.449998],[24.399998,24.569999,24.9],[24.299999,24.649998,24.949999],[24.939998,25.609998,25.71],[25.079998,25.349998,25.71],[24.999999,26.069999,26.069999],[26.24,27.18,27.239999],[27.109999,27.999998,28.12],[27.749998,28.009998,28.26],[27.899998,29.179999,29.2],[29.049999,29.299999,29.769998],[28.809998,29.299999,29.359998],[28.93,29.229998,29.6],[28.939998,29.419999,29.47],[28.729999,28.769999,29.259999],[28.52,28.859999,28.959998],[28.509999,28.979998,29.06],[28.459999,28.559998,28.949998],[28.209999,28.229999,28.779999],[28.359999,28.769999,28.92],[28.729999,29.029999,29.249998],[28.019998,28.069999,29.019999],[27.349998,27.45,28.039998],[27.399999,27.98,27.999998],[27.269999,27.369998,27.769998],[26.719999,26.959998,27.389999],[12.41,13.83,14],[13.55,14.29,14.5],[13.91,14.14,14.43],[13.96,14.05,14.25],[13.83,14.01,14.06],[13.84,13.87,14.35],[13.83,14.12,14.14],[13.9,13.92,14.21],[13.29,13.31,13.8],[13.03,13.11,13.45],[13.11,13.35,13.43],[13.26,13.28,13.65],[13.38,13.64,13.69],[13.62,13.79,13.84],[13.81,14.06,14.09],[13.99,14.23,14.33],[14.02,14.64,14.82],[12.26,12.64,13.27],[12.51,12.61,12.88],[12.39,12.54,12.69],[12.52,12.74,12.77],[11.9,11.95,12.61],[11.86,12.15,12.37],[12.12,12.32,12.56],[12.07,12.15,12.47],[11.89,12.19,12.36],[12.05,12.11,12.45],[12.12,12.36,12.38],[12.04,12.21,12.28],[12.01,12.16,12.47],[12.2,12.21,12.47],[12.18,12.26,12.4],[11.89,11.9,12.35],[11.45,11.51,11.91],[11.31,11.43,11.63],[11.3,11.66,11.76],[11.66,11.75,11.79],[11.72,11.73,11.89],[11.58,11.63,11.72],[11.67,11.86,11.93],[11.81,11.84,11.96],[11.76,11.84,11.99],[11.45,11.6,11.66],[11.58,11.71,11.78],[11.2,11.29,11.52],[10.72,10.77,11.05],[10.55,10.58,10.92],[10.5,10.65,10.75],[10.57,10.82,10.89],[10.44,10.58,10.93],[10.54,10.62,10.82],[9.99,10.11,10.38],[9.7,9.76,10.28],[9.24,9.55,9.63],[9.51,9.94,10.01],[9.73,9.8,10.24],[9.45,9.49,9.81],[9.51,9.64,9.8],[9.57,9.62,9.89],[9.42,9.48,9.77],[9.4,9.71,9.72],[9.59,9.97,10.01],[9.73,9.88,9.97],[9.33,9.65,9.85],[9.6,9.86,9.94],[9.76,9.91,10.12],[9.21,9.37,9.81],[9.15,9.19,9.42],[9.19,9.28,9.47],[8.91,9.02,9.2],[9.03,9.42,9.44],[9.45,9.81,9.85],[9.87,10.08,10.1],[10.1,10.52,10.67],[10.05,10.32,10.49],[10.42,10.68,10.75],[10.25,10.31,10.63],[10.1,10.82,10.86],[9.95,10.34,10.46],[10.38,10.64,10.99],[10.6,10.69,10.85],[10.67,10.93,11.02],[10.77,10.9,11.06],[10.96,11.11,11.3],[11.1,11.18,11.32],[10.95,11.31,11.4],[10.96,11.05,11.27],[11.09,11.36,11.45],[11.15,11.42,11.56],[11.45,11.7,11.7],[11.36,11.47,11.71],[11.2,11.4,11.45],[11.35,11.62,11.67],[11.59,11.72,12.25],[11.78,12.18,12.22],[11.98,12.21,12.24],[12.06,12.26,12.3],[11.97,12.02,12.28],[11.72,12.07,12.1],[11.96,12.07,12.14],[11.92,12.28,12.35],[12.16,12.3,12.39],[12.2,12.32,12.36],[12.03,12.26,12.29],[12.09,12.1,12.3],[11.93,11.95,12.14],[11.89,12.28,12.29],[11.93,11.99,12.29],[12.05,12.06,12.28],[12.1,12.13,12.44],[11.78,12.22,12.31],[12.26,12.64,12.74],[12.34,12.55,12.69],[12.5,12.52,12.71],[12.45,12.67,12.96],[12.59,12.78,12.92],[12.73,12.8,12.96],[12.58,12.59,12.84],[12.52,12.61,12.73],[12.37,12.57,12.64],[12.58,12.73,12.79],[12.49,12.76,12.79],[12.52,12.57,12.8],[12.13,12.27,12.51],[12.02,12.12,12.33],[11.61,11.71,12.11],[11.52,11.59,11.8],[11.4,11.45,11.74],[11.37,11.59,11.64],[11.38,11.43,11.63],[11.41,11.61,11.72],[11.53,11.69,11.76],[11.45,11.56,11.8],[11.43,11.5,11.69],[11.49,11.64,11.68],[11.48,11.53,11.79],[11.47,11.57,11.68],[11.31,11.44,11.55],[11.4,11.66,11.68],[11.62,11.67,11.87],[11.62,11.91,11.93],[12.11,12.2,12.34],[12.45,13.04,13.15],[12.96,13.17,13.31],[13.07,13.38,13.38],[13.21,13.44,13.49],[13.38,13.54,13.65],[13.32,13.44,13.53],[13.43,13.67,13.7],[13.61,13.69,13.8],[13.66,13.87,13.9],[13.62,13.84,13.89],[13.39,13.5,13.72],[13.02,13.03,13.29],[12.89,13.05,13.2],[12.96,13,13.2],[12.71,12.98,13.02],[12.96,13.12,13.18],[13.06,13.07,13.38],[13.06,13.33,13.36],[12.6,12.61,12.97],[12.79,12.95,12.97],[12.15,12.26,12.63],[11.48,11.55,12.12],[11.51,11.79,11.8],[11.84,12.18,12.23],[12.14,12.55,12.55],[12.51,12.73,12.76],[12.26,12.36,12.71],[12.04,12.6,12.62],[12.59,12.85,12.88],[12.95,13.08,13.16],[13.03,13.16,13.3],[13.42,13.72,13.83],[13.63,13.81,13.85],[13.75,13.8,13.94],[13.77,13.85,13.93],[13.85,13.94,14],[13.92,14.05,14.11],[14.04,14.16,14.25],[13.93,14,14.18],[13.91,14.11,14.14],[14.09,14.16,14.2],[14.12,14.18,14.27],[13.9,13.99,14.26],[13.82,13.94,13.98],[13.79,14.01,14.13],[14.02,14.18,14.24],[13.85,14.06,14.18],[14.04,14.31,14.35],[14.1,14.15,14.38],[14.19,14.28,14.36],[14.2,14.26,14.34],[14.24,14.25,14.34],[14.14,14.19,14.3],[14.15,14.3,14.33],[14.25,14.28,14.38],[14.31,14.52,14.59],[14.38,14.41,14.52],[14.33,14.5,14.51],[14.46,14.51,14.6],[14.39,14.42,14.51],[14.26,14.37,14.39],[14.43,14.57,14.65],[14.39,14.4,14.73],[13.55,14.37,14.48],[14.37,14.39,14.69],[14.39,14.43,14.58],[14.28,14.38,14.46],[14.21,14.37,14.42],[14.28,14.5,14.5],[14.45,14.49,14.7],[14.53,14.63,14.67],[14.51,14.69,14.75],[14.55,14.63,14.69],[14.07,14.07,14.53],[13.78,14.49,14.57],[14.06,14.18,14.44],[14.09,14.27,14.35],[14.14,14.5,14.6],[14.49,14.53,14.8],[14.54,14.56,14.74],[14.52,14.54,14.67],[14.62,14.99,15],[14.93,15.12,15.17],[15.03,15.09,15.19],[14.93,15.02,15.12],[14.95,15.34,15.37],[15.17,15.49,15.49],[15.33,15.39,15.6],[15.44,15.53,15.73],[15.46,15.65,15.69],[15.27,15.36,15.74],[15.43,15.63,15.68],[15.42,15.6,15.63],[15.49,15.58,15.68],[15.59,15.59,15.88],[15.32,15.44,15.6],[15.31,15.35,15.56],[14.94,15.15,15.25],[14.48,14.48,15],[14.01,14.03,14.56],[14.09,14.21,14.42],[14.04,14.12,14.27],[13.98,14.1,14.17],[13.77,13.8,14.04],[13.83,13.97,13.97],[13.86,13.9,13.99],[13.84,13.91,14.07],[13.87,13.99,14.1],[13.94,14.09,14.19],[14.03,14.49,14.49],[14.12,14.35,14.56],[14.28,14.65,14.83],[14.51,14.54,14.88],[14.43,14.71,14.93],[14.89,15.05,15.15],[14.87,15.28,15.32],[14.99,15.57,15.71],[15.44,15.49,15.9],[15.36,15.82,15.83],[15.8,16.1,16.190001],[15.82,15.87,16.07],[15.72,15.8,15.9],[15.82,15.89,15.96],[15.81,15.87,15.96],[15.93,16,16.07],[15.9,15.95,16.190001],[14.78,14.87,15.72],[14.83,15.18,15.24],[15,15.08,15.2],[15.03,15.15,15.32],[15.11,15.4,15.53],[15.02,15.06,15.48],[15.02,15.12,15.3],[15.26,15.55,15.55],[15.46,15.6,15.64],[15.6,16.15,16.17],[16.1,16.16,16.25],[15.74,15.78,16.15],[15.41,15.83,15.84],[15.69,15.82,15.95],[15.53,15.61,15.9],[15.4,15.51,15.65],[15.05,15.05,15.54],[14.91,15.12,15.16],[15,15.08,15.22],[15.09,15.14,15.36],[14.94,15.14,15.27],[15.02,15.1,15.18],[15.13,15.21,15.24],[14.93,14.94,15.31],[14.87,14.94,15.04],[14.77,14.84,15.1],[14.62,14.85,15.14],[14.85,15.08,15.21],[14.9,15.07,15.16],[14.97,15,15.16],[14.67,14.68,15.09],[14.4,14.69,14.97],[14.62,14.94,14.97],[14.56,14.79,14.96],[14.69,14.77,14.94],[14.56,14.58,14.89],[14.5,14.58,14.7],[14.75,14.86,15.02],[14.6,14.73,14.99],[14.41,14.67,14.73],[14.67,15.17,15.25],[15.12,15.19,15.35],[14.77,14.79,15.31],[14.78,14.8,15.11],[14.62,14.84,14.85],[14.57,15.05,15.11],[14.84,14.99,15.16],[14.87,15.21,15.22],[15.12,15.27,15.32],[15.09,15.26,15.3],[15.16,15.43,15.44],[15.39,15.51,15.64],[15.45,15.64,15.77],[15.55,15.72,15.74],[15.7,16.040001,16.110001],[15.95,16.059999,16.41],[15.89,15.98,16.139999],[15.89,15.92,16.030001],[15.72,15.95,15.95],[15.93,16.129999,16.219999],[16.09,16.200001,16.24],[16.48,17.6,17.799999],[17.309999,17.65,17.68],[17.48,17.65,17.809999],[17.370001,17.370001,17.67],[17.450001,17.620001,17.709999],[17.309999,17.32,17.690001],[17.120001,17.35,17.4],[17.129999,17.299999,17.440001],[17.049999,17.27,17.42],[17.219999,17.32,17.4],[17.18,17.360001,17.42],[17.25,17.389999,17.6],[17.35,17.49,17.49],[17.41,17.469999,17.58],[17.280001,17.57,17.65],[17.48,17.65,17.709999],[17.559999,17.559999,17.700001],[17.52,17.559999,17.68],[17.15,17.15,17.690001],[17.1,17.23,17.299999],[17.139999,17.209999,17.379999],[17.129999,17.23,17.4],[17.030001,17.200001,17.309999],[17.200001,17.26,17.41],[17.17,17.26,17.379999],[17.219999,17.65,17.690001],[17.559999,17.879999,17.959999],[17.43,17.59,17.950001],[17.5,17.719999,17.74],[17.6,17.690001,17.940001],[17.43,17.559999,17.719999],[17.280001,17.370001,17.629999],[17.290001,17.360001,17.540001],[17.290001,17.540001,17.549999],[17.85,18.02,18.370001]]]},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="intel" class="section level3">
+<h3>Intel</h3>
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="htmlwidget-1ea614d7db34b70887e8" style="width:576px;height:460.8px;" class="dygraphs html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1ea614d7db34b70887e8">{"x":{"attrs":{"labels":["day","INTC"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}},"customBars":true,"series":{"INTC":{"axis":"y"}}},"scale":"daily","group":"stocks","annotations":[],"shadings":[],"events":[],"format":"date","data":[["2014-01-02T00:00:00Z","2014-01-03T00:00:00Z","2014-01-06T00:00:00Z","2014-01-07T00:00:00Z","2014-01-08T00:00:00Z","2014-01-09T00:00:00Z","2014-01-10T00:00:00Z","2014-01-13T00:00:00Z","2014-01-14T00:00:00Z","2014-01-15T00:00:00Z","2014-01-16T00:00:00Z","2014-01-17T00:00:00Z","2014-01-21T00:00:00Z","2014-01-22T00:00:00Z","2014-01-23T00:00:00Z","2014-01-24T00:00:00Z","2014-01-27T00:00:00Z","2014-01-28T00:00:00Z","2014-01-29T00:00:00Z","2014-01-30T00:00:00Z","2014-01-31T00:00:00Z","2014-02-03T00:00:00Z","2014-02-04T00:00:00Z","2014-02-05T00:00:00Z","2014-02-06T00:00:00Z","2014-02-07T00:00:00Z","2014-02-10T00:00:00Z","2014-02-11T00:00:00Z","2014-02-12T00:00:00Z","2014-02-13T00:00:00Z","2014-02-14T00:00:00Z","2014-02-18T00:00:00Z","2014-02-19T00:00:00Z","2014-02-20T00:00:00Z","2014-02-21T00:00:00Z","2014-02-24T00:00:00Z","2014-02-25T00:00:00Z","2014-02-26T00:00:00Z","2014-02-27T00:00:00Z","2014-02-28T00:00:00Z","2014-03-03T00:00:00Z","2014-03-04T00:00:00Z","2014-03-05T00:00:00Z","2014-03-06T00:00:00Z","2014-03-07T00:00:00Z","2014-03-10T00:00:00Z","2014-03-11T00:00:00Z","2014-03-12T00:00:00Z","2014-03-13T00:00:00Z","2014-03-14T00:00:00Z","2014-03-17T00:00:00Z","2014-03-18T00:00:00Z","2014-03-19T00:00:00Z","2014-03-20T00:00:00Z","2014-03-21T00:00:00Z","2014-03-24T00:00:00Z","2014-03-25T00:00:00Z","2014-03-26T00:00:00Z","2014-03-27T00:00:00Z","2014-03-28T00:00:00Z","2014-03-31T00:00:00Z","2014-04-01T00:00:00Z","2014-04-02T00:00:00Z","2014-04-03T00:00:00Z","2014-04-04T00:00:00Z","2014-04-07T00:00:00Z","2014-04-08T00:00:00Z","2014-04-09T00:00:00Z","2014-04-10T00:00:00Z","2014-04-11T00:00:00Z","2014-04-14T00:00:00Z","2014-04-15T00:00:00Z","2014-04-16T00:00:00Z","2014-04-17T00:00:00Z","2014-04-21T00:00:00Z","2014-04-22T00:00:00Z","2014-04-23T00:00:00Z","2014-04-24T00:00:00Z","2014-04-25T00:00:00Z","2014-04-28T00:00:00Z","2014-04-29T00:00:00Z","2014-04-30T00:00:00Z","2014-05-01T00:00:00Z","2014-05-02T00:00:00Z","2014-05-05T00:00:00Z","2014-05-06T00:00:00Z","2014-05-07T00:00:00Z","2014-05-08T00:00:00Z","2014-05-09T00:00:00Z","2014-05-12T00:00:00Z","2014-05-13T00:00:00Z","2014-05-14T00:00:00Z","2014-05-15T00:00:00Z","2014-05-16T00:00:00Z","2014-05-19T00:00:00Z","2014-05-20T00:00:00Z","2014-05-21T00:00:00Z","2014-05-22T00:00:00Z","2014-05-23T00:00:00Z","2014-05-27T00:00:00Z","2014-05-28T00:00:00Z","2014-05-29T00:00:00Z","2014-05-30T00:00:00Z","2014-06-02T00:00:00Z","2014-06-03T00:00:00Z","2014-06-04T00:00:00Z","2014-06-05T00:00:00Z","2014-06-06T00:00:00Z","2014-06-09T00:00:00Z","2014-06-10T00:00:00Z","2014-06-11T00:00:00Z","2014-06-12T00:00:00Z","2014-06-13T00:00:00Z","2014-06-16T00:00:00Z","2014-06-17T00:00:00Z","2014-06-18T00:00:00Z","2014-06-19T00:00:00Z","2014-06-20T00:00:00Z","2014-06-23T00:00:00Z","2014-06-24T00:00:00Z","2014-06-25T00:00:00Z","2014-06-26T00:00:00Z","2014-06-27T00:00:00Z","2014-06-30T00:00:00Z","2014-07-01T00:00:00Z","2014-07-02T00:00:00Z","2014-07-03T00:00:00Z","2014-07-07T00:00:00Z","2014-07-08T00:00:00Z","2014-07-09T00:00:00Z","2014-07-10T00:00:00Z","2014-07-11T00:00:00Z","2014-07-14T00:00:00Z","2014-07-15T00:00:00Z","2014-07-16T00:00:00Z","2014-07-17T00:00:00Z","2014-07-18T00:00:00Z","2014-07-21T00:00:00Z","2014-07-22T00:00:00Z","2014-07-23T00:00:00Z","2014-07-24T00:00:00Z","2014-07-25T00:00:00Z","2014-07-28T00:00:00Z","2014-07-29T00:00:00Z","2014-07-30T00:00:00Z","2014-07-31T00:00:00Z","2014-08-01T00:00:00Z","2014-08-04T00:00:00Z","2014-08-05T00:00:00Z","2014-08-06T00:00:00Z","2014-08-07T00:00:00Z","2014-08-08T00:00:00Z","2014-08-11T00:00:00Z","2014-08-12T00:00:00Z","2014-08-13T00:00:00Z","2014-08-14T00:00:00Z","2014-08-15T00:00:00Z","2014-08-18T00:00:00Z","2014-08-19T00:00:00Z","2014-08-20T00:00:00Z","2014-08-21T00:00:00Z","2014-08-22T00:00:00Z","2014-08-25T00:00:00Z","2014-08-26T00:00:00Z","2014-08-27T00:00:00Z","2014-08-28T00:00:00Z","2014-08-29T00:00:00Z","2014-09-02T00:00:00Z","2014-09-03T00:00:00Z","2014-09-04T00:00:00Z","2014-09-05T00:00:00Z","2014-09-08T00:00:00Z","2014-09-09T00:00:00Z","2014-09-10T00:00:00Z","2014-09-11T00:00:00Z","2014-09-12T00:00:00Z","2014-09-15T00:00:00Z","2014-09-16T00:00:00Z","2014-09-17T00:00:00Z","2014-09-18T00:00:00Z","2014-09-19T00:00:00Z","2014-09-22T00:00:00Z","2014-09-23T00:00:00Z","2014-09-24T00:00:00Z","2014-09-25T00:00:00Z","2014-09-26T00:00:00Z","2014-09-29T00:00:00Z","2014-09-30T00:00:00Z","2014-10-01T00:00:00Z","2014-10-02T00:00:00Z","2014-10-03T00:00:00Z","2014-10-06T00:00:00Z","2014-10-07T00:00:00Z","2014-10-08T00:00:00Z","2014-10-09T00:00:00Z","2014-10-10T00:00:00Z","2014-10-13T00:00:00Z","2014-10-14T00:00:00Z","2014-10-15T00:00:00Z","2014-10-16T00:00:00Z","2014-10-17T00:00:00Z","2014-10-20T00:00:00Z","2014-10-21T00:00:00Z","2014-10-22T00:00:00Z","2014-10-23T00:00:00Z","2014-10-24T00:00:00Z","2014-10-27T00:00:00Z","2014-10-28T00:00:00Z","2014-10-29T00:00:00Z","2014-10-30T00:00:00Z","2014-10-31T00:00:00Z","2014-11-03T00:00:00Z","2014-11-04T00:00:00Z","2014-11-05T00:00:00Z","2014-11-06T00:00:00Z","2014-11-07T00:00:00Z","2014-11-10T00:00:00Z","2014-11-11T00:00:00Z","2014-11-12T00:00:00Z","2014-11-13T00:00:00Z","2014-11-14T00:00:00Z","2014-11-17T00:00:00Z","2014-11-18T00:00:00Z","2014-11-19T00:00:00Z","2014-11-20T00:00:00Z","2014-11-21T00:00:00Z","2014-11-24T00:00:00Z","2014-11-25T00:00:00Z","2014-11-26T00:00:00Z","2014-11-28T00:00:00Z","2014-12-01T00:00:00Z","2014-12-02T00:00:00Z","2014-12-03T00:00:00Z","2014-12-04T00:00:00Z","2014-12-05T00:00:00Z","2014-12-08T00:00:00Z","2014-12-09T00:00:00Z","2014-12-10T00:00:00Z","2014-12-11T00:00:00Z","2014-12-12T00:00:00Z","2014-12-15T00:00:00Z","2014-12-16T00:00:00Z","2014-12-17T00:00:00Z","2014-12-18T00:00:00Z","2014-12-19T00:00:00Z","2014-12-22T00:00:00Z","2014-12-23T00:00:00Z","2014-12-24T00:00:00Z","2014-12-26T00:00:00Z","2014-12-29T00:00:00Z","2014-12-30T00:00:00Z","2014-12-31T00:00:00Z","2015-01-02T00:00:00Z","2015-01-05T00:00:00Z","2015-01-06T00:00:00Z","2015-01-07T00:00:00Z","2015-01-08T00:00:00Z","2015-01-09T00:00:00Z","2015-01-12T00:00:00Z","2015-01-13T00:00:00Z","2015-01-14T00:00:00Z","2015-01-15T00:00:00Z","2015-01-16T00:00:00Z","2015-01-20T00:00:00Z","2015-01-21T00:00:00Z","2015-01-22T00:00:00Z","2015-01-23T00:00:00Z","2015-01-26T00:00:00Z","2015-01-27T00:00:00Z","2015-01-28T00:00:00Z","2015-01-29T00:00:00Z","2015-01-30T00:00:00Z","2015-02-02T00:00:00Z","2015-02-03T00:00:00Z","2015-02-04T00:00:00Z","2015-02-05T00:00:00Z","2015-02-06T00:00:00Z","2015-02-09T00:00:00Z","2015-02-10T00:00:00Z","2015-02-11T00:00:00Z","2015-02-12T00:00:00Z","2015-02-13T00:00:00Z","2015-02-17T00:00:00Z","2015-02-18T00:00:00Z","2015-02-19T00:00:00Z","2015-02-20T00:00:00Z","2015-02-23T00:00:00Z","2015-02-24T00:00:00Z","2015-02-25T00:00:00Z","2015-02-26T00:00:00Z","2015-02-27T00:00:00Z","2015-03-02T00:00:00Z","2015-03-03T00:00:00Z","2015-03-04T00:00:00Z","2015-03-05T00:00:00Z","2015-03-06T00:00:00Z","2015-03-09T00:00:00Z","2015-03-10T00:00:00Z","2015-03-11T00:00:00Z","2015-03-12T00:00:00Z","2015-03-13T00:00:00Z","2015-03-16T00:00:00Z","2015-03-17T00:00:00Z","2015-03-18T00:00:00Z","2015-03-19T00:00:00Z","2015-03-20T00:00:00Z","2015-03-23T00:00:00Z","2015-03-24T00:00:00Z","2015-03-25T00:00:00Z","2015-03-26T00:00:00Z","2015-03-27T00:00:00Z","2015-03-30T00:00:00Z","2015-03-31T00:00:00Z","2015-04-01T00:00:00Z","2015-04-02T00:00:00Z","2015-04-06T00:00:00Z","2015-04-07T00:00:00Z","2015-04-08T00:00:00Z","2015-04-09T00:00:00Z","2015-04-10T00:00:00Z","2015-04-13T00:00:00Z","2015-04-14T00:00:00Z","2015-04-15T00:00:00Z","2015-04-16T00:00:00Z","2015-04-17T00:00:00Z","2015-04-20T00:00:00Z","2015-04-21T00:00:00Z","2015-04-22T00:00:00Z","2015-04-23T00:00:00Z","2015-04-24T00:00:00Z","2015-04-27T00:00:00Z","2015-04-28T00:00:00Z","2015-04-29T00:00:00Z","2015-04-30T00:00:00Z","2015-05-01T00:00:00Z","2015-05-04T00:00:00Z","2015-05-05T00:00:00Z","2015-05-06T00:00:00Z","2015-05-07T00:00:00Z","2015-05-08T00:00:00Z","2015-05-11T00:00:00Z","2015-05-12T00:00:00Z","2015-05-13T00:00:00Z","2015-05-14T00:00:00Z","2015-05-15T00:00:00Z","2015-05-18T00:00:00Z","2015-05-19T00:00:00Z","2015-05-20T00:00:00Z","2015-05-21T00:00:00Z","2015-05-22T00:00:00Z","2015-05-26T00:00:00Z","2015-05-27T00:00:00Z","2015-05-28T00:00:00Z","2015-05-29T00:00:00Z","2015-06-01T00:00:00Z","2015-06-02T00:00:00Z","2015-06-03T00:00:00Z","2015-06-04T00:00:00Z","2015-06-05T00:00:00Z","2015-06-08T00:00:00Z","2015-06-09T00:00:00Z","2015-06-10T00:00:00Z","2015-06-11T00:00:00Z","2015-06-12T00:00:00Z","2015-06-15T00:00:00Z","2015-06-16T00:00:00Z","2015-06-17T00:00:00Z","2015-06-18T00:00:00Z","2015-06-19T00:00:00Z","2015-06-22T00:00:00Z","2015-06-23T00:00:00Z","2015-06-24T00:00:00Z","2015-06-25T00:00:00Z","2015-06-26T00:00:00Z","2015-06-29T00:00:00Z","2015-06-30T00:00:00Z","2015-07-01T00:00:00Z","2015-07-02T00:00:00Z","2015-07-06T00:00:00Z","2015-07-07T00:00:00Z","2015-07-08T00:00:00Z","2015-07-09T00:00:00Z","2015-07-10T00:00:00Z","2015-07-13T00:00:00Z","2015-07-14T00:00:00Z","2015-07-15T00:00:00Z","2015-07-16T00:00:00Z","2015-07-17T00:00:00Z","2015-07-20T00:00:00Z","2015-07-21T00:00:00Z","2015-07-22T00:00:00Z","2015-07-23T00:00:00Z","2015-07-24T00:00:00Z","2015-07-27T00:00:00Z","2015-07-28T00:00:00Z","2015-07-29T00:00:00Z","2015-07-30T00:00:00Z","2015-07-31T00:00:00Z","2015-08-03T00:00:00Z","2015-08-04T00:00:00Z","2015-08-05T00:00:00Z","2015-08-06T00:00:00Z","2015-08-07T00:00:00Z","2015-08-10T00:00:00Z","2015-08-11T00:00:00Z","2015-08-12T00:00:00Z","2015-08-13T00:00:00Z","2015-08-14T00:00:00Z","2015-08-17T00:00:00Z","2015-08-18T00:00:00Z","2015-08-19T00:00:00Z","2015-08-20T00:00:00Z","2015-08-21T00:00:00Z","2015-08-24T00:00:00Z","2015-08-25T00:00:00Z","2015-08-26T00:00:00Z","2015-08-27T00:00:00Z","2015-08-28T00:00:00Z","2015-08-31T00:00:00Z","2015-09-01T00:00:00Z","2015-09-02T00:00:00Z","2015-09-03T00:00:00Z","2015-09-04T00:00:00Z","2015-09-08T00:00:00Z","2015-09-09T00:00:00Z","2015-09-10T00:00:00Z","2015-09-11T00:00:00Z","2015-09-14T00:00:00Z","2015-09-15T00:00:00Z","2015-09-16T00:00:00Z","2015-09-17T00:00:00Z","2015-09-18T00:00:00Z","2015-09-21T00:00:00Z","2015-09-22T00:00:00Z","2015-09-23T00:00:00Z","2015-09-24T00:00:00Z","2015-09-25T00:00:00Z","2015-09-28T00:00:00Z","2015-09-29T00:00:00Z","2015-09-30T00:00:00Z","2015-10-01T00:00:00Z","2015-10-02T00:00:00Z","2015-10-05T00:00:00Z","2015-10-06T00:00:00Z","2015-10-07T00:00:00Z","2015-10-08T00:00:00Z","2015-10-09T00:00:00Z","2015-10-12T00:00:00Z","2015-10-13T00:00:00Z","2015-10-14T00:00:00Z","2015-10-15T00:00:00Z","2015-10-16T00:00:00Z","2015-10-19T00:00:00Z","2015-10-20T00:00:00Z","2015-10-21T00:00:00Z","2015-10-22T00:00:00Z","2015-10-23T00:00:00Z","2015-10-26T00:00:00Z","2015-10-27T00:00:00Z","2015-10-28T00:00:00Z","2015-10-29T00:00:00Z","2015-10-30T00:00:00Z","2015-11-02T00:00:00Z","2015-11-03T00:00:00Z","2015-11-04T00:00:00Z","2015-11-05T00:00:00Z","2015-11-06T00:00:00Z","2015-11-09T00:00:00Z","2015-11-10T00:00:00Z","2015-11-11T00:00:00Z","2015-11-12T00:00:00Z","2015-11-13T00:00:00Z","2015-11-16T00:00:00Z","2015-11-17T00:00:00Z","2015-11-18T00:00:00Z","2015-11-19T00:00:00Z","2015-11-20T00:00:00Z","2015-11-23T00:00:00Z","2015-11-24T00:00:00Z","2015-11-25T00:00:00Z","2015-11-27T00:00:00Z","2015-11-30T00:00:00Z","2015-12-01T00:00:00Z","2015-12-02T00:00:00Z","2015-12-03T00:00:00Z","2015-12-04T00:00:00Z","2015-12-07T00:00:00Z","2015-12-08T00:00:00Z","2015-12-09T00:00:00Z","2015-12-10T00:00:00Z","2015-12-11T00:00:00Z","2015-12-14T00:00:00Z","2015-12-15T00:00:00Z","2015-12-16T00:00:00Z","2015-12-17T00:00:00Z","2015-12-18T00:00:00Z","2015-12-21T00:00:00Z","2015-12-22T00:00:00Z","2015-12-23T00:00:00Z","2015-12-24T00:00:00Z","2015-12-28T00:00:00Z","2015-12-29T00:00:00Z","2015-12-30T00:00:00Z","2015-12-31T00:00:00Z","2016-01-04T00:00:00Z","2016-01-05T00:00:00Z","2016-01-06T00:00:00Z","2016-01-07T00:00:00Z","2016-01-08T00:00:00Z","2016-01-11T00:00:00Z","2016-01-12T00:00:00Z","2016-01-13T00:00:00Z","2016-01-14T00:00:00Z","2016-01-15T00:00:00Z","2016-01-19T00:00:00Z","2016-01-20T00:00:00Z","2016-01-21T00:00:00Z","2016-01-22T00:00:00Z","2016-01-25T00:00:00Z","2016-01-26T00:00:00Z","2016-01-27T00:00:00Z","2016-01-28T00:00:00Z","2016-01-29T00:00:00Z","2016-02-01T00:00:00Z","2016-02-02T00:00:00Z","2016-02-03T00:00:00Z","2016-02-04T00:00:00Z","2016-02-05T00:00:00Z","2016-02-08T00:00:00Z","2016-02-09T00:00:00Z","2016-02-10T00:00:00Z","2016-02-11T00:00:00Z","2016-02-12T00:00:00Z","2016-02-16T00:00:00Z","2016-02-17T00:00:00Z","2016-02-18T00:00:00Z","2016-02-19T00:00:00Z","2016-02-22T00:00:00Z","2016-02-23T00:00:00Z","2016-02-24T00:00:00Z","2016-02-25T00:00:00Z","2016-02-26T00:00:00Z","2016-02-29T00:00:00Z","2016-03-01T00:00:00Z","2016-03-02T00:00:00Z","2016-03-03T00:00:00Z","2016-03-04T00:00:00Z","2016-03-07T00:00:00Z","2016-03-08T00:00:00Z","2016-03-09T00:00:00Z","2016-03-10T00:00:00Z","2016-03-11T00:00:00Z","2016-03-14T00:00:00Z","2016-03-15T00:00:00Z","2016-03-16T00:00:00Z","2016-03-17T00:00:00Z","2016-03-18T00:00:00Z","2016-03-21T00:00:00Z","2016-03-22T00:00:00Z","2016-03-23T00:00:00Z","2016-03-24T00:00:00Z","2016-03-28T00:00:00Z","2016-03-29T00:00:00Z","2016-03-30T00:00:00Z","2016-03-31T00:00:00Z","2016-04-01T00:00:00Z","2016-04-04T00:00:00Z","2016-04-05T00:00:00Z","2016-04-06T00:00:00Z","2016-04-07T00:00:00Z","2016-04-08T00:00:00Z","2016-04-11T00:00:00Z","2016-04-12T00:00:00Z","2016-04-13T00:00:00Z","2016-04-14T00:00:00Z","2016-04-15T00:00:00Z","2016-04-18T00:00:00Z","2016-04-19T00:00:00Z","2016-04-20T00:00:00Z","2016-04-21T00:00:00Z","2016-04-22T00:00:00Z","2016-04-25T00:00:00Z","2016-04-26T00:00:00Z","2016-04-27T00:00:00Z","2016-04-28T00:00:00Z","2016-04-29T00:00:00Z","2016-05-02T00:00:00Z","2016-05-03T00:00:00Z","2016-05-04T00:00:00Z","2016-05-05T00:00:00Z","2016-05-06T00:00:00Z","2016-05-09T00:00:00Z","2016-05-10T00:00:00Z","2016-05-11T00:00:00Z","2016-05-12T00:00:00Z","2016-05-13T00:00:00Z","2016-05-16T00:00:00Z","2016-05-17T00:00:00Z","2016-05-18T00:00:00Z","2016-05-19T00:00:00Z","2016-05-20T00:00:00Z","2016-05-23T00:00:00Z","2016-05-24T00:00:00Z","2016-05-25T00:00:00Z","2016-05-26T00:00:00Z","2016-05-27T00:00:00Z","2016-05-31T00:00:00Z","2016-06-01T00:00:00Z","2016-06-02T00:00:00Z","2016-06-03T00:00:00Z","2016-06-06T00:00:00Z","2016-06-07T00:00:00Z","2016-06-08T00:00:00Z","2016-06-09T00:00:00Z","2016-06-10T00:00:00Z","2016-06-13T00:00:00Z","2016-06-14T00:00:00Z","2016-06-15T00:00:00Z","2016-06-16T00:00:00Z","2016-06-17T00:00:00Z","2016-06-20T00:00:00Z","2016-06-21T00:00:00Z","2016-06-22T00:00:00Z","2016-06-23T00:00:00Z","2016-06-24T00:00:00Z","2016-06-27T00:00:00Z","2016-06-28T00:00:00Z","2016-06-29T00:00:00Z","2016-06-30T00:00:00Z","2016-07-01T00:00:00Z","2016-07-05T00:00:00Z","2016-07-06T00:00:00Z","2016-07-07T00:00:00Z","2016-07-08T00:00:00Z","2016-07-11T00:00:00Z","2016-07-12T00:00:00Z","2016-07-13T00:00:00Z","2016-07-14T00:00:00Z","2016-07-15T00:00:00Z","2016-07-18T00:00:00Z","2016-07-19T00:00:00Z","2016-07-20T00:00:00Z","2016-07-21T00:00:00Z","2016-07-22T00:00:00Z","2016-07-25T00:00:00Z","2016-07-26T00:00:00Z","2016-07-27T00:00:00Z","2016-07-28T00:00:00Z","2016-07-29T00:00:00Z","2016-08-01T00:00:00Z","2016-08-02T00:00:00Z","2016-08-03T00:00:00Z","2016-08-04T00:00:00Z","2016-08-05T00:00:00Z","2016-08-08T00:00:00Z","2016-08-09T00:00:00Z","2016-08-10T00:00:00Z","2016-08-11T00:00:00Z","2016-08-12T00:00:00Z","2016-08-15T00:00:00Z","2016-08-16T00:00:00Z","2016-08-17T00:00:00Z","2016-08-18T00:00:00Z","2016-08-19T00:00:00Z","2016-08-22T00:00:00Z","2016-08-23T00:00:00Z","2016-08-24T00:00:00Z","2016-08-25T00:00:00Z","2016-08-26T00:00:00Z","2016-08-29T00:00:00Z","2016-08-30T00:00:00Z","2016-08-31T00:00:00Z","2016-09-01T00:00:00Z","2016-09-02T00:00:00Z","2016-09-06T00:00:00Z","2016-09-07T00:00:00Z","2016-09-08T00:00:00Z","2016-09-09T00:00:00Z","2016-09-12T00:00:00Z","2016-09-13T00:00:00Z","2016-09-14T00:00:00Z","2016-09-15T00:00:00Z","2016-09-16T00:00:00Z","2016-09-19T00:00:00Z","2016-09-20T00:00:00Z","2016-09-21T00:00:00Z","2016-09-22T00:00:00Z","2016-09-23T00:00:00Z","2016-09-26T00:00:00Z","2016-09-27T00:00:00Z","2016-09-28T00:00:00Z","2016-09-29T00:00:00Z","2016-09-30T00:00:00Z","2016-10-03T00:00:00Z","2016-10-04T00:00:00Z","2016-10-05T00:00:00Z","2016-10-06T00:00:00Z","2016-10-07T00:00:00Z","2016-10-10T00:00:00Z","2016-10-11T00:00:00Z","2016-10-12T00:00:00Z","2016-10-13T00:00:00Z","2016-10-14T00:00:00Z","2016-10-17T00:00:00Z","2016-10-18T00:00:00Z","2016-10-19T00:00:00Z","2016-10-20T00:00:00Z","2016-10-21T00:00:00Z","2016-10-24T00:00:00Z","2016-10-25T00:00:00Z","2016-10-26T00:00:00Z","2016-10-27T00:00:00Z","2016-10-28T00:00:00Z","2016-10-31T00:00:00Z","2016-11-01T00:00:00Z","2016-11-02T00:00:00Z","2016-11-03T00:00:00Z","2016-11-04T00:00:00Z","2016-11-07T00:00:00Z","2016-11-08T00:00:00Z","2016-11-09T00:00:00Z","2016-11-10T00:00:00Z","2016-11-11T00:00:00Z","2016-11-14T00:00:00Z","2016-11-15T00:00:00Z","2016-11-16T00:00:00Z","2016-11-17T00:00:00Z","2016-11-18T00:00:00Z","2016-11-21T00:00:00Z","2016-11-22T00:00:00Z","2016-11-23T00:00:00Z","2016-11-25T00:00:00Z","2016-11-28T00:00:00Z","2016-11-29T00:00:00Z","2016-11-30T00:00:00Z","2016-12-01T00:00:00Z","2016-12-02T00:00:00Z","2016-12-05T00:00:00Z","2016-12-06T00:00:00Z","2016-12-07T00:00:00Z","2016-12-08T00:00:00Z","2016-12-09T00:00:00Z","2016-12-12T00:00:00Z","2016-12-13T00:00:00Z","2016-12-14T00:00:00Z","2016-12-15T00:00:00Z","2016-12-16T00:00:00Z","2016-12-19T00:00:00Z","2016-12-20T00:00:00Z","2016-12-21T00:00:00Z","2016-12-22T00:00:00Z","2016-12-23T00:00:00Z","2016-12-27T00:00:00Z","2016-12-28T00:00:00Z","2016-12-29T00:00:00Z","2016-12-30T00:00:00Z","2017-01-03T00:00:00Z","2017-01-04T00:00:00Z","2017-01-05T00:00:00Z","2017-01-06T00:00:00Z","2017-01-09T00:00:00Z","2017-01-10T00:00:00Z","2017-01-11T00:00:00Z","2017-01-12T00:00:00Z","2017-01-13T00:00:00Z","2017-01-17T00:00:00Z","2017-01-18T00:00:00Z","2017-01-19T00:00:00Z","2017-01-20T00:00:00Z","2017-01-23T00:00:00Z","2017-01-24T00:00:00Z","2017-01-25T00:00:00Z","2017-01-26T00:00:00Z","2017-01-27T00:00:00Z","2017-01-30T00:00:00Z","2017-01-31T00:00:00Z","2017-02-01T00:00:00Z","2017-02-02T00:00:00Z","2017-02-03T00:00:00Z","2017-02-06T00:00:00Z","2017-02-07T00:00:00Z","2017-02-08T00:00:00Z","2017-02-09T00:00:00Z","2017-02-10T00:00:00Z","2017-02-13T00:00:00Z","2017-02-14T00:00:00Z","2017-02-15T00:00:00Z","2017-02-16T00:00:00Z","2017-02-17T00:00:00Z","2017-02-21T00:00:00Z","2017-02-22T00:00:00Z","2017-02-23T00:00:00Z","2017-02-24T00:00:00Z","2017-02-27T00:00:00Z","2017-02-28T00:00:00Z","2017-03-01T00:00:00Z","2017-03-02T00:00:00Z","2017-03-03T00:00:00Z","2017-03-06T00:00:00Z","2017-03-07T00:00:00Z","2017-03-08T00:00:00Z","2017-03-09T00:00:00Z","2017-03-10T00:00:00Z","2017-03-13T00:00:00Z","2017-03-14T00:00:00Z","2017-03-15T00:00:00Z","2017-03-16T00:00:00Z","2017-03-17T00:00:00Z","2017-03-20T00:00:00Z","2017-03-21T00:00:00Z","2017-03-22T00:00:00Z","2017-03-23T00:00:00Z","2017-03-24T00:00:00Z","2017-03-27T00:00:00Z","2017-03-28T00:00:00Z","2017-03-29T00:00:00Z","2017-03-30T00:00:00Z","2017-03-31T00:00:00Z","2017-04-03T00:00:00Z","2017-04-04T00:00:00Z","2017-04-05T00:00:00Z","2017-04-06T00:00:00Z","2017-04-07T00:00:00Z","2017-04-10T00:00:00Z","2017-04-11T00:00:00Z","2017-04-12T00:00:00Z"],[[25.469999,25.790001,25.82],[25.6,25.780001,25.9],[25.450001,25.459999,25.790001],[25.469999,25.59,25.73],[25.299999,25.43,25.709999],[25.25,25.309999,25.549999],[25.5,25.530001,25.85],[25.42,25.5,25.99],[25.9,26.51,26.549999],[26.610001,26.67,27.120001],[26.33,26.540001,26.74],[25.25,25.85,25.860001],[25.27,25.59,25.799999],[25.15,25.309999,25.540001],[24.9,25.129999,25.25],[24.790001,24.809999,25.190001],[24.66,24.719999,24.99],[24.57,24.9,25.049999],[24.629999,24.68,24.959999],[24.540001,24.74,24.889999],[24.4,24.540001,24.65],[23.889999,23.950001,24.51],[23.58,23.82,24.040001],[23.5,23.52,23.76],[23.549999,23.99,24.08],[23.77,24.209999,24.26],[24.059999,24.290001,24.370001],[24.33,24.469999,24.52],[24.370001,24.549999,24.690001],[24.309999,24.700001,24.74],[24.41,24.76,24.76],[24.549999,24.76,24.780001],[24.42,24.5,24.719999],[24.5,24.74,24.85],[24.35,24.42,24.959999],[24.41,24.629999,24.879999],[24.459999,24.620001,24.709999],[24.610001,24.799999,24.98],[24.51,24.76,24.799999],[24.57,24.76,24.85],[24.299999,24.5,24.59],[24.5,24.610001,24.780001],[24.4,24.5,24.709999],[24.379999,24.629999,24.65],[24.57,24.639999,24.85],[24.58,24.84,24.889999],[24.610001,24.73,24.85],[24.610001,24.76,24.879999],[24.43,24.57,25],[24.4,24.5,24.65],[24.49,24.700001,24.82],[24.549999,24.82,24.9],[24.77,25.02,25.25],[24.940001,25.43,25.59],[25.16,25.17,25.68],[24.92,25.120001,25.379999],[25.17,25.459999,25.67],[25.32,25.379999,25.74],[25.290001,25.309999,25.75],[25.32,25.620001,25.809999],[25.620001,25.809999,26.059999],[25.639999,25.99,26],[25.639999,25.889999,26.049999],[26.139999,26.41,26.459999],[26.110001,26.16,26.73],[26.200001,26.49,26.74],[26.35,26.91,26.98],[26.73,26.98,27.02],[26.360001,26.43,27.09],[26.17,26.18,26.59],[26.139999,26.559999,26.65],[26.360001,26.77,26.83],[26.6,26.93,27.24],[26.790001,27.040001,27.16],[26.73,26.950001,27.049999],[26.66,26.84,26.98],[26.719999,26.75,26.969999],[26.639999,26.75,26.959999],[26.190001,26.26,26.719999],[26.01,26.33,26.389999],[26.35,26.48,26.66],[26.219999,26.690001,26.700001],[26.389999,26.450001,26.67],[26.4,26.41,26.639999],[25.99,26.17,26.26],[26,26.200001,26.379999],[26.219999,26.370001,26.450001],[26.219999,26.34,26.530001],[26.219999,26.299999,26.41],[26.299999,26.370001,26.540001],[26.33,26.450001,26.540001],[26.33,26.33,26.52],[26.01,26.01,26.5],[25.74,25.82,26.07],[25.75,26.040001,26.09],[25.879999,26.040001,26.17],[26,26.200001,26.25],[26.08,26.15,26.27],[26.139999,26.290001,26.299999],[26.18,26.709999,26.74],[26.66,26.879999,26.940001],[26.719999,26.959999,26.959999],[26.93,27.32,27.32],[27.120001,27.26,27.35],[27.120001,27.66,27.700001],[27.5,27.6,27.76],[27.43,27.66,27.66],[27.73,28.17,28.209999],[27.83,27.91,28.42],[27.719999,28.24,28.33],[27.799999,27.93,28.209999],[27.77,27.959999,28.1],[29.559999,29.870001,30.059999],[29.67,30.01,30.15],[29.84,29.950001,30.1],[29.67,29.93,29.98],[29.889999,30.09,30.09],[30.030001,30.200001,30.200001],[29.85,30.23,30.309999],[30.09,30.5,30.83],[30.450001,30.879999,31],[30.610001,30.780001,30.9],[30.700001,30.93,31],[30.66,30.9,31],[30.870001,30.98,31.09],[30.799999,30.98,31.049999],[31.02,31.139999,31.360001],[30.92,31.030001,31.200001],[30.700001,30.790001,31.08],[30.690001,30.889999,30.98],[30.440001,31.26,31.33],[31.040001,31.25,31.450001],[31.34,31.49,31.58],[31.16,31.709999,31.799999],[33.209999,34.650002,34.740002],[33.630001,33.700001,34.360001],[33.389999,33.700001,33.84],[33.540001,34.060001,34.23],[34.07,34.790001,34.830002],[34.299999,34.5,34.709999],[34.099998,34.25,34.669998],[33.93,34.25,34.369999],[33.880001,34.23,34.32],[34.09,34.189999,34.369999],[34.040001,34.349998,34.57],[33.810001,33.889999,34.25],[33.610001,33.740002,34.029999],[33.549999,34.049999,34.09],[32.599998,32.82,33.779999],[32.389999,32.849998,33.189999],[32.540001,32.68,33.150002],[32.540001,32.599998,33],[32.810001,33.02,33.240002],[32.68,33.130001,33.150002],[33.23,34.099998,34.150002],[33.740002,33.939999,34.23],[33.709999,34.169998,34.209999],[33.98,34.41,34.470001],[34.25,34.34,34.5],[34.18,34.5,34.509998],[34.450001,35.150002,35.189999],[34.91,34.939999,35.200001],[34.650002,34.810001,35.150002],[34.689999,34.799999,35.049999],[34.630001,34.790001,34.939999],[34.610001,34.650002,34.810001],[34.669998,34.919998,34.939999],[34.43,34.57,34.91],[34.450001,34.57,34.880001],[34.52,34.91,35.09],[34.830002,35,35.119999],[34.880001,35.330002,35.560001],[34.849998,34.91,35.290001],[34.669998,35.02,35.130001],[34.529999,35.02,35.02],[34.5,34.619999,34.91],[34.23,34.540001,34.77],[34.470001,34.93,35.080002],[34.740002,34.98,35.200001],[34.860001,35.169998,35.169998],[34.82,34.82,35.220001],[34.549999,34.709999,35.029999],[34.380001,34.419998,34.709999],[34.369999,34.75,34.849998],[33.880001,34.139999,34.790001],[33.630001,34.259998,34.360001],[33.939999,34.900002,34.990002],[34.41,34.82,35],[33.84,33.990002,34.779999],[33.259998,33.52,34],[33.470001,34.029999,34.18],[33.869999,34.110001,34.48],[33.419998,33.470001,34.049999],[33.139999,34.27,34.369999],[33.580002,33.619999,34.43],[30.5,31.91,32.860001],[31.469999,31.469999,32.369999],[31.709999,32.139999,32.669998],[29.65,31.280001,31.65],[30.75,30.85,31.51],[30.969999,31.379999,31.709999],[30.9,31.58,31.700001],[31.58,32.610001,32.619999],[32.220001,32.27,32.869999],[32.599998,32.689999,32.91],[32.57,33.18,33.330002],[32.77,33.200001,33.299999],[33.23,33.740002,33.75],[33.509998,33.919998,33.970001],[32.400002,32.580002,33.610001],[32.630001,34.009998,34.009998],[33.790001,34.310001,34.48],[34.209999,34.540001,34.779999],[33.599998,33.759998,34.099998],[33.41,33.82,34.23],[33.189999,33.580002,34],[33.080002,33.259998,33.490002],[33.200001,33.310001,33.540001],[33,33.380001,33.419998],[33.34,33.68,33.860001],[33.349998,33.950001,33.970001],[33.759998,34.240002,34.25],[34.16,34.709999,34.900002],[34.25,34.349998,34.790001],[34,35.950001,35.970001],[35.5,35.59,36.459999],[35.84,36.25,36.43],[36.150002,36.32,36.48],[36.279999,36.900002,36.990002],[36.939999,37.25,37.689999],[36.900002,37.169998,37.619999],[37.18,37.599998,37.599998],[37.41,37.43,37.889999],[37.040001,37.459999,37.459999],[37.52,37.669998,37.900002],[36.939999,37.200001,37.73],[36.299999,36.889999,37.09],[36.299999,36.419998,37.02],[36.439999,36.700001,37.209999],[36.220001,36.23,36.82],[35.900002,35.919998,36.779999],[35.560001,35.560001,36.5],[35.330002,36.240002,36.330002],[36.43,37.02,37.02],[36.23,36.369999,37.16],[36.389999,37.209999,37.259998],[37.299999,37.43,37.700001],[37.18,37.439999,37.599998],[37.52,37.549999,37.740002],[37.169998,37.18,37.52],[36.759998,36.759998,37.189999],[36.290001,36.290001,37.040001],[36.110001,36.360001,37.16],[35.939999,35.950001,36.450001],[35.259998,35.279999,36.23],[35.27,36.02,36.07],[36.259998,36.689999,37],[36.400002,36.759998,37.110001],[36.23,36.599998,37],[36.290001,36.5,37.490002],[35.91,36.349998,36.91],[36.029999,36.189999,36.880001],[35.509998,36.450001,36.66],[35.57,36.09,36.459999],[35.77,36.48,36.68],[36.139999,36.91,37],[36.380001,36.450001,37.029999],[35.57,35.810001,36.299999],[33.549999,34.189999,34.720001],[33.720001,33.779999,34.700001],[33.459999,34.209999,34.279999],[33,33.040001,33.990002],[32.650002,33.650002,33.75],[32.610001,33.700001,34.049999],[33.299999,33.599998,33.84],[33.450001,33.939999,33.990002],[33.139999,33.299999,34],[32.669998,32.93,33.240002],[33.049999,33.700001,33.73],[33.32,33.549999,33.759998],[33.759998,34.130001,34.130001],[33.950001,34.360001,34.369999],[34.259998,34.740002,34.75],[34.189999,34.27,34.709999],[34.049999,34.209999,34.419998],[33.91,34.41,34.57],[33.580002,33.759998,34.5],[33.509998,34.41,34.490002],[33.73,33.950001,34.150002],[33.43,33.650002,33.880001],[33.209999,33.25,33.639999],[33.119999,34.060001,34.130001],[33.91,34.099998,34.380001],[33.720001,34.119999,34.41],[33.59,33.73,34.5],[33.080002,33.189999,33.68],[32.48,32.720001,33.27],[31.5,31.700001,32.41],[31.950001,32.330002,32.959999],[30.58,30.799999,31.6],[30.360001,30.93,30.98],[30.65,30.83,31.110001],[30.41,30.59,30.73],[30.299999,30.889999,31.200001],[30.690001,30.74,31.1],[30.93,31.309999,31.620001],[31.200001,31.200001,31.790001],[30.74,30.790001,31.32],[29.860001,29.889999,30.889999],[29.309999,30.08,30.4],[29.85,32,33],[31.299999,31.459999,32.099998],[31.200001,31.27,31.93],[30.65,30.809999,31.32],[30.67,30.809999,31.23],[30.450001,31.040001,31.25],[31,31.26,31.59],[31.059999,31.309999,31.559999],[30.57,31.24,31.620001],[31.33,31.93,31.940001],[31.709999,31.73,32.049999],[31.27,31.49,31.940001],[32.07,32.830002,32.990002],[32.700001,32.869999,32.990002],[32.220001,32.470001,32.700001],[32.529999,32.73,32.790001],[32.279999,32.43,32.970001],[32.029999,32.700001,32.720001],[32.009998,32.349998,32.41],[32.02,32.080002,32.48],[32.080002,32.5,32.689999],[32.23,33.02,33.040001],[32.549999,32.889999,33],[32.299999,32.549999,32.849998],[32.619999,33.419998,33.490002],[33.220001,33.43,33.5],[32.57,32.639999,33.099998],[31.93,32.220001,32.790001],[32.18,32.240002,32.630001],[32.34,32.799999,32.880001],[32.43,32.689999,32.709999],[32,32.25,32.5],[32.27,32.639999,32.900002],[32.77,32.970001,33.130001],[32.75,32.990002,33.119999],[32.849998,33.41,33.41],[32.990002,33.150002,33.380001],[33.009998,33.369999,33.5],[33.07,33.549999,33.560001],[33.32,33.450001,33.509998],[32.84,33.099998,33.290001],[33.130001,33.709999,33.849998],[33.68,34.009998,34.150002],[34.209999,34.459999,34.75],[33.68,33.91,34.59],[33.139999,33.27,33.75],[32.59,32.73,33.240002],[32.200001,32.310001,32.720001],[31.83,31.84,32.299999],[31.209999,31.299999,31.950001],[31.15,31.25,31.66],[31.370001,31.82,32.16],[31.84,31.85,32.099998],[31.200001,31.32,32.099998],[30.940001,31.389999,31.51],[31.129999,31.639999,31.76],[31.690001,31.950001,32.09],[32,32.380001,32.5],[31.959999,32.07,32.57],[32.080002,32.259998,32.389999],[31.93,32.09,32.34],[31.879999,31.91,32.150002],[31.99,31.99,32.32],[30.76,31.02,31.530001],[30.309999,30.389999,30.98],[30.15,30.42,30.690001],[30.01,30.18,30.549999],[30.1,30.559999,30.92],[29.84,30.040001,30.450001],[29.09,29.9,29.93],[29.15,29.5,29.67],[28.82,28.93,29.889999],[28.940001,29.17,29.35],[29.190001,29.73,29.82],[29.440001,29.65,30.110001],[29.469999,29.690001,29.99],[29.1,29.9,30.48],[29.1,29.469999,29.799999],[29.07,29.1,29.620001],[28.67,28.719999,29.26],[28.43,28.610001,28.85],[28.43,28.6,28.969999],[28.059999,28.059999,28.639999],[27.620001,28.35,28.42],[28.440001,28.959999,29.18],[28.790001,29.01,29.129999],[28.85,28.91,29.450001],[28.77,28.950001,29.120001],[28.9,29.049999,29.35],[28.860001,29.129999,29.15],[29.02,29.120001,29.389999],[28.85,29.01,29.23],[28.690001,28.879999,28.959999],[29.059999,29.639999,29.68],[28.959999,28.969999,29.48],[28.66,29.459999,29.57],[28.870001,28.870001,29.450001],[28.82,29.02,29.040001],[28.709999,29.08,29.200001],[28.799999,28.91,29.049999],[28.280001,28.360001,28.799999],[27.530001,27.530001,28.24],[26.559999,26.559999,27.629999],[24.870001,26.25,27.629999],[25.870001,25.870001,27.15],[26.08,27.299999,27.34],[27.01,27.719999,27.91],[27.450001,28.42,28.610001],[28.16,28.540001,29.129999],[27.66,27.82,28.17],[28.139999,28.6,28.6],[28.690001,29.08,29.42],[28.41,28.52,28.9],[28.950001,29.5,29.5],[29.17,29.24,30.120001],[28.9,29.27,29.66],[29.040001,29.469999,29.52],[29.09,29.389999,29.530001],[29.48,29.73,29.940001],[29.4,29.77,29.790001],[29.549999,29.709999,30.200001],[28.809999,29.02,29.42],[28.940001,29.16,29.34],[28.48,28.67,28.9],[28.59,28.74,29.09],[27.870001,28.48,28.67],[28.629999,28.809999,29.120001],[28.639999,28.76,29.360001],[28.76,29.24,29.35],[29.540001,30.139999,30.32],[29.459999,30,30.280001],[29.530001,30.51,30.530001],[30.559999,31.209999,31.379999],[31.110001,31.74,31.85],[31.719999,32.32,32.419998],[31.98,32.52,32.599998],[31.940001,32.139999,32.549999],[32,32.209999,32.32],[31.98,32.040001,32.48],[30.85,32.799999,32.93],[32.459999,32.75,33.060001],[32.48,33.040001,33.200001],[32.869999,33.59,33.619999],[33.310001,33.439999,33.700001],[33.32,33.369999,34.049999],[33.59,34.400002,34.5],[34.400002,34.900002,35.029999],[34.549999,34.59,34.959999],[34.310001,34.470001,34.549999],[34.119999,34.709999,34.709999],[33.77,34.029999,34.290001],[33.860001,33.860001,34.290001],[33.639999,34.110001,34.279999],[33.98,34.310001,34.41],[33.900002,34.150002,34.27],[33.73,34,34.200001],[33.41,33.84,33.970001],[33.080002,33.349998,33.830002],[32.810001,33.209999,33.27],[32.799999,32.860001,33.380001],[32.389999,32.400002,32.919998],[31.959999,32.110001,32.380001],[31.93,32.099998,32.259998],[32.009998,32.639999,32.880001],[32.619999,33.16,33.240002],[33.130001,34.299999,34.73],[34.48,34.66,35.290001],[34.41,34.48,34.849998],[33.900002,34.360001,34.439999],[34.139999,34.450001,34.740002],[34.400002,34.459999,34.68],[34.43,34.77,34.900002],[34.709999,35.09,35.200001],[34.810001,34.830002,35.41],[34,34.040001,34.990002],[34,34.939999,35.029999],[34.75,34.990002,35.169998],[34.419998,34.75,34.950001],[34.509998,34.810001,35.220001],[34.66,34.77,35.07],[34.200001,34.27,34.650002],[33.880001,34.470001,34.48],[34.639999,35.18,35.349998],[34.77,35.299999,35.470001],[34.759998,34.91,35.369999],[33.860001,33.869999,34.75],[33.82,34.240002,34.299999],[34.27,34.73,34.779999],[34.779999,35,35.049999],[34.959999,34.98,35.259998],[34.57,34.93,35],[35.009998,35.439999,35.59],[34.950001,34.990002,35.450001],[34.439999,34.450001,34.959999],[33.459999,33.990002,34.009998],[33.529999,33.830002,34],[32.799999,33.080002,33.52],[31.84,31.84,33.009998],[31.43,31.51,32.220001],[31.68,32.060001,32.220001],[32.27,32.68,32.889999],[31.83,31.91,32.93],[31.799999,32.740002,32.869999],[29.450001,29.76,30.5],[29.48,29.799999,30.059999],[29.209999,29.59,29.870001],[29.24,29.66,30.030001],[29.51,29.93,30.24],[29.57,29.6,30.219999],[29.610001,29.940001,30.049999],[29.639999,29.809999,30.219999],[29.75,29.969999,30.18],[30.1,31.02,31.030001],[30.639999,30.82,31.120001],[29.629999,29.799999,30.49],[28.52,29.34,29.719999],[29.110001,29.77,29.879999],[28.91,29.040001,29.76],[28.299999,28.82,28.98],[28.41,28.809999,29.15],[28.190001,28.23,29],[27.68,28.219999,28.41],[28.139999,28.639999,28.700001],[28.360001,28.780001,28.950001],[28.73,29.469999,29.620001],[29.379999,29.42,29.76],[28.709999,28.709999,29.33],[29,29.35,29.540001],[28.6,28.799999,29.35],[28.379999,29.190001,29.299999],[28.950001,29.620001,29.620001],[29.700001,29.799999,30.08],[29.58,29.59,30.139999],[29.75,30.370001,30.530001],[30.120001,30.540001,30.870001],[30.540001,30.58,31.35],[30.049999,30.629999,30.860001],[30.5,30.940001,31.120001],[30.379999,30.559999,30.879999],[30.67,30.870001,31.040001],[30.379999,31.25,31.4],[31.530001,31.76,31.790001],[31.299999,31.43,31.690001],[31.059999,31.65,31.65],[31.17,31.690001,31.799999],[31.700001,31.98,32.169998],[32.060001,32.68,32.689999],[31.950001,32.34,32.419998],[31.950001,32.32,32.459999],[31.98,32,32.470001],[31.700001,31.879999,31.950001],[31.620001,31.9,32],[31.73,32.380001,32.439999],[32.290001,32.709999,32.75],[32.32,32.349998,32.66],[32.099998,32.450001,32.470001],[31.74,32,32.380001],[31.719999,31.9,32.119999],[31.77,32.080002,32.23],[31.35,31.549999,31.9],[31.48,31.629999,32.02],[31.66,31.67,32.34],[31.379999,31.860001,31.940001],[31.950001,32.130001,32.18],[31.549999,31.799999,31.889999],[31.379999,31.459999,31.889999],[31.379999,31.65,31.719999],[31.4,31.6,31.809999],[31.25,32,32.259998],[31.809999,31.969999,32.060001],[31.219999,31.639999,31.860001],[31.200001,31.389999,31.5],[31.17,31.4,31.700001],[31.190001,31.75,31.799999],[31.030001,31.110001,31.709999],[30.1,30.280001,30.870001],[30.360001,30.610001,30.690001],[30.09,30.360001,30.559999],[29.700001,29.85,30.209999],[29.75,29.9,30.02],[29.52,30.040001,30.110001],[29.76,29.799999,30.17],[29.82,30.139999,30.18],[29.969999,30.059999,30.25],[29.57,29.76,30.24],[29.84,29.91,30.200001],[29.879999,30.389999,30.559999],[29.860001,29.98,30.57],[29.780001,29.99,30.25],[29.5,29.629999,29.93],[29.700001,30.15,30.379999],[30.129999,30.23,30.48],[30.450001,31.059999,31.120001],[31.15,31.389999,31.57],[31.4,31.49,31.629999],[31.450001,31.57,31.65],[31.309999,31.59,31.65],[31.469999,31.66,31.719999],[31.450001,31.76,31.76],[31.4,31.620001,31.74],[31.58,31.68,31.82],[31.700001,31.879999,32.02],[31.790001,31.889999,32],[31.68,31.940001,32],[31.65,32.040001,32.240002],[32.040001,32.169998,32.5],[31.790001,32.139999,32.240002],[31.59,31.610001,32.259998],[31.219999,31.690001,31.77],[31.469999,31.76,31.809999],[32.009998,32.169998,32.439999],[32.09,32.32,32.380001],[32.25,32.290001,32.630001],[32.5,32.990002,33],[31.4,31.549999,32.32],[30.440001,30.719999,31.41],[30.809999,31.190001,31.200001],[31.309999,31.93,31.98],[31.969999,32.799999,32.880001],[32.470001,32.75,32.889999],[32.459999,32.68,32.73],[32.380001,32.970001,33],[32.959999,33.200001,33.549999],[33.5,34,34],[34.040001,34.380001,34.5],[34.48,34.939999,34.970001],[34.880001,35.009998,35.25],[34.959999,35.200001,35.299999],[34.900002,35.07,35.290001],[34.950001,35.049999,35.200001],[34.849998,35.150002,35.16],[35.060001,35.689999,35.93],[33.860001,34.27,34.490002],[34.259998,34.66,34.700001],[34.57,34.689999,34.759998],[34.700001,35.09,35.23],[34.630001,34.830002,35.279999],[34.52,34.77,34.830002],[34.599998,34.860001,34.919998],[34.560001,34.849998,34.91],[34.330002,34.560001,34.869999],[33.990002,34.25,34.279999],[34.220001,34.580002,34.619999],[34.700001,34.98,35.130001],[34.860001,35.040001,35.169998],[34.84,34.919998,35.16],[34.5,34.529999,35],[34.490002,34.68,34.740002],[34.439999,34.57,34.759998],[34.630001,34.91,35.16],[34.77,35.209999,35.209999],[34.77,35.02,35.209999],[34.75,34.970001,35.09],[34.740002,35.240002,35.27],[35.119999,35.360001,35.450001],[35.299999,35.400002,35.689999],[35.02,35.150002,35.41],[34.900002,35.09,35.220001],[35.049999,35.259998,35.580002],[35.150002,35.549999,35.669998],[35.52,35.700001,35.740002],[35.580002,35.889999,35.900002],[35.580002,36.02,36.040001],[35.950001,36.080002,36.330002],[36.169998,36.57,36.599998],[36.380001,36.459999,36.650002],[36.119999,36.439999,36.59],[35.439999,35.439999,36.389999],[35.060001,36.080002,36.119999],[35.32,35.610001,35.880001],[35.400002,35.619999,35.82],[35.540001,36.560001,36.650002],[37.25,37.669998,38.049999],[37.09,37.16,38.02],[36.939999,37.139999,37.43],[36.860001,37.450001,37.459999],[37.439999,37.549999,37.830002],[37.119999,37.189999,37.650002],[36.599998,36.650002,36.939999],[36.630001,37.18,37.220001],[37.150002,37.439999,37.5],[37,37.32,37.529999],[37.439999,37.75,37.919998],[37.529999,37.66,37.950001],[37.330002,37.540001,37.939999],[37.639999,37.990002,38.310001],[37.580002,38.07,38.16],[37.779999,38.099998,38.220001],[37.900002,38.02,38.360001],[36.82,37.27,38],[36.810001,37.130001,37.25],[36.459999,36.970001,37.130001],[37.16,37.450001,37.700001],[37.240002,37.290001,37.720001],[37.529999,37.75,38.049999],[35.23,35.509998,36.09],[35.099998,35.43,35.669998],[34.810001,35.150002,35.400002],[35.110001,35.259998,35.490002],[35.009998,35.099998,35.25],[34.740002,34.919998,35.209999],[34.75,34.810001,35.23],[34.709999,34.740002,35.169998],[34.84,34.869999,35.080002],[34.27,34.52,35.16],[34.470001,34.599998,34.900002],[33.869999,33.93,34.52],[33.419998,33.610001,33.93],[34.150002,34.689999,34.75],[34.490002,34.740002,34.950001],[33.669998,34.75,34.849998],[34.029999,34.5,34.950001],[34.34,34.610001,34.869999],[34.200001,34.48,34.73],[34.610001,34.91,35.290001],[34.540001,34.84,34.919998],[34.630001,35.02,35.02],[34.639999,34.950001,35],[34.84,34.98,35.200001],[35.110001,35.48,35.5],[35.099998,35.200001,35.52],[35.110001,35.439999,35.450001],[35.209999,35.509998,35.66],[35.27,35.310001,35.639999],[34.700001,34.700001,35.299999],[33.560001,33.759998,34.93],[33.599998,34.16,34.259998],[33.970001,34.389999,34.419998],[34.299999,34.720001,34.75],[34.450001,35.5,35.57],[35.220001,35.700001,36.029999],[35.59,35.759998,35.900002],[35.669998,35.970001,36.09],[35.93,36.799999,36.889999],[36.459999,36.549999,36.889999],[36.529999,36.790001,37.16],[36.09,36.310001,36.869999],[36.27,36.889999,36.950001],[36.889999,37.209999,37.240002],[36.91,36.98,37.349998],[36.810001,36.93,37.240002],[36.77,36.970001,36.98],[36.91,37.07,37.330002],[36.580002,36.630001,37.200001],[36.43,36.66,36.720001],[36.200001,36.27,36.799999],[36.27,36.599998,36.93],[36.34,36.41,36.77],[36.310001,36.349998,36.720001],[36.189999,36.48,36.68],[36.48,36.610001,36.889999],[36.529999,36.540001,36.93],[36.509998,36.950001,37],[36.32,36.709999,36.830002],[36.619999,36.790001,36.860001],[36.59,36.799999,36.830002],[36.610001,36.759998,37.009998],[36.509998,36.57,36.91],[36.580002,36.939999,37.029999],[36.549999,36.77,37.209999],[36.810001,37.619999,37.740002],[37.52,37.799999,38],[37.419998,37.560001,37.919998],[37.810001,37.98,38.450001],[37.330002,37.419998,37.84],[36.639999,36.82,37.369999],[36.02,36.52,36.950001],[36.200001,36.68,36.700001],[36.450001,36.52,36.82],[36.150002,36.27,36.509998],[36.240002,36.349998,36.52],[36.139999,36.380001,36.650002],[35.400002,35.459999,36.5],[34.84,35.34,35.43],[35.34,35.799999,35.849998],[35.529999,35.93,35.959999],[35.669998,36.049999,36.060001],[36.099998,36.41,36.560001],[36.099998,36.48,36.48],[36.330002,36.52,36.650002],[35.790001,36.07,36.400002],[35.900002,36.18,36.299999],[35.950001,36.529999,36.529999],[36.27,36.509998,36.68],[36,36.200001,36.459999],[35.439999,35.93,36.099998],[35.650002,35.91,36.02],[35.669998,35.900002,36.09],[35.419998,35.57,35.799999],[35.389999,35.799999,35.799999],[35.529999,35.619999,35.900002],[35.5,35.82,35.939999],[35.779999,35.91,36.299999],[34.939999,35.16,36.040001],[34.66,35.18,35.23],[34.68,35.099998,35.169998],[35.07,35.139999,35.360001],[35.099998,35.27,35.330002],[35.259998,35.43,35.630001],[35,35.040001,35.599998],[35,35.369999,35.459999],[35.02,35.27,35.490002],[35.119999,35.16,35.73],[34.939999,35.389999,35.5],[35.209999,35.599998,35.709999],[35.439999,35.57,35.700001],[35.52,35.75,35.889999],[35.740002,36.07,36.25],[36.119999,36.16,36.740002],[35.990002,36.279999,36.380001],[36.169998,36.220001,36.759998],[36.029999,36.029999,36.279999],[35.990002,36.029999,36.32],[35.610001,35.799999,36.09],[35.209999,35.740002,35.790001],[35.5,35.630001,36.009998]]]},"evals":[],"jsHooks":[]}</script>
+</div>
+
+</div>
+
+
+<script>
+
+$(document).ready(function () {
+
+  // add bootstrap table styles to pandoc tables
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+
+  // initialize mathjax
+  var script = document.createElement("script");
+  script.type = "text/javascript";
+  script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+  document.getElementsByTagName("head")[0].appendChild(script);
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+"","term","comparison","estimate","conf.low","conf.high","adj.p.value"
+"1","sex:drug_treatment:health_status","Female:Placebo:Healthy-Male:Placebo:Healthy",0.0111116511653151,-0.914081861820394,0.936305164151024,1
+"2","sex:drug_treatment:health_status","Male:Low dose:Healthy-Male:Placebo:Healthy",0.00566921317349056,-0.900090686868138,0.91142911321512,1
+"3","sex:drug_treatment:health_status","Female:Low dose:Healthy-Male:Placebo:Healthy",0.0403184138449646,-0.874813190033172,0.955450017723101,0.999999999996299
+"4","sex:drug_treatment:health_status","Male:High Dose:Healthy-Male:Placebo:Healthy",0.776240958955263,-0.129518941086366,1.68200085899689,0.177530997270534
+"5","sex:drug_treatment:health_status","Female:High Dose:Healthy-Male:Placebo:Healthy",0.436060864301606,-0.479070739576531,1.35119246817974,0.921364609095923
+"6","sex:drug_treatment:health_status","Male:Placebo:Alzheimer's-Male:Placebo:Healthy",-12.8040143671347,-13.7053249817595,-11.9027037525099,4.97796359688607e-10
+"7","sex:drug_treatment:health_status","Female:Placebo:Alzheimer's-Male:Placebo:Healthy",-13.009916312365,-13.9299878080162,-12.0898448167138,4.97796359688607e-10
+"8","sex:drug_treatment:health_status","Male:Low dose:Alzheimer's-Male:Placebo:Healthy",-10.2796846019778,-11.1854445020194,-9.37392470193617,4.97796359688607e-10
+"9","sex:drug_treatment:health_status","Female:Low dose:Alzheimer's-Male:Placebo:Healthy",-9.60803279864292,-10.5231644025211,-8.69290119476479,4.97796359688607e-10
+"10","sex:drug_treatment:health_status","Male:High Dose:Alzheimer's-Male:Placebo:Healthy",-1.79554741744063,-2.71561891309182,-0.875475921789451,2.09526761496548e-08
+"11","sex:drug_treatment:health_status","Female:High Dose:Alzheimer's-Male:Placebo:Healthy",-2.09888282392366,-3.00019343854844,-1.19757220929888,5.03689867592527e-10
+"12","sex:drug_treatment:health_status","Male:Low dose:Healthy-Female:Placebo:Healthy",-0.00544243799182453,-0.93912331426148,0.928238438277831,1
+"13","sex:drug_treatment:health_status","Female:Low dose:Healthy-Female:Placebo:Healthy",0.0292067626796495,-0.913568308376443,0.971981833735742,1
+"14","sex:drug_treatment:health_status","Male:High Dose:Healthy-Female:Placebo:Healthy",0.765129307789948,-0.168551568479708,1.6988101840596,0.234310223291809
+"15","sex:drug_treatment:health_status","Female:High Dose:Healthy-Female:Placebo:Healthy",0.424949213136291,-0.517825857919802,1.36772428419238,0.945866986496219
+"16","sex:drug_treatment:health_status","Male:Placebo:Alzheimer's-Female:Placebo:Healthy",-12.8151260183,-13.7444912889141,-11.885760747686,4.97796359688607e-10
+"17","sex:drug_treatment:health_status","Female:Placebo:Alzheimer's-Female:Placebo:Healthy",-13.0210279635303,-13.9685988259454,-12.0734571011153,4.97796359688607e-10
+"18","sex:drug_treatment:health_status","Male:Low dose:Alzheimer's-Female:Placebo:Healthy",-10.2907962531431,-11.2244771294128,-9.35711537687346,4.97796359688607e-10
+"19","sex:drug_treatment:health_status","Female:Low dose:Alzheimer's-Female:Placebo:Healthy",-9.61914444980824,-10.5619195208643,-8.67636937875215,4.97796359688607e-10
+"20","sex:drug_treatment:health_status","Male:High Dose:Alzheimer's-Female:Placebo:Healthy",-1.80665906860595,-2.75422993102103,-0.859088206190871,5.04637337472857e-08
+"21","sex:drug_treatment:health_status","Female:High Dose:Alzheimer's-Female:Placebo:Healthy",-2.10999447508897,-3.03935974570304,-1.18062920447491,5.20004150850184e-10
+"22","sex:drug_treatment:health_status","Female:Low dose:Healthy-Male:Low dose:Healthy",0.034649200671474,-0.889062223236125,0.958360624579074,0.999999999999496
+"23","sex:drug_treatment:health_status","Male:High Dose:Healthy-Male:Low dose:Healthy",0.770571745781773,-0.143855910604591,1.68499940216814,0.19792630136345
+"24","sex:drug_treatment:health_status","Female:High Dose:Healthy-Male:Low dose:Healthy",0.430391651128115,-0.493319772779484,1.35410307503571,0.932180170656684
+"25","sex:drug_treatment:health_status","Male:Placebo:Alzheimer's-Male:Low dose:Healthy",-12.8096835803082,-13.7197043307728,-11.8996628298436,4.97796359688607e-10
+"26","sex:drug_treatment:health_status","Female:Placebo:Alzheimer's-Male:Low dose:Healthy",-13.0155855255385,-13.9441912003815,-12.0869798506955,4.97796359688607e-10
+"27","sex:drug_treatment:health_status","Male:Low dose:Alzheimer's-Male:Low dose:Healthy",-10.2853538151513,-11.1997814715377,-9.37092615876493,4.97796359688607e-10
+"28","sex:drug_treatment:health_status","Female:Low dose:Alzheimer's-Male:Low dose:Healthy",-9.61370201181641,-10.537413435724,-8.68999058790881,4.97796359688607e-10
+"29","sex:drug_treatment:health_status","Male:High Dose:Alzheimer's-Male:Low dose:Healthy",-1.80121663061412,-2.72982230545713,-0.872610955771116,2.64222052015484e-08
+"30","sex:drug_treatment:health_status","Female:High Dose:Alzheimer's-Male:Low dose:Healthy",-2.10455203709715,-3.01457278756174,-1.19453128663256,5.06285569024101e-10
+"31","sex:drug_treatment:health_status","Male:High Dose:Healthy-Female:Low dose:Healthy",0.735922545110299,-0.187788878797301,1.6596339690179,0.27400755564002
+"32","sex:drug_treatment:health_status","Female:High Dose:Healthy-Female:Low dose:Healthy",0.395742450456641,-0.537160358280986,1.32864525919427,0.964853302537967
+"33","sex:drug_treatment:health_status","Male:Placebo:Alzheimer's-Female:Low dose:Healthy",-12.8443327809797,-13.7636818018468,-11.9249837601126,4.97796359688607e-10
+"34","sex:drug_treatment:health_status","Female:Placebo:Alzheimer's-Female:Low dose:Healthy",-13.05023472621,-13.9879838159156,-12.1124856365043,4.97796359688607e-10
+"35","sex:drug_treatment:health_status","Male:Low dose:Alzheimer's-Female:Low dose:Healthy",-10.3200030158228,-11.2437144397304,-9.39629159191517,4.97796359688607e-10
+"36","sex:drug_treatment:health_status","Female:Low dose:Alzheimer's-Female:Low dose:Healthy",-9.64835121248789,-10.5812540212255,-8.71544840375026,4.97796359688607e-10
+"37","sex:drug_treatment:health_status","Male:High Dose:Alzheimer's-Female:Low dose:Healthy",-1.8358658312856,-2.77361492099126,-0.898116741579942,1.8552776204217e-08
+"38","sex:drug_treatment:health_status","Female:High Dose:Alzheimer's-Female:Low dose:Healthy",-2.13920123776862,-3.05855025863572,-1.21985221690153,5.03941777196815e-10
+"39","sex:drug_treatment:health_status","Female:High Dose:Healthy-Male:High Dose:Healthy",-0.340180094653658,-1.26389151856126,0.583531329253942,0.988226912438641
+"40","sex:drug_treatment:health_status","Male:Placebo:Alzheimer's-Male:High Dose:Healthy",-13.58025532609,-14.4902760765546,-12.6702345756254,4.97796359688607e-10
+"41","sex:drug_treatment:health_status","Female:Placebo:Alzheimer's-Male:High Dose:Healthy",-13.7861572713203,-14.7147629461633,-12.8575515964773,4.97796359688607e-10
+"42","sex:drug_treatment:health_status","Male:Low dose:Alzheimer's-Male:High Dose:Healthy",-11.0559255609331,-11.9703532173194,-10.1414979045467,4.97796359688607e-10
+"43","sex:drug_treatment:health_status","Female:Low dose:Alzheimer's-Male:High Dose:Healthy",-10.3842737575982,-11.3079851815058,-9.46056233369059,4.97796359688607e-10
+"44","sex:drug_treatment:health_status","Male:High Dose:Alzheimer's-Male:High Dose:Healthy",-2.5717883763959,-3.50039405123891,-1.64318270155289,4.97908270169489e-10
+"45","sex:drug_treatment:health_status","Female:High Dose:Alzheimer's-Male:High Dose:Healthy",-2.87512378287892,-3.78514453334351,-1.96510303241433,4.97912266972378e-10
+"46","sex:drug_treatment:health_status","Male:Placebo:Alzheimer's-Female:High Dose:Healthy",-13.2400752314363,-14.1594242523034,-12.3207262105692,4.97796359688607e-10
+"47","sex:drug_treatment:health_status","Female:Placebo:Alzheimer's-Female:High Dose:Healthy",-13.4459771766666,-14.3837262663723,-12.508228086961,4.97796359688607e-10
+"48","sex:drug_treatment:health_status","Male:Low dose:Alzheimer's-Female:High Dose:Healthy",-10.7157454662794,-11.639456890187,-9.79203404237181,4.97796359688607e-10
+"49","sex:drug_treatment:health_status","Female:Low dose:Alzheimer's-Female:High Dose:Healthy",-10.0440936629445,-10.9769964716822,-9.1111908542069,4.97796359688607e-10
+"50","sex:drug_treatment:health_status","Male:High Dose:Alzheimer's-Female:High Dose:Healthy",-2.23160828174224,-3.1693573714479,-1.29385919203658,4.99665420150563e-10
+"51","sex:drug_treatment:health_status","Female:High Dose:Alzheimer's-Female:High Dose:Healthy",-2.53494368822527,-3.45429270909236,-1.61559466735817,4.97907159946465e-10
+"52","sex:drug_treatment:health_status","Female:Placebo:Alzheimer's-Male:Placebo:Alzheimer's",-0.205901945230311,-1.13016831747509,0.718364427014467,0.999880255288826
+"53","sex:drug_treatment:health_status","Male:Low dose:Alzheimer's-Male:Placebo:Alzheimer's",2.52432976515691,1.61430901469232,3.4343505156215,4.97907159946465e-10
+"54","sex:drug_treatment:health_status","Female:Low dose:Alzheimer's-Male:Placebo:Alzheimer's",3.19598156849179,2.27663254762469,4.11533058935888,4.9781812005989e-10
+"55","sex:drug_treatment:health_status","Male:High Dose:Alzheimer's-Male:Placebo:Alzheimer's",11.0084669496941,10.0842005774493,11.9327333219389,4.97796359688607e-10
+"56","sex:drug_treatment:health_status","Female:High Dose:Alzheimer's-Male:Placebo:Alzheimer's",10.7051315432111,9.79953914384585,11.6107239425763,4.97796359688607e-10
+"57","sex:drug_treatment:health_status","Male:Low dose:Alzheimer's-Female:Placebo:Alzheimer's",2.73023171038722,1.80162603554421,3.65883738523023,4.97909824481724e-10
+"58","sex:drug_treatment:health_status","Female:Low dose:Alzheimer's-Female:Placebo:Alzheimer's",3.4018835137221,2.46413442401644,4.33963260342776,4.97797691956237e-10
+"59","sex:drug_treatment:health_status","Male:High Dose:Alzheimer's-Female:Placebo:Alzheimer's",11.2143688949244,10.2717984413576,12.1569393484911,4.97796359688607e-10
+"60","sex:drug_treatment:health_status","Female:High Dose:Alzheimer's-Female:Placebo:Alzheimer's",10.9110334884414,9.98676711619659,11.8352998606861,4.97796359688607e-10
+"61","sex:drug_treatment:health_status","Female:Low dose:Alzheimer's-Male:Low dose:Alzheimer's",0.671651803334877,-0.252059620572723,1.59536322724248,0.417281033585216
+"62","sex:drug_treatment:health_status","Male:High Dose:Alzheimer's-Male:Low dose:Alzheimer's",8.48413718453717,7.55553150969416,9.41274285938018,4.97796359688607e-10
+"63","sex:drug_treatment:health_status","Female:High Dose:Alzheimer's-Male:Low dose:Alzheimer's",8.18080177805414,7.27078102758955,9.09082252851873,4.97796359688607e-10
+"64","sex:drug_treatment:health_status","Male:High Dose:Alzheimer's-Female:Low dose:Alzheimer's",7.81248538120229,6.87473629149663,8.75023447090795,4.97796359688607e-10
+"65","sex:drug_treatment:health_status","Female:High Dose:Alzheimer's-Female:Low dose:Alzheimer's",7.50914997471926,6.58980095385217,8.42849899558636,4.97796359688607e-10
+"66","sex:drug_treatment:health_status","Female:High Dose:Alzheimer's-Male:High Dose:Alzheimer's",-0.303335406483026,-1.2276017787278,0.620930965761752,0.995531457400941

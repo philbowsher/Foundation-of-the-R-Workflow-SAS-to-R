@@ -1,0 +1,81 @@
+---
+title: "Economic Indicators"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+
+```{r setup, include=FALSE}
+# Based on Example from StochasticCoder/EconomicIndicators_Flexdashboard
+library(flexdashboard) #devtools::install_github('rstudio/flexdashboard')
+library(readxl)
+library(ggplot2)
+
+#Read US GDP Data Set from FED Excel File
+dtGDP <- read_excel('fredgraph.xls',sheet = 'GDP')
+
+#Read US Unemployment Rate and ISM PCI Index Data Set from FED Excel File 
+dtOtherIndicators <- read_excel('fredgraph.xls',sheet = 'Sheet2')
+
+
+```
+
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Real GDP Quarterly Percent Changed - Seasonaly Adjusted
+
+```{r fig.width=10}
+
+#Create Line Graph To Display Time Series Real GDP
+ggplot(dtGDP,aes(x=Date,y=RGDP)) +
+  geom_line(color="blue") +
+  ggtitle("") +
+  xlab("") +
+  ylab("") +
+  theme(axis.text.x =element_text(size=12),axis.text.y =element_text(size=12))
+
+
+```
+
+### Civilian Unemployment Rate, Percent, Monthly, Seasonally Adjusted
+
+```{r fig.width=10}
+
+#Create Line Graph To Display Time Series Unemployment Rate 
+ggplot(dtOtherIndicators,aes(x=Date,y=UNRATE)) +
+  geom_line(color="blue") +
+  ggtitle("") +
+  xlab("") +
+  ylab("") +
+  theme(axis.text.x =element_text(size=12), axis.text.y =element_text(size=12))
+
+
+```
+
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### ISM Manufacturing: PMI Composite Index
+
+```{r fig.width=5, fig.height=5}
+
+# Create Line Graph To Display Time Series ISM PCI Index 
+ggplot(dtOtherIndicators,aes(x=Date,y=ISM.PMI)) +
+  geom_line(color="blue") +
+  ggtitle("") +
+  xlab("") +
+  ylab("") +
+  theme(axis.text.x =element_text(size=12),axis.text.y =element_text(size=12))
+
+```
+
+### Insight
+
+Average Unemployment Rate from `r min(dtOtherIndicators$Date)` to `r max(dtOtherIndicators$Date)` is `r mean(dtOtherIndicators$UNRATE)`.
+
+

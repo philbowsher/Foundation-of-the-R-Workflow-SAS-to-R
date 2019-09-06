@@ -1,0 +1,33 @@
+name: "Immunogenicity-RMarkdown-Website"
+title: "Immunogenicity-RMarkdown-Website"
+description: |
+  Immunogenicity Assessments
+output_dir: "_site"
+navbar:
+  logo:
+    image: images/financial.png
+    href: https://www.rstudio.com
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
+    - text: "Notes"
+      menu:
+        - text: "Notes"
+          href: ImportantConcepts.html
+    - text:  "Tiers_Reporting"
+      menu:
+        - text: "ADA Assessment"
+          href: Tiers.html
+        - text: "Reporting"
+          href: Reporting.html
+    - text: "Resources"
+      href: links.html
+    - text: "Tiers"
+      href: Tiers.html
+    - text: "Reporting"
+      href: Reporting.html
+    - icon: fab fa-github
+      href: https://github.com/rstudio/distil
+output: distill::distill_article

@@ -1,0 +1,13 @@
+---
+title: Introduction to Stocks Website
+---
+
+This website is a POC *Analytical Stocks App* in which the R capabilities of various tools/packages are used to explore the possibilities for **financial reporting**---a site fully conceived within a digital environment---instead of a **self-run report** that simply is an outputted html file.
+
+### About
+
+A brief explanation of how this website was developed.
+
+### References
+
+A collection of external references that users might find useful. Where possible, links to the sources are included.

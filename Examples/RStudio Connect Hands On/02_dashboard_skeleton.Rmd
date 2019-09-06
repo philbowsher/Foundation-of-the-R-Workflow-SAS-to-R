@@ -1,0 +1,48 @@
+---
+title: "Stock Analysis"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(dplyr)
+library(glue)
+library(tidyquant)
+library(timetk)
+library(highcharter)
+library(DT)
+
+price <- tq_get('GOOG', from = "2018-01-01") %>% 
+  mutate(change = close - open)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Stock Price Over Time (Chart)
+
+
+```{r}
+
+```
+
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Stock Volatility
+
+```{r}
+
+```
+
+
+### Stock Price Table
+
+```{r}
+
+```
+

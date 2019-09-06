@@ -1,0 +1,8 @@
+name: testblog
+title:
+account: phil
+server: colorado.rstudio.com
+appId: 656
+bundleId: 1358
+url: http://colorado.rstudio.com:3939/content/656/
+when: 1503431553.58004

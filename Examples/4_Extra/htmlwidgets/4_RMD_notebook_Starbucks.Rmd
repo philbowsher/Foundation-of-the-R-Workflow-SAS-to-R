@@ -1,0 +1,63 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+packages
+```{r}
+library(tidyverse)
+library(leaflet)
+library(magrittr)
+library(stringr)
+```
+
+Read in data
+```{r}
+download.file("https://opendata.socrata.com/api/views/ddym-zvjk/rows.csv?accessType=DOWNLOAD",destfile="data.csv",method="libcurl")
+
+# Base R
+# starbucks1 <- read.csv("data.csv")
+
+# readr
+starbucks <- read_csv("data.csv")
+
+# is this needed? as_tibble(starbucks)
+
+# rename(starbucks, `StoreNumber` =  `Store Number` )
+
+#Make State a factor for later on
+#starbucks$State.f <- factor(starbucks$State)
+#is.factor(starbucks$State.f)
+
+class(starbucks)
+
+#View(starbucks2)
+
+starbucks
+
+
+```
+
+Let's now subset it for PA
+```{r}
+
+# Base R
+# starbucks <- starbucks1[ which(starbucks1$State=='VA' & starbucks1$Country== 'US'), ]
+
+# Dplyr
+# Without pipes
+# starbucks_MO <- filter(starbucks, Country== 'US', State=='VA')
+
+starbucks_MO <- starbucks %>%
+  filter(Country== 'US', State=='KS' | State=='MO')%>% 
+  select(Brand, `Store Number`, `Ownership Type`, City,	State,	Zip, Country, Coordinates,	Latitude,	Longitude, Name)
+
+```
+
+```{r}
+leaflet() %>% addTiles() %>% setView(-94.582461, 39.097719, zoom = 12) %>% 
+              
+addMarkers(data = starbucks_MO, lat = ~ Latitude, lng = ~ Longitude, popup = starbucks_MO$Name) %>%
+  addPopups(-94.582461, 39.097719, 'the <b> spot</b>')
+
+```

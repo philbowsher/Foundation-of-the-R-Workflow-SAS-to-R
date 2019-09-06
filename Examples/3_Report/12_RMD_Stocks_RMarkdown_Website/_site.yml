@@ -1,0 +1,34 @@
+name: "stocks-website"
+navbar:
+  title: "stocks-website"
+  type: inverse
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
+    - text: "Notes"
+      menu:
+        - text: "Notes & Issues"
+          href: ImportantConcepts.html
+    - text:  "Stocks"
+      menu:
+        - text: "Stock 1"
+          href: Stocks.html
+        - text: "Stock 2"
+          href: FlexStocks.html
+    - text: "Resources"
+      href: links.html
+    - text: "Stocks"
+      href: Stocks.html
+    - text: "FlexStocks"
+      href: FlexStocks.html
+output:
+  html_document:
+    theme: paper
+    highlight: default
+    toc: false
+    toc_float: false
+    css: styles.css
+
+      

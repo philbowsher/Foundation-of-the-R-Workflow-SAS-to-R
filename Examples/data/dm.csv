@@ -1,0 +1,151 @@
+USUBJID,SITE,SITEID,AGE,SEX,RACE,ARM,ARMCD,SBJTSTAT,RFSTDTC,RFENDTC,RFENDY,SAFFL,SAFFN
+01-001,Clinical Site 01,01,30,F,Other/Mixed,Placebo,PLACEBO,Early Termination,2015-05-21,2015-05-26,6,Y,1
+01-002,Clinical Site 01,01,24,F,Black,Treatment A,TRTA,Ongoing,2015-05-30,2015-11-09,164,Y,1
+01-003,Clinical Site 01,01,43,F,Hispanic,Placebo,PLACEBO,Ongoing,2015-08-13,2016-02-23,195,Y,1
+01-004,Clinical Site 01,01,42,F,Hispanic,Placebo,PLACEBO,Ongoing,2015-01-12,2015-04-26,105,Y,1
+01-005,Clinical Site 01,01,51,M,White,Treatment B,TRTB,Ongoing,2015-11-11,2016-03-18,129,Y,1
+01-006,Clinical Site 01,01,23,M,White,Screen Failure,SCRNFAIL,Screen Failure,2015-05-12,2015-05-12,1,N,0
+01-007,Clinical Site 01,01,20,M,Other/Mixed,Screen Failure,SCRNFAIL,Screen Failure,2015-09-10,2015-09-10,1,N,0
+01-008,Clinical Site 01,01,53,F,Black,Treatment B,TRTB,Ongoing,2015-11-21,2015-12-05,15,Y,1
+01-009,Clinical Site 01,01,44,M,White,Treatment B,TRTB,Ongoing,2015-11-25,2016-05-07,165,Y,1
+01-010,Clinical Site 01,01,35,F,Black,Treatment B,TRTB,Ongoing,2015-01-06,2015-05-04,119,Y,1
+01-011,Clinical Site 01,01,33,F,Other/Mixed,Treatment A,TRTA,Ongoing,2015-10-04,2016-01-23,112,Y,1
+01-012,Clinical Site 01,01,36,M,White,Placebo,PLACEBO,Ongoing,2015-04-18,2015-12-21,248,Y,1
+01-013,Clinical Site 01,01,40,F,White,Treatment A,TRTA,Ongoing,2015-07-15,2016-06-08,330,Y,1
+01-014,Clinical Site 01,01,37,M,Black,Treatment A,TRTA,Ongoing,2015-07-24,2016-02-14,206,Y,1
+01-015,Clinical Site 01,01,26,M,Hispanic,Treatment B,TRTB,Ongoing,2015-04-28,2015-11-07,194,Y,1
+01-016,Clinical Site 01,01,18,M,Black,Treatment A,TRTA,Ongoing,2015-12-21,2016-09-06,261,Y,1
+01-017,Clinical Site 01,01,40,M,Hispanic,Treatment A,TRTA,Ongoing,2015-02-12,2015-08-05,175,Y,1
+01-018,Clinical Site 01,01,29,F,Hispanic,Treatment B,TRTB,Ongoing,2015-02-13,2015-07-01,139,Y,1
+01-019,Clinical Site 01,01,47,M,Other/Mixed,Treatment B,TRTB,Ongoing,2015-04-24,2016-01-31,283,Y,1
+01-020,Clinical Site 01,01,27,M,Hispanic,Screen Failure,SCRNFAIL,Screen Failure,2015-06-17,2015-06-17,1,N,0
+01-021,Clinical Site 01,01,23,F,Black,Treatment A,TRTA,Ongoing,2015-10-04,2015-11-15,43,Y,1
+01-022,Clinical Site 01,01,27,F,Black,Treatment A,TRTA,Completed,2015-10-01,2016-09-20,356,Y,1
+01-023,Clinical Site 01,01,48,M,Black,Treatment A,TRTA,Ongoing,2015-03-29,2015-09-03,159,Y,1
+01-024,Clinical Site 01,01,24,F,Other/Mixed,Treatment B,TRTB,Ongoing,2015-04-23,2015-10-28,189,Y,1
+01-025,Clinical Site 01,01,21,M,White,Placebo,PLACEBO,Ongoing,2015-06-22,2015-09-25,96,Y,1
+01-026,Clinical Site 01,01,25,F,White,Treatment A,TRTA,Completed,2015-02-19,2016-02-28,375,Y,1
+01-027,Clinical Site 01,01,40,F,Other/Mixed,Treatment B,TRTB,Ongoing,2015-06-01,2015-10-24,146,Y,1
+01-028,Clinical Site 01,01,21,F,Hispanic,Treatment B,TRTB,Completed,2015-11-12,2016-11-04,359,Y,1
+01-029,Clinical Site 01,01,50,M,Black,Placebo,PLACEBO,Ongoing,2015-06-10,2016-05-23,349,Y,1
+01-030,Clinical Site 01,01,25,M,Other/Mixed,Screen Failure,SCRNFAIL,Screen Failure,2015-01-18,2015-01-18,1,N,0
+02-001,Clinical Site 02,02,20,M,White,Screen Failure,SCRNFAIL,Screen Failure,2015-12-11,2015-12-11,1,N,0
+02-002,Clinical Site 02,02,42,F,White,Treatment B,TRTB,Ongoing,2015-03-16,2015-07-18,125,Y,1
+02-003,Clinical Site 02,02,27,F,Hispanic,Placebo,PLACEBO,Ongoing,2015-04-27,2015-12-14,232,Y,1
+02-004,Clinical Site 02,02,21,F,White,Placebo,PLACEBO,Ongoing,2015-09-30,2015-10-21,22,Y,1
+02-005,Clinical Site 02,02,18,M,Hispanic,Treatment B,TRTB,Early Termination,2015-12-13,2016-07-21,222,Y,1
+02-006,Clinical Site 02,02,36,M,White,Placebo,PLACEBO,Early Termination,2015-06-03,2015-09-18,108,Y,1
+02-007,Clinical Site 02,02,31,M,Hispanic,Screen Failure,SCRNFAIL,Screen Failure,2015-09-01,2015-09-01,1,N,0
+02-008,Clinical Site 02,02,21,F,Other/Mixed,Treatment B,TRTB,Completed,2015-08-17,2016-08-23,373,Y,1
+02-009,Clinical Site 02,02,27,F,Black,Treatment B,TRTB,Ongoing,2015-12-13,2016-07-30,231,Y,1
+02-010,Clinical Site 02,02,36,F,White,Treatment B,TRTB,Completed,2015-07-26,2016-07-18,359,Y,1
+02-011,Clinical Site 02,02,40,F,Other/Mixed,Treatment A,TRTA,Ongoing,2015-10-08,2015-10-13,6,Y,1
+02-012,Clinical Site 02,02,37,F,Other/Mixed,Treatment B,TRTB,Ongoing,2015-09-30,2016-07-25,300,Y,1
+02-013,Clinical Site 02,02,32,M,White,Treatment B,TRTB,Completed,2015-12-29,2016-12-20,358,Y,1
+02-014,Clinical Site 02,02,19,F,Other/Mixed,Treatment A,TRTA,Ongoing,2015-04-13,2015-09-19,160,Y,1
+02-015,Clinical Site 02,02,29,M,White,Placebo,PLACEBO,Ongoing,2015-02-24,2015-05-14,80,Y,1
+02-016,Clinical Site 02,02,25,M,Hispanic,Screen Failure,SCRNFAIL,Screen Failure,2015-10-24,2015-10-24,1,N,0
+02-017,Clinical Site 02,02,33,M,White,Placebo,PLACEBO,Completed,2015-04-06,2016-03-27,357,Y,1
+02-018,Clinical Site 02,02,19,F,White,Placebo,PLACEBO,Completed,2015-11-23,2016-11-21,365,Y,1
+02-019,Clinical Site 02,02,49,F,Black,Placebo,PLACEBO,Ongoing,2015-02-16,2015-09-27,224,Y,1
+02-020,Clinical Site 02,02,23,F,White,Treatment A,TRTA,Early Termination,2015-07-14,2016-06-18,341,Y,1
+02-021,Clinical Site 02,02,53,F,Black,Treatment B,TRTB,Ongoing,2015-10-01,2016-09-03,339,Y,1
+02-022,Clinical Site 02,02,30,M,White,Treatment B,TRTB,Ongoing,2015-12-27,2016-03-02,67,Y,1
+02-023,Clinical Site 02,02,45,F,Black,Treatment A,TRTA,Completed,2015-12-06,2016-12-09,370,Y,1
+02-024,Clinical Site 02,02,45,M,White,Treatment A,TRTA,Ongoing,2015-02-28,2015-07-20,143,Y,1
+02-025,Clinical Site 02,02,36,F,Black,Screen Failure,SCRNFAIL,Screen Failure,2015-08-04,2015-08-04,1,N,0
+02-026,Clinical Site 02,02,27,F,Black,Placebo,PLACEBO,Completed,2015-04-03,2016-04-05,369,Y,1
+02-027,Clinical Site 02,02,36,F,Hispanic,Treatment B,TRTB,Completed,2015-03-08,2016-03-02,361,Y,1
+02-028,Clinical Site 02,02,29,M,Hispanic,Placebo,PLACEBO,Ongoing,2015-04-25,2015-12-12,232,Y,1
+02-029,Clinical Site 02,02,47,M,Black,Placebo,PLACEBO,Ongoing,2015-04-26,2016-04-15,356,Y,1
+02-030,Clinical Site 02,02,41,M,Hispanic,Screen Failure,SCRNFAIL,Screen Failure,2015-12-11,2015-12-11,1,N,0
+03-001,Clinical Site 03,03,43,F,Hispanic,Treatment A,TRTA,Early Termination,2015-04-24,2015-05-15,22,Y,1
+03-002,Clinical Site 03,03,27,F,White,Treatment A,TRTA,Completed,2015-09-02,2016-08-30,364,Y,1
+03-003,Clinical Site 03,03,42,M,Black,Treatment B,TRTB,Ongoing,2015-05-26,2016-03-10,290,Y,1
+03-004,Clinical Site 03,03,19,F,Hispanic,Placebo,PLACEBO,Completed,2015-12-03,2016-11-23,357,Y,1
+03-005,Clinical Site 03,03,48,M,Hispanic,Placebo,PLACEBO,Ongoing,2015-04-15,2015-10-11,180,Y,1
+03-006,Clinical Site 03,03,52,M,Other/Mixed,Treatment B,TRTB,Ongoing,2015-05-24,2015-08-30,99,Y,1
+03-007,Clinical Site 03,03,49,F,Other/Mixed,Treatment A,TRTA,Completed,2015-08-18,2016-08-06,355,Y,1
+03-008,Clinical Site 03,03,46,M,Black,Treatment B,TRTB,Ongoing,2015-03-08,2016-02-17,347,Y,1
+03-009,Clinical Site 03,03,28,F,White,Placebo,PLACEBO,Early Termination,2015-11-15,2016-02-19,97,Y,1
+03-010,Clinical Site 03,03,40,M,White,Placebo,PLACEBO,Completed,2015-02-07,2016-02-13,372,Y,1
+03-011,Clinical Site 03,03,43,M,Black,Treatment A,TRTA,Early Termination,2015-11-16,2016-01-05,51,Y,1
+03-012,Clinical Site 03,03,32,M,Black,Placebo,PLACEBO,Ongoing,2015-08-19,2016-05-19,275,Y,1
+03-013,Clinical Site 03,03,33,M,Other/Mixed,Placebo,PLACEBO,Ongoing,2015-10-28,2016-08-19,297,Y,1
+03-014,Clinical Site 03,03,53,F,Black,Placebo,PLACEBO,Ongoing,2015-02-06,2015-03-07,30,Y,1
+03-015,Clinical Site 03,03,24,F,Black,Placebo,PLACEBO,Completed,2015-07-21,2016-07-13,359,Y,1
+03-016,Clinical Site 03,03,20,F,White,Treatment A,TRTA,Ongoing,2015-05-04,2015-07-04,62,Y,1
+03-017,Clinical Site 03,03,43,M,Black,Treatment B,TRTB,Ongoing,2015-06-26,2015-10-27,124,Y,1
+03-018,Clinical Site 03,03,19,M,Hispanic,Placebo,PLACEBO,Ongoing,2015-05-30,2015-08-30,93,Y,1
+03-019,Clinical Site 03,03,18,M,Hispanic,Treatment B,TRTB,Completed,2015-11-06,2016-11-07,368,Y,1
+03-020,Clinical Site 03,03,50,M,White,Treatment A,TRTA,Ongoing,2015-08-09,2015-12-09,123,Y,1
+03-021,Clinical Site 03,03,18,M,Hispanic,Treatment A,TRTA,Ongoing,2015-09-21,2016-08-09,324,Y,1
+03-022,Clinical Site 03,03,49,M,Hispanic,Placebo,PLACEBO,Ongoing,2015-05-14,2016-04-14,337,Y,1
+03-023,Clinical Site 03,03,52,M,Hispanic,Placebo,PLACEBO,Ongoing,2015-03-25,2015-06-03,71,Y,1
+03-024,Clinical Site 03,03,27,F,White,Screen Failure,SCRNFAIL,Screen Failure,2015-03-16,2015-03-16,1,N,0
+03-025,Clinical Site 03,03,53,F,Black,Treatment B,TRTB,Ongoing,2015-04-29,2016-02-16,294,Y,1
+03-026,Clinical Site 03,03,18,M,White,Treatment B,TRTB,Ongoing,2015-10-08,2015-10-28,21,Y,1
+03-027,Clinical Site 03,03,37,F,Other/Mixed,Treatment B,TRTB,Ongoing,2015-05-10,2015-05-25,16,Y,1
+03-028,Clinical Site 03,03,37,F,Other/Mixed,Placebo,PLACEBO,Ongoing,2015-03-08,2015-11-22,260,Y,1
+03-029,Clinical Site 03,03,26,M,White,Placebo,PLACEBO,Ongoing,2015-06-03,2016-02-24,267,Y,1
+03-030,Clinical Site 03,03,18,M,Hispanic,Treatment B,TRTB,Ongoing,2015-03-30,2015-12-19,265,Y,1
+04-001,Clinical Site 04,04,21,M,Hispanic,Screen Failure,SCRNFAIL,Screen Failure,2015-02-11,2015-02-11,1,N,0
+04-002,Clinical Site 04,04,54,F,White,Treatment A,TRTA,Completed,2015-06-19,2016-06-09,357,Y,1
+04-003,Clinical Site 04,04,25,M,Other/Mixed,Treatment A,TRTA,Ongoing,2015-11-17,2015-12-30,44,Y,1
+04-004,Clinical Site 04,04,39,M,Black,Placebo,PLACEBO,Ongoing,2015-08-03,2016-01-10,161,Y,1
+04-005,Clinical Site 04,04,42,M,White,Treatment B,TRTB,Completed,2015-08-17,2016-08-20,370,Y,1
+04-006,Clinical Site 04,04,29,M,White,Screen Failure,SCRNFAIL,Screen Failure,2015-10-31,2015-10-31,1,N,0
+04-007,Clinical Site 04,04,24,M,Hispanic,Treatment B,TRTB,Completed,2015-04-15,2016-04-08,360,Y,1
+04-008,Clinical Site 04,04,31,F,Black,Placebo,PLACEBO,Completed,2015-04-10,2016-04-02,359,Y,1
+04-009,Clinical Site 04,04,39,F,Hispanic,Placebo,PLACEBO,Ongoing,2015-01-22,2015-10-27,279,Y,1
+04-010,Clinical Site 04,04,18,F,White,Treatment B,TRTB,Ongoing,2015-12-14,2016-10-04,296,Y,1
+04-011,Clinical Site 04,04,48,M,Other/Mixed,Treatment B,TRTB,Completed,2015-10-16,2016-10-20,371,Y,1
+04-012,Clinical Site 04,04,33,M,Black,Treatment B,TRTB,Completed,2015-06-26,2016-06-16,357,Y,1
+04-013,Clinical Site 04,04,19,M,Hispanic,Treatment A,TRTA,Completed,2015-04-22,2016-04-24,369,Y,1
+04-014,Clinical Site 04,04,36,M,Other/Mixed,Treatment B,TRTB,Ongoing,2015-05-14,2015-10-28,168,Y,1
+04-015,Clinical Site 04,04,40,F,Hispanic,Treatment B,TRTB,Ongoing,2015-11-26,2016-06-08,196,Y,1
+04-016,Clinical Site 04,04,40,M,Hispanic,Treatment A,TRTA,Ongoing,2015-04-27,2016-03-07,316,Y,1
+04-017,Clinical Site 04,04,42,M,Other/Mixed,Screen Failure,SCRNFAIL,Screen Failure,2015-01-26,2015-01-26,1,N,0
+04-018,Clinical Site 04,04,26,F,White,Screen Failure,SCRNFAIL,Screen Failure,2015-06-13,2015-06-13,1,N,0
+04-019,Clinical Site 04,04,55,F,Other/Mixed,Placebo,PLACEBO,Ongoing,2015-01-20,2015-07-03,165,Y,1
+04-020,Clinical Site 04,04,24,F,White,Treatment B,TRTB,Ongoing,2015-09-14,2015-10-12,29,Y,1
+04-021,Clinical Site 04,04,21,M,White,Placebo,PLACEBO,Ongoing,2015-06-20,2015-09-01,74,Y,1
+04-022,Clinical Site 04,04,54,F,White,Placebo,PLACEBO,Ongoing,2015-12-26,2016-07-08,196,Y,1
+04-023,Clinical Site 04,04,21,M,Hispanic,Treatment A,TRTA,Early Termination,2015-10-04,2016-05-18,228,Y,1
+04-024,Clinical Site 04,04,26,M,Other/Mixed,Placebo,PLACEBO,Completed,2015-05-05,2016-04-24,356,Y,1
+04-025,Clinical Site 04,04,26,M,Black,Treatment A,TRTA,Ongoing,2015-08-08,2015-09-04,28,Y,1
+04-026,Clinical Site 04,04,27,M,Other/Mixed,Placebo,PLACEBO,Ongoing,2015-07-02,2015-07-21,20,Y,1
+04-027,Clinical Site 04,04,28,M,White,Treatment A,TRTA,Ongoing,2015-01-13,2015-09-10,241,Y,1
+04-028,Clinical Site 04,04,51,M,Black,Placebo,PLACEBO,Ongoing,2015-01-23,2015-12-13,325,Y,1
+04-029,Clinical Site 04,04,49,M,Hispanic,Treatment A,TRTA,Ongoing,2015-05-12,2015-12-15,218,Y,1
+04-030,Clinical Site 04,04,31,F,Hispanic,Treatment B,TRTB,Early Termination,2015-04-25,2015-11-25,215,Y,1
+05-001,Clinical Site 05,05,48,F,Black,Treatment A,TRTA,Early Termination,2015-04-11,2015-10-12,185,Y,1
+05-002,Clinical Site 05,05,24,M,Black,Treatment B,TRTB,Ongoing,2015-10-26,2016-07-22,271,Y,1
+05-003,Clinical Site 05,05,42,M,Black,Treatment B,TRTB,Completed,2015-09-26,2016-09-25,366,Y,1
+05-004,Clinical Site 05,05,47,M,White,Placebo,PLACEBO,Ongoing,2015-10-29,2015-11-29,32,Y,1
+05-005,Clinical Site 05,05,20,M,Other/Mixed,Treatment B,TRTB,Early Termination,2015-06-06,2015-11-24,172,Y,1
+05-006,Clinical Site 05,05,21,M,Hispanic,Screen Failure,SCRNFAIL,Screen Failure,2015-10-15,2015-10-15,1,N,0
+05-007,Clinical Site 05,05,43,M,White,Treatment B,TRTB,Ongoing,2015-07-07,2015-08-17,42,Y,1
+05-008,Clinical Site 05,05,26,F,Hispanic,Treatment B,TRTB,Ongoing,2015-10-12,2016-10-04,359,Y,1
+05-009,Clinical Site 05,05,42,F,Hispanic,Placebo,PLACEBO,Completed,2015-12-16,2016-12-24,375,Y,1
+05-010,Clinical Site 05,05,43,F,White,Treatment B,TRTB,Completed,2015-02-06,2016-02-06,366,Y,1
+05-011,Clinical Site 05,05,49,M,Other/Mixed,Treatment A,TRTA,Ongoing,2015-02-04,2015-06-25,142,Y,1
+05-012,Clinical Site 05,05,45,M,Black,Treatment A,TRTA,Completed,2015-04-18,2016-04-26,375,Y,1
+05-013,Clinical Site 05,05,39,M,Hispanic,Treatment A,TRTA,Completed,2015-10-22,2016-10-22,367,Y,1
+05-014,Clinical Site 05,05,32,M,Other/Mixed,Treatment A,TRTA,Ongoing,2015-07-01,2016-03-14,258,Y,1
+05-015,Clinical Site 05,05,38,F,Hispanic,Treatment B,TRTB,Ongoing,2015-01-11,2015-11-14,308,Y,1
+05-016,Clinical Site 05,05,42,F,Other/Mixed,Treatment A,TRTA,Ongoing,2015-06-15,2015-07-31,47,Y,1
+05-017,Clinical Site 05,05,40,M,Hispanic,Placebo,PLACEBO,Ongoing,2015-07-03,2016-05-10,313,Y,1
+05-018,Clinical Site 05,05,36,F,White,Treatment A,TRTA,Ongoing,2015-12-14,2016-09-12,274,Y,1
+05-019,Clinical Site 05,05,42,F,Black,Placebo,PLACEBO,Ongoing,2015-05-13,2016-03-11,304,Y,1
+05-020,Clinical Site 05,05,32,M,Other/Mixed,Treatment A,TRTA,Ongoing,2015-04-21,2015-09-22,155,Y,1
+05-021,Clinical Site 05,05,46,M,Other/Mixed,Treatment A,TRTA,Completed,2015-01-20,2016-01-14,360,Y,1
+05-022,Clinical Site 05,05,29,F,Black,Placebo,PLACEBO,Ongoing,2015-01-10,2015-08-16,219,Y,1
+05-023,Clinical Site 05,05,49,M,Hispanic,Treatment A,TRTA,Ongoing,2015-08-15,2016-05-10,270,Y,1
+05-024,Clinical Site 05,05,54,M,White,Treatment A,TRTA,Ongoing,2015-11-17,2016-04-15,151,Y,1
+05-025,Clinical Site 05,05,54,M,White,Treatment A,TRTA,Ongoing,2015-02-28,2015-06-13,106,Y,1
+05-026,Clinical Site 05,05,32,M,Black,Placebo,PLACEBO,Ongoing,2015-01-26,2015-10-20,268,Y,1
+05-027,Clinical Site 05,05,28,F,Hispanic,Treatment A,TRTA,Ongoing,2015-05-28,2016-04-29,338,Y,1
+05-028,Clinical Site 05,05,42,M,Other/Mixed,Treatment A,TRTA,Ongoing,2015-12-01,2016-09-28,303,Y,1
+05-029,Clinical Site 05,05,35,M,White,Placebo,PLACEBO,Ongoing,2015-10-02,2015-12-31,91,Y,1
+05-030,Clinical Site 05,05,23,F,Hispanic,Treatment A,TRTA,Ongoing,2015-11-13,2016-06-06,207,Y,1

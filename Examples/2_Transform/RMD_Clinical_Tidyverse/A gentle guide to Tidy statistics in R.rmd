@@ -1,0 +1,399 @@
+---
+title: "A gentle introduction to Tidy statistics in R"
+author: "Tom"
+date: "February 7, 2018"
+output: html_document
+---
+
+## Introduction
+
+After a great discussion started by Jesse Maegan (@kiersi) on Twitter, I decided to post a workthrough of some (fake) experimental treatment data. These data correspond to a new (fake) research drug called AD-x37, a theoretical drug that has been shown to have beneficial outcomes in mouse models of Alzheimer's disease. In the current experiment we will be statistically testing whether the drug was effective in reducing cognitive decline in dementia patients. 
+
+We will be working through loading, plotting, analyzing, and saving the outputs through the tidyverse, an "opinionated collection of R packages" designed for data analysis. We will limit dependence to two packages `tidyverse` and `broom` while using base R for the rest. I will use `knitr::kable` to generate some html tables for this markdown document, but it is not necessary for the workflow. 
+
+***
+
+### Load the tidyverse, broom, knitr
+Using the library function we will load the `tidyverse`. If you have never installed it before you can also use the `install.packages("tidyverse")` call to install it for the first time. This package includes `ggplot2` (graphs), `dplyr`/`tidyr` (sumamry statistics, data manipulation), and `readxl` (reading excel files) as well as the pipe `%>%` which will make our code much more readable! We will also load the `broom` package to tidy up some of our statistical outputs. Lastly we will load `knitr` for making nice tables via `kable` for the html output, but not necessary for simply saving the outputs to Excel.
+
+```{r, message=F, warning = F, error = F}
+# Load for ggplot, dplyr, tidyr, readxl
+library(tidyverse)
+library(readxl)
+library(broom)
+library(knitr)
+library(haven)
+```
+***
+
+### Read Excel file
+While I am calling `readxl::read_xlsx` you could also simply use `read_xlsx`, but in the interest of transparency, I will be using the full call to begin. By using the `glimpse` function from `dplyr` we can see how the variables were imported, as well as the first few rows. We can already see some NAs, which we will need to address later!
+
+```{r}
+# read excel file
+raw_df_xlsx <- readxl::read_xlsx("ad_treatment.xlsx")
+write_sas(raw_df_xlsx , "./Data/raw_df_xlsx.sas7bdat")
+raw_df <- read_sas("./Data/raw_df_xlsx.sas7bdat")
+
+dplyr::glimpse(raw_df)
+```
+***
+### Check distribution
+
+By calling `ggplot` we can take a look at the distribution of `age`. The graph shows us that age really only goes from 79–85 years, and that there is really not any age over or underrepresented.
+```{r}
+# density plot
+
+g2 <- ggplot(raw_df, aes(x = age)) +
+  geom_density(fill = "blue")
+g2
+
+```
+
+```{r}
+# tidyverse way for range
+raw_df %>% summarize(min = min(age),
+                     max = max(age))
+```
+
+```{r}
+# base way for range, note use of the $ to select column
+range(raw_df$age)
+```
+
+  
+  
+  
+***
+  
+### Data cleaning
+We can check for any NAs by using a summarize function again. Yay no missing data! 
+
+```{r}
+# check for NAs
+raw_df %>% 
+  summarize(na_count = sum(is.na(mmse)))
+```
+  
+  
+***
+
+### Experimental variables levels
+Now while I am very aware of the variables in this dataframe, you might not be without exploring it! To quickly determine `drug_treatment` groups, `health_status` groups and how they interact we can do a table call. By calling it on both `drug_treatment` and `health_status`, we get a nice table breaking down how many rows are in each of the variable groups.
+
+```{r}
+# check Ns and levels for our variables
+table(raw_df$drug_treatment, raw_df$health_status)
+```
+***
+
+Notice what happens when we add our 3rd variable into the table call. It splits into two parallel tables with the two sex levels recorded. We can see that there is a nice balance between males and females, but does 0 = male or female? A number is not a very descriptive label for sex.
+
+```{r}
+table(raw_df$drug_treatment, raw_df$health_status, raw_df$sex)
+```
+***
+  
+  
+Alternatively, we can use a `group_by` call to seperate by our variables, then look at the number of patients in each group. Notice that this results in a Tidy dataframe, as opposed to the table-formate from `table`. Regardless the resulting data is the same!
+```{r}
+# tidy way of looking at variables
+raw_df %>% 
+  group_by(drug_treatment, health_status, sex) %>% 
+  count()
+```
+
+### Visual Exploratory Data Analysis
+Before running our summary statistics we can actually visualize the range, central tendency and quartiles via a `geom_boxplot` call. We have split the data into separate graph facets (or panes) for healthy and Alzheimer’s patients, as well as into groups within each facet by drug treatment. This graph tells us a few things of interest for later. It definitely looks like we have an effect with our (fake) awesome drug! Let’s explore that with descriptive statistics.
+
+While this is an exploratory graph and we don’t necessarily want to “tweak” it to perfection, we can take note that our drug treatment should be ordered Placebo < Low dose < High Dose and we should have Healthy patients presented first, and Alzheimer’s patients second. This is something we can fix in our next section!
+
+```{r}
+ggplot(data = raw_df, # add the data
+       aes(x = drug_treatment, y = mmse, # set x, y coordinates
+           color = drug_treatment)) +    # color by treatment
+  geom_boxplot() +
+  facet_grid(~health_status) # create panes base on health status
+```
+
+### Summary Statistics
+
+Now that we have confirmed a clean data set, we can get our summary stats. We are looking to generate the mean and standard error for mmse (cognitive function). We have our categorical variables of `sex`, `health_status`, and `drug_treatment`.  Let's take  a first look at the data with the `dplyr::glimpse` function. We can either call `glimpse` directly as in `glimpse(raw_df)` or pipe (`%>%`) the data into the function as in `raw_df %>% glimpse()`. Both will results in the same thing, but useful to know that!
+
+```{r}
+raw_df %>% 
+  glimpse()
+```
+  
+  
+We can use the dplyr::mutate function to tell R we want to change (mutate) the rows within a variable of interest. So we will take the data in the sex, drug_treatment, and health_status columns and convert them from either just numbers or characters into a factor variable! dplyr::mutate can also perform math, and many other interesting things. For more information please see here.
+
+We will use the mutate function and the base R factorfunction to convert our variables into the proper factors, and give them labels (for sex) or reorder the levels of the factors.
+
+We need to be REALLY careful to type the labels EXACTLY as they appear in the column or it will replace those misspelled with a NA. For example, did you notice that High Dose has a capital “D” while Low dose has a lower case “d”? As powerful as R is, it needs explicit and accurate code input to accomplish the end goals. As such, if we had typed “High dose” it would give an NA, while “High Dose” outputs correctly. We now see age and mmse as dbl (numerics) and sex, health_status, and drug_treatment as factors.
+
+```{r}
+sum_df <- raw_df %>% 
+            mutate(
+              sex = factor(sex, 
+                  labels = c("Male", "Female")),
+              drug_treatment =  factor(drug_treatment, 
+                  levels = c("Placebo", "Low dose", "High Dose")),
+              health_status = factor(health_status, 
+                  levels = c("Healthy", "Alzheimer's"))
+              ) %>% 
+            group_by(sex, health_status, drug_treatment # group by categorical variables
+              ) %>%  
+            summarize(
+              mmse_mean = mean(mmse),      # calc mean
+              mmse_se = sd(mmse)/sqrt(n()) # calc standard error
+              ) %>%  
+            ungroup() # ungrouping variable is a good habit to prevent errors
+```
+Now that everything is coded and calculated properly, we can take a look at our means and standard errors (se = standard deviation/square root of number of samples)!
+
+```{r}
+# view the summary dataframe
+kable(sum_df)
+```
+***
+And save the data to Excel.
+
+```{r}
+# save to excel
+write.csv(sum_df, "adx37_sum_stats.csv")
+```
+
+***
+  
+### Plotting summary statistics
+  
+There is an important distinction between personal use graphs and publication graphs. We don't want to necessarily spend a large chunk of time making an exploratory graph JUST PERFECT, if we might end up discarding it. The first graph below is fine for just taking a look at the data. We will work on making a publication grade graph later on.
+
+**Things to keep in mind**
+a) Do we want colors? Background and by treatment?
+b) Are our facets (graph panes) organized in the optimal way?
+```{r}
+g <- ggplot(data = sum_df, # add the data
+       aes(x = drug_treatment,  #set x, y coordinates
+           y = mmse_mean,
+           group = drug_treatment,  # group by treatment
+           color = drug_treatment)) +    # color by treatment
+  geom_point(size = 3) + # set size of the dots
+  facet_grid(sex~health_status) # create facets by sex and status
+g
+```
+
+We can now see that the graph is properly sorted by drug treatment and by health status. We still have some work to do on the final graph, but let’s move on to the ANOVAs first!
+  
+    
+***
+  
+  
+  
+### Statistics
+  
+  
+We will be prepping a dataframe for analysis via ANOVA. We need to again make sure we have our factors as factors via `mutate`, and in the correct order. This is necessary for the ANOVA/post-hoc testing to work, and to make the post-hocs and the ANOVA outputs easier to read.
+  
+  
+  
+```{r}
+# set up the statistics df
+stats_df <- raw_df %>% # start with data
+   mutate(drug_treatment = factor(drug_treatment, levels = c("Placebo", "Low dose", "High Dose")),
+         sex = factor(sex, labels = c("Male", "Female")),
+         health_status = factor(health_status, levels = c("Healthy", "Alzheimer's")))
+
+glimpse(stats_df)
+```
+***
+That gets our dataframe into working status!
+***
+
+
+### ANOVA
+  
+Calling the ANOVA is a done via the `aov` function. The basic syntax is shown via pseudocode below. We put the dependent variable first (mmse in our case), then a ~ then the independent variable we want to test. Lastly we specify what data to use.
+
+this code wont work, its pseudocode code!
+
+```{r, eval = F}
+# pseudocode example of ANOVA call
+aov(dependent_variable ~ independent variable, data = data_df)
+```
+***
+  
+  Because we have 3 independent variables we have a choice to make. We can simply look for main effects by adding a + in between each of our variables, or we can look for both main effects and interactions by adding a `*` between each variable. Make sure to not replace the `+` or `*` with commas, as that will lead to an error!
+  
+***
+```{r}
+# this gives main effects AND interactions
+ad_aov <- aov(mmse ~ sex * drug_treatment * health_status, 
+        data = stats_df)
+```
+***
+```{r, eval = F}
+# this would give ONLY main effects
+ad_aov <- aov(mmse ~ sex + drug_treatment + health_status, data = stats_df)
+```
+
+
+  
+Now that the data frame is ready to go we can move on to calling the ANOVA via `aov` and inputting our formula. By using `*` in between our variables we can do the main effects and interactions of those terms. Importantly the variables need to be factors for them to work in both the `aov` call and the subsequent post-hoc pairwise comparisons.
+  
+  
+***
+  
+```{r}
+# look at effects and interactions
+summary(ad_aov)
+```
+We can see significant main effects of drug treatment, health status, and an interaction of drug treatment by health status. Importantly, we did not see a significant effect of sex, which is also important. Exciting! We can use the pairwise comparisons to find where any specific differences are in the comparisons. But first, let's use `broom::tidy` to coerce the ANOVA output into a nice tidy dataframe and save to Excel.
+  
+```{r}
+# this extracts ANOVA output into a nice tidy dataframe
+tidy_ad_aov <- tidy(ad_aov)
+
+# which we can save to Excel
+write.csv(tidy_ad_aov, "ad_aov.csv")
+```
+
+### Post-hocs > Post-docs (academia jokes < dad jokes)
+
+We have multiple ways of looking at post-hocs. I will show two in this section.
+
+For the pairwise, we need to use the `$` to select columns from each of the dataframes and look at the interaction via `:`. Our first pairwise has NO correction for multiple comparisons, and is comparable to a unprotected Fisher’s-LSD post-hoc. This is not stringent at all, and given the amount of comparisons we have it is advisable to either move forward with a p.adjusting Bonferonni correction (change `p.adj = “none”` to `p.adj = “bonf”`) or the Tukey post-hoc test seen in the next example. You can see that this method is a little jumbled to read due to the `dataset$column` method and the need for `:` in between each interaction. We can read this as we want pairwise.t.test for the interaction of sex by drug_treatment by health_status, which gives us every iteration of these factors against the other.
+
+***
+  
+
+```{r}
+# pairwise t.tests
+ad_pairwise <- pairwise.t.test(stats_df$mmse,
+                               stats_df$sex:stats_df$drug_treatment:stats_df$health_status, 
+                               p.adj = "none")
+```
+
+
+
+We need to tidy the output and save it to an Excel file for long-term storage.
+```{r}
+# look at the posthoc p.values in a tidy dataframe
+kable(head(tidy(ad_pairwise)))
+
+# tidy
+tidy_ad_pairwise <- tidy(ad_pairwise)
+
+# save to excel
+write.csv(tidy_ad_pairwise, "tidy_ad_pairwise.csv")
+```
+
+
+***
+The Tukey post-hoc is a little cleaner to call, and is preferable to the unadjusted pairwise t-test. Notice we also are already wrapping the Tukey results in broom::tidy to save as a tidy dataframe! The TukeyHSD call incorporates the results of the ANOVA call, and is preferable to the previous method.
+
+The following code can be read as we want a Tukey post-hoc test on the results of our ad_aov ANOVA across the interactions of sex by drug_treatment by health_status. Notice the quotation marks around ‘sex:drug_treatment:health_status’ and the : in between each variable. These are necessary to tell R how we want the Tukey to be run! Once this is done, R then runs tidy on it to make it into a nice dataframe similar to our previous pairwise test. We can then save the results to Excel! We will wrap our Tukey call with the `broom::tidy` function to coerce the list output into a dataframe.
+
+  
+  
+***
+  
+```{r}
+# call and tidy the tukey posthoc
+tidy_ad_tukey <- tidy(
+                      TukeyHSD(ad_aov, 
+                              which = 'sex:drug_treatment:health_status')
+                      )
+# save to excel
+write.csv(tidy_ad_tukey, "tukey_ad.csv")
+
+kable(head(tidy_ad_tukey))
+```
+
+```{r, eval = F}
+# write the posthocs to excel
+write.csv(rr_last_pairwise, "rr_last_post-hoc.csv")
+write.csv(rr_last_tukey, "rr_last_tukey_post-hoc.csv")
+```
+  
+***
+  
+### Publication plot
+Now that we have our ANOVA results, we can work on a publication-grade plot. We will spend more time with custom adjustments to get it JUST RIGHT.
+
+We don't want color here, and we want to make sure all of our variables are "ordered" properly. Additionally, based on where there is a significant difference as determined by both the ANOVA and the Tukey post-hoc, we will indicate significance. I like to indicate significance with a `*` over the data point of interest.
+
+We will use the `tribble` function to create a handmade dataframe which we fill with the points that need significance labels.
+
+```{r}
+# an example of how tribble works
+# label the columns with ~
+# then fill columns with rows of data
+tribble(
+  ~colA, ~colB,
+  "a",   1,
+  "b",   2,
+  "c",   3
+)
+```
+
+***
+And here is our actual code for making the custom dataframe.
+
+
+
+```{r}
+sig_df <- tribble(
+  ~drug_treatment, ~ health_status, ~sex, ~mmse_mean,
+  "Low dose", "Alzheimer's", "Male", 17,
+  "High Dose", "Alzheimer's", "Male", 25,
+  "Low dose", "Alzheimer's", "Female", 18, 
+  "High Dose", "Alzheimer's", "Female", 24
+  )
+
+sig_df <- sig_df %>% 
+  mutate(drug_treatment = factor(drug_treatment, levels = c("Placebo", "Low dose", "High Dose")),
+         sex = factor(sex, levels = c("Male", "Female")),
+         health_status = factor(health_status, levels = c("Healthy", "Alzheimer's")))
+sig_df
+```
+***
+Now that we have this data frame, we can use it in a geom_text call to label our bars with significance labels as indicated by a *. 
+
+Here is what the final publication graph looks like in ggplot2 code. You’ll notice I assigned it to g1 rather than just calling it directly. This means I will have to call g1 to view the graph, but I can save it now! To read what we are doing, I am calling the initial ggplot call as before, but adding an error bar layer, a bar graph layer, separating into panes for sex and health_status, switching to an alternate appearance (theme_bw), setting the colors manually, making minor adjustments via theme, adding the * for indication of significance, and lastly altering the axis labels while adding a figure caption.
+***
+
+```{r}
+# plot of cognitive function health and drug treatment
+g1 <- ggplot(data = sum_df, 
+       aes(x = drug_treatment, y = mmse_mean, fill = drug_treatment,  
+           group = drug_treatment)) +
+  geom_errorbar(aes(ymin = mmse_mean - mmse_se, 
+                    ymax = mmse_mean + mmse_se), width = 0.5) +
+  geom_bar(color = "black", stat = "identity", width = 0.7) +
+  
+  facet_grid(sex~health_status) +
+  theme_bw() +
+  scale_fill_manual(values = c("white", "grey", "black")) +
+  theme(legend.position = "NULL",
+        legend.title = element_blank(),
+        axis.title = element_text(size = 20),
+        legend.background = element_blank(),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 12)) +
+  geom_text(data = sig_df, label = "*", size = 8) +
+  labs(x = "\nDrug Treatment", 
+       y = "Cognitive Function (MMSE)\n",
+       caption = "\nFigure 1. Effect of novel drug treatment AD-x37 on cognitive function in healthy and demented elderly adults. \nn = 100/treatment group (total n = 600), * indicates significance at p < 0.001")
+g1
+
+```
+  
+***
+Lastly we can save our publication graph as a .png file!
+```{r, eval = F}
+# save the graph!
+ggsave("ad_publication_graph.png", g1, height = 7, width = 8, units = "in")
+```
