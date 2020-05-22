@@ -1,0 +1,67 @@
+---
+title: "Writing Functions In R"
+output: html_document
+---
+
+
+# Part 1
+Creating our first R function. Hello World!
+```{r}
+
+hello_world<-function(){
+  print('Hello, World')
+}
+
+```
+
+Now let's execute our first function 
+```{r}
+hello_world()
+```
+
+Let's experiment with adding arguments. 
+```{r}
+
+paste('Hello', name) # this is the action we want done for different names
+
+```
+
+
+
+# Part 2
+Set up read in df
+```{r}
+temp_df<-read_csv('temp_data.csv')
+additive_df<-read_csv('additive_data.csv')
+
+```
+
+# Here is the Code to convert the temp_df to our summary df
+```{r}
+time <- max(f$Time)
+df %>% 
+  pivot_wider(names_from = Time, values_from = Value) %>% 
+  rename(Time_0='0', Time_24='24') %>%
+  mutate(Rate= Time_24-Time_0/time) %>% 
+  group_by(Treatment) %>% 
+  summarize(Average_rate = mean(Rate), Std_Dev=sd(Rate), n=n())
+```
+
+
+The skeleton of a function
+```{r}
+name <- function(variables) {
+  
+}
+```
+
+Try applying the function to the temp_df to create temp_df_summary
+```{r}
+# Execute function with temp_df as argument variable
+```
+
+Now let's apply the function to get summary data set for the additive experiment data
+```{r}
+# Apply the function
+```
+
