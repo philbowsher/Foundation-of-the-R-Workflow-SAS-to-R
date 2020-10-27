@@ -481,9 +481,10 @@ unite() combines multiple columns into a single column
 
 ```{r}
 
-hdi <- read_csv("https://stat.duke.edu/~mc301/data/hdi.csv")
+library(readr)
+hdi <- read_csv("~/Foundation-of-the-R-Workflow-workshop-2019-09-06/Examples/data/hdi.csv")
 
-View(hdi)
+hdi
 
 ```
 
@@ -494,7 +495,7 @@ library(tidyr)
 library(stringr)
 hdi_long <- gather(hdi, key = year, value = hd_index, hdi_1980:hdi_2011)
 
-View(hdi_long)
+hdi_long
 
 ```
 
@@ -504,7 +505,7 @@ Let's do a little bit better…
 hdi_long2 <- hdi_long %>%
   mutate(year = as.numeric(str_replace(year, "hdi_", "")))
 
-View(hdi_long2)
+hdi_long2
 ```
 
 Long to wide data with spread
@@ -512,7 +513,7 @@ Long to wide data with spread
 ```{r}
 hdi_wide <- spread(hdi_long2, key = year, value = hd_index)
 
-View(hdi_wide)
+hdi_wide
 ```
 
 
