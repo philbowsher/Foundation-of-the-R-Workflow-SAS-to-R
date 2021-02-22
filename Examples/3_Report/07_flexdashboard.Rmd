@@ -15,7 +15,7 @@ library(plotly)
 year <- '2020'
 hospital <- 'rhode island hospital'
 
-data <- read_csv('simulated_patient_data.csv') %>% 
+data <- read_csv('~/Foundation-of-the-R-Workflow-workshop-2019-09-06/Examples/data/simulated_patient_data.csv') %>% 
   mutate(start_date = as_date(start)) %>% 
   filter(year(start)==year, name == hospital)
 
