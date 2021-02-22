@@ -1,0 +1,85 @@
+---
+title: Simulated Hospital Encounter Data Dashboard
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+params:
+  year: '2020'
+  hospital:
+    label: "Hospital:"
+    value: 'rhode island hospital'
+    input: select
+    choices: ['rhode island hospital', 'butler hospital', 'our lady of fatima hospital', 'newport hospital', 'memorial hospital of rhode island', 'westerly hospital', 'women & infants hospital of rhode island', 'south county hospital', 'the miriam hospital', 'kent county memorial hospital']
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(lubridate)
+library(plotly)
+
+year <- params$year
+hospital <- params$hospital
+
+# Get pinned data
+
+board_register("rsconnect",
+               server = Sys.getenv("CONNECT_SERVER"),
+               key = Sys.getenv("CONNECT_SERVER_KEY"))
+
+
+pin <- pin_get("simulated_hospital_visits", board = "rsconnect")
+  
+  
+data <- pin %>% 
+  mutate(start_date = as_date(start)) %>% 
+  filter(year(start)==year, name == hospital)
+
+visits_by_date <- data %>% 
+  count(name,start_date)
+
+visits_by_reason <- data %>% 
+           count(reasondescription)
+
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Encounters by Date
+
+```{r}
+visits_by_date <- visits_by_date %>% mutate(wday = wday(start_date, label=T))
+
+plot_ly(visits_by_date,x = ~start_date, y= ~n,
+        text = ~paste("Total Encounters: ", n, '<br>Date', start_date, '<br>Weekday: ', wday))
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Top Encounter reason
+
+```{r}
+visits_by_reason %>% top_n(10, n) %>% drop_na() %>% 
+  ggplot()+
+  geom_col(aes(y=reorder(reasondescription, n), x=n), fill='mediumblue')+
+  theme_classic()+
+  xlab('Number of Encounters')+
+  ylab('') 
+
+```
+
+### Top 10 Encounter Types
+
+```{r}
+data %>% count(description) %>% drop_na() %>%  top_n(10,n) %>% 
+  ggplot()+
+  geom_col(aes(y=reorder(description, n), x=n), fill='darkgreen')+
+  theme_classic()+
+  xlab('Number of Encounters')+
+  ylab('')
+```
+

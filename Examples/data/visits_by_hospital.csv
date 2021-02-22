@@ -1,0 +1,46 @@
+name,encounterclass,n,total_visits
+butler hospital,wellness,5,5
+hospital medicine associates llc,wellness,91,91
+kent county memorial hospital,ambulatory,36107,59329
+kent county memorial hospital,emergency,4345,59329
+kent county memorial hospital,inpatient,4216,59329
+kent county memorial hospital,outpatient,14601,59329
+kent county memorial hospital,wellness,60,59329
+memorial hospital of rhode island,ambulatory,17656,30176
+memorial hospital of rhode island,emergency,2216,30176
+memorial hospital of rhode island,inpatient,2277,30176
+memorial hospital of rhode island,outpatient,7966,30176
+memorial hospital of rhode island,wellness,61,30176
+newport hospital,ambulatory,14993,25565
+newport hospital,emergency,1800,25565
+newport hospital,inpatient,1317,25565
+newport hospital,outpatient,7194,25565
+newport hospital,wellness,261,25565
+our lady of fatima hospital,ambulatory,31721,54498
+our lady of fatima hospital,emergency,4063,54498
+our lady of fatima hospital,inpatient,3363,54498
+our lady of fatima hospital,outpatient,15351,54498
+rhode island hospital,ambulatory,7515,12613
+rhode island hospital,emergency,747,12613
+rhode island hospital,inpatient,527,12613
+rhode island hospital,outpatient,2955,12613
+rhode island hospital,wellness,869,12613
+south county hospital,ambulatory,14359,25021
+south county hospital,emergency,1600,25021
+south county hospital,inpatient,1449,25021
+south county hospital,outpatient,5392,25021
+south county hospital,urgentcare,2221,25021
+the miriam hospital,ambulatory,6685,13003
+the miriam hospital,emergency,954,13003
+the miriam hospital,inpatient,800,13003
+the miriam hospital,outpatient,3789,13003
+the miriam hospital,wellness,775,13003
+westerly hospital,ambulatory,6943,11384
+westerly hospital,emergency,725,11384
+westerly hospital,inpatient,874,11384
+westerly hospital,outpatient,2842,11384
+women & infants hospital of rhode island,ambulatory,16644,28080
+women & infants hospital of rhode island,emergency,1867,28080
+women & infants hospital of rhode island,inpatient,1584,28080
+women & infants hospital of rhode island,outpatient,7928,28080
+women & infants hospital of rhode island,wellness,57,28080

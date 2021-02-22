@@ -1,0 +1,69 @@
+---
+output: html_document
+---
+
+# 2020 Encounter Report for Rhode Island Hospital 
+
+Encounter reasons and visits by date from a simulated population of 10k Rhode Islanders. 
+
+Data simulated using synthea: https://github.com/synthetichealth/synthea
+
+```{r include=FALSE}
+library(tidyverse)
+library(lubridate)
+
+year <- '2020'
+hospital <- 'rhode island hospital'
+
+data <- read_csv('simulated_patient_data.csv') %>% 
+  mutate(start_date = as_date(start)) %>% 
+  filter(year(start)==year, name == hospital)
+
+visits_by_date <- data %>% 
+  count(name,start_date)
+
+visits_by_reason <- data %>% 
+           count(reasondescription)
+
+top_condition <- data %>% count(reasondescription) %>% drop_na() %>%  top_n(1) %>% pull(reasondescription)
+
+top_encounter_type <- data %>% count(description) %>% drop_na() %>%  top_n(1) %>% pull(description)
+```
+
+## Overview
+*  **`r n_distinct(data$patient)`** individuals visiting
+* **`r top_encounter_type`** was the top encounter type
+*   **`r top_condition`** was the top condition targeted during encounters  
+
+## Top 10 reasons for visit
+
+```{r}
+visits_by_reason %>% top_n(10, n) %>% drop_na() %>% 
+  ggplot()+
+  geom_col(aes(y=reorder(reasondescription, n), x=n), fill='mediumblue')+
+  theme_classic()+
+  xlab('Number of Encounters')+
+  ylab('')
+```
+
+## Encounters by date
+
+```{r}
+ggplot(visits_by_date)+
+  geom_line(aes(x=start_date, y=n))+
+  xlab('Date')+
+  ylab('Number of Encounters')+
+  theme_classic()
+```
+  
+## Top Encounter Types  
+
+```{r}
+data %>% count(description) %>% drop_na() %>%  top_n(10,n) %>% 
+  ggplot()+
+  geom_col(aes(y=reorder(description, n), x=n), fill='darkgreen')+
+  theme_classic()+
+  xlab('Number of Encounters')+
+  ylab('')
+```
+

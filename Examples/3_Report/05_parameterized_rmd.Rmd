@@ -1,0 +1,79 @@
+---
+output: html_document
+params:
+  year: '2020'
+  hospital:
+    label: "Hospital:"
+    value: 'rhode island hospital'
+    input: select
+    choices: ['rhode island hospital', 'butler hospital', 'our lady of fatima hospital', 'newport hospital', 'memorial hospital of rhode island', 'westerly hospital', 'women & infants hospital of rhode island', 'south county hospital', 'the miriam hospital', 'kent county memorial hospital']
+---
+```{r include=FALSE}
+library(tidyverse)
+library(lubridate)
+library(stringr)
+
+```
+
+# `r params$year` Encounter Report for `r str_to_title(params$hospital)` 
+
+Encounter reasons and visits by date from a simulated population of 10k Rhode Islanders. 
+
+Data simulated using synthea: https://github.com/synthetichealth/synthea
+
+```{r include=FALSE}
+year <- params$year
+hospital <- params$hospital
+
+data <- read_csv('simulated_patient_data.csv') %>% 
+  mutate(start_date = as_date(start)) %>% 
+  filter(year(start)==year, name == hospital)
+
+visits_by_date <- data %>% 
+  count(name,start_date)
+
+visits_by_reason <- data %>% 
+           count(reasondescription)
+
+top_condition <- data %>% count(reasondescription) %>% drop_na() %>%  top_n(1) %>% pull(reasondescription)
+
+top_encounter_type <- data %>% count(description) %>% drop_na() %>%  top_n(1) %>% pull(description)
+```
+
+## Overview
+*  **`r n_distinct(data$patient)`** individuals visiting
+* **`r top_encounter_type`** was the top encounter type
+*   **`r top_condition`** was the top condition targeted during encounters  
+
+## Top 10 reasons for visit
+
+```{r echo=FALSE}
+visits_by_reason %>% top_n(10, n) %>% drop_na() %>% 
+  ggplot()+
+  geom_col(aes(y=reorder(reasondescription, n), x=n), fill='mediumblue')+
+  theme_classic()+
+  xlab('Number of Encounters')+
+  ylab('')
+```
+
+## Encounters by date
+
+```{r echo=FALSE}
+ggplot(visits_by_date)+
+  geom_point(aes(x=start_date, y=n))+
+  xlab('Date')+
+  ylab('Number of Encounters')+
+  theme_classic()
+```
+  
+## Top Encounter Types  
+
+```{r echo=FALSE}
+data %>% count(description) %>% drop_na() %>%  top_n(10,n) %>% 
+  ggplot()+
+  geom_col(aes(y=reorder(description, n), x=n), fill='darkgreen')+
+  theme_classic()+
+  xlab('Number of Encounters')+
+  ylab('')
+```
+
