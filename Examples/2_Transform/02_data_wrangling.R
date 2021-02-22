@@ -1,5 +1,5 @@
 ## Import visits_by_date.csv
-visits_by_date<- read_csv('visits_by_date.csv')
+visits_by_date<- read_csv('~/Foundation-of-the-R-Workflow-workshop-2019-09-06/Examples/data/visits_by_date.csv')
 # Data simulated using synthea: https://github.com/synthetichealth/synthea
 
 # Filter by year
@@ -25,7 +25,7 @@ rih_2 <- visits_by_date %>%
        select(name, start_date, n)
 
 # Import visits_by_hospital
-visits_by_hospital<-read_csv('visits_by_hospital.csv')
+visits_by_hospital<-read_csv('~/Foundation-of-the-R-Workflow-workshop-2019-09-06/Examples/data/visits_by_hospital.csv')
 
 # filter for just newport hospital
 newport_hosp<- visits_by_hospital %>%  
