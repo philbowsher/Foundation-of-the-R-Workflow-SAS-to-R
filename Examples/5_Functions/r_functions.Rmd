@@ -1,0 +1,313 @@
+---
+title: "R Functions"
+author: "Jeremy Allen"
+date: "9/30/2021"
+output: html_document
+---
+
+```{r}
+
+library(tidyverse)
+
+```
+
+# Writing functions in R
+
+```{r}
+
+# This is a function's structure
+# This is how you define a function
+# We will see more on this in a bit
+
+name_it <- function(arguments) {
+  "body: magic code goes here"
+}
+
+```
+
+Consider writing a function whenever you've copied and pasted a block of code more than twice
+
+```{r}
+
+df <- tibble::tibble(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
+
+# rescale each column to have a range from 0 to 1.
+
+df$a <- (df$a - min(df$a, na.rm = TRUE)) / (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+
+df$b <- (df$b - min(df$b, na.rm = TRUE)) / (max(df$b, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+
+df$c <- (df$c - min(df$c, na.rm = TRUE)) / (max(df$c, na.rm = TRUE) - min(df$c, na.rm = TRUE))
+
+df$d <- (df$d - min(df$d, na.rm = TRUE)) / (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+
+```
+
+To write a function you need to first analyse the code. How many inputs does it have?
+
+```{r}
+
+(df$a - min(df$a, na.rm = TRUE)) / (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+
+```
+
+This code only has one input. Let's turn it into a temporary variable and replace it in our code.
+
+```{r}
+
+x <- df$a
+
+(x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+
+```
+
+We're computing the range of the data three times, so it makes sense to do it in one step.
+
+```{r}
+
+rng <- range(x, na.rm = TRUE)
+
+(x - rng[1]) / (rng[2] - rng[1])
+
+```
+
+Pulling out intermediate calculations into named variables is a good practice because it makes it more clear what the code is doing.
+
+```{r}
+
+# Let's make a function!
+
+name_it <- function(arguments) {
+  "body: magic code goes here"
+}
+
+
+rescale01 <- function(x) {
+  rng <- range(x, na.rm = TRUE)       # intermediate calculation
+  (x - rng[1]) / (rng[2] - rng[1])    # using both x and rng in the calculation
+}
+
+rescale01(c(0, 5, 10))
+
+```
+
+I only made the function after I'd figured out how to make it work with a simple input. It's easier to start with working code and turn it into a function; it's harder to create a function and then try to make it work.
+
+We can simplify the original example now that we have a function:
+
+```{r}
+
+# original
+
+# rescale each column to have a range from 0 to 1.
+
+df$a <- (df$a - min(df$a, na.rm = TRUE)) / (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+
+df$b <- (df$b - min(df$b, na.rm = TRUE)) / (max(df$b, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+
+df$c <- (df$c - min(df$c, na.rm = TRUE)) / (max(df$c, na.rm = TRUE) - min(df$c, na.rm = TRUE))
+
+df$d <- (df$d - min(df$d, na.rm = TRUE)) / (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+
+
+# now using our new function
+
+df$a <- rescale01(df$a)
+df$b <- rescale01(df$b)
+df$c <- rescale01(df$c)
+df$d <- rescale01(df$d)
+
+assertthat::is.date("a")
+
+```
+
+Another advantage of functions is that if our requirements change, we only need to make the change in one place. For example, we might discover that some of our variables include infinite values, and rescale01() fails:
+
+```{r}
+
+x <- c(1:10, Inf)
+
+rescale01(x)
+
+```
+
+Fix in one place
+
+```{r}
+
+rescale01 <- function(x) {
+  rng <- range(x, na.rm = TRUE, finite = TRUE) # single fix by adding an argument inside the function
+  (x - rng[1]) / (rng[2] - rng[1])
+}
+
+rescale01(x)
+
+```
+
+Naming things is hard! The name of a function is important.
+
+Ideally, the name of your function will be short, but clearly evoke what the function does.
+
+That's hard! But it's better to be clear than short, as RStudio's autocomplete makes it easy to type long names.
+
+-   function names should be **verbs**
+
+-   arguments should be **nouns**
+
+If you have a family of functions that do similar things, make sure they have consistent names and arguments. Use a common prefix to indicate that they are connected.
+
+```{r}
+
+library(stringr)
+
+str_
+
+```
+
+How inspect inside a function? Run it without arguments and without parentheses!
+
+```{r}
+
+str_c
+
+```
+
+**Avoid overriding existing functions and variables when you name your function!**
+
+Can we give this function a better name?
+
+```{r}
+
+f2 <- function(x) {
+  if (length(x) <= 1) return(NULL)
+  x[-length(x)]
+}
+
+f2("cats")
+f2(c("cats", "dogs"))
+f2(c(1:9))
+
+```
+
+If you need too many if statements, use switch
+
+```{r}
+
+operate <- function(x, y, op) {
+  
+  if (op == "plus") {
+    x + y
+  } else if (op == "minus") {
+    x - y
+  } else if (op == "mulitply") {
+    x * y
+  } else {
+    stop("Unknown op!")
+  }
+}
+
+operate_better <- function(x, y, op) {
+  
+ switch(op,
+   plus = x + y,
+   minus = x - y,
+   times = x * y,
+   stop("Unknown op!")
+ )
+  
+}
+
+operate(1, 2, "plus")
+operate_better(1, 2, "plus")
+
+```
+
+**Generally, the data argument should be first, then other arguments**
+
+## ------------------------------------------------------------------------
+
+### A function caught in the wild
+
+As you start to write more functions, you'll eventually get to the point where you don't remember exactly how your function works. At this point it's easy to call your function with invalid inputs. To avoid this problem, it's often useful to make constraints explicit.
+
+**I wrote this function in 2018! Does it even still work?**
+
+**Thankfully, I wrote many explanatory comments inside the function itself**
+
+```{r}
+
+order_months <- function(x = NULL, label = "abb") {
+  
+  # This function takes a given month number or the current month
+  # number and returns a character vector of the last 12 months,
+  # including current month. For example, if it is now February: 
+  # "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec" "Jan" "Feb"
+  # is returned with the current month at the end.
+  # This makes a nice x axis if you need to plot something for
+  # the "last 12 months".
+  # if x is NULL the current month is taken from Sys.Date
+  # if x is given, x must be 1-12
+  # if label is "abb", month names are abbreviated
+  # if label is "names", month names are full
+  
+  # stop if x is out of bounds
+  if(!is.null(x))
+    if(x > 12 | x < 1) stop("x must be 1-12")
+  
+  # sets of named integers using abbreviated and full month names
+  months_abb <- setNames(1:12, month.abb)
+  months_names <- setNames(1:12, month.name)
+  
+  # current month number
+  m <- as.POSIXlt(Sys.Date())$mon + 1
+  
+  # get a value for x
+  if(is.null(x)) x <- m + 1 else x <- x + 1
+  
+  # a and b components for main if
+  # if x is 1 or 12
+  a <- 1:12
+  # if x is 2 through 12
+  b <- c(
+    x:12,
+    1:(x-1)
+    )
+  
+  # main if
+  if(x == 1 | x == 13) new_order <- a else new_order <- b
+
+  # use new_order to set desired order of months
+  if(label == "abb") my_month_order <- names(months_abb[new_order])
+  if(label == "names") my_month_order <- names(months_names[new_order])
+  
+  my_month_order
+  
+}
+
+#order_months()
+
+```
+
+Test it on all months
+
+```{r}
+
+purrr::map(c(1:12), order_months)
+
+```
+
+## BONUS: Run the order_months() function, but make it output full month names not abbreviated names
+
+## ------------------------------------------------------------------------
+
+## ------------------------------------------------------------------------
+
+
+# References
+
+[R for Data Science](https://r4ds.had.co.nz/functions.html)
