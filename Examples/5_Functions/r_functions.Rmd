@@ -3,6 +3,8 @@ title: "R Functions"
 author: "Jeremy Allen"
 date: "9/30/2021"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r}
@@ -19,9 +21,13 @@ library(tidyverse)
 # This is how you define a function
 # We will see more on this in a bit
 
-name_it <- function(arguments) {
+verb <- function(arguments) {
   "body: magic code goes here"
 }
+
+# use it
+
+verb()
 
 ```
 
@@ -82,7 +88,7 @@ Pulling out intermediate calculations into named variables is a good practice be
 
 # Let's make a function!
 
-name_it <- function(arguments) {
+verb <- function(arguments) {
   "body: magic code goes here"
 }
 
@@ -306,6 +312,43 @@ purrr::map(c(1:12), order_months)
 ## ------------------------------------------------------------------------
 
 ## ------------------------------------------------------------------------
+
+```{r}
+
+library(lubridate)
+
+covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv")
+
+covid <- covid %>% 
+  mutate(month = month(date, label = TRUE),
+         year = year(date))
+
+month_deaths <- covid %>% 
+  group_by(year, month) %>% 
+  arrange(year, month) %>% 
+  summarise(us_deaths = last(deaths)) %>% 
+  ungroup()
+
+my_months <- order_months()
+
+last_12 <- month_deaths %>% 
+  slice(10:n()) %>% 
+  mutate(month = factor(month, levels = my_months, ordered = TRUE))
+
+last_12 %>% 
+  ggplot(aes(x = month, y = us_deaths)) +
+  geom_col(fill = "black") +
+  labs(
+    title = "Cumulative COVID-19 Deaths in the US",
+    subtitle = "by month for the last 12 months",
+    caption = " data from NYT",
+    x = NULL,
+    y = "cumulative deaths"
+  ) +
+  theme_minimal()
+
+```
+
 
 
 # References
