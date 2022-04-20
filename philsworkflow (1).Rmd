@@ -1,0 +1,50 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+packages
+```{r setup}
+library(readr)
+library(dplyr)
+library(stringr)
+```
+
+1. Import data
+
+```{r}
+starbucks <- read_csv("Examples/data/starbucks.csv") %>% filter(grepl('A|B|C|D|E|F|G|H|I|J', State))
+  
+  
+starbucks
+```
+
+2. Cleaning up the data
+
+```{r}
+
+
+
+starbucks_CO <- starbucks %>%
+ filter(`Ownership Type` %in% "Company Owned") %>%
+ filter(!(`Features - Service` %in% "Wireless Hotspot") | 
+ is.na(`Features - Service`)) %>%
+ filter(`Venue Type` %in% "Unknown")
+
+starbucks_CO
+
+
+```
+
+3. Data Viz
+
+```{r}
+
+```
+
+3.5 Interactive Viz
+
+```{r}
+
+```
+
