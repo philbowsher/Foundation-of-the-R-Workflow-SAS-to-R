@@ -24,7 +24,7 @@ library("leaflet")
 
 leaflet() %>% addTiles() %>% setView(-70.275740, 43.653360, zoom = 9) %>% 
   
-  addMarkers(data = Torn1, lat = ~ slat, lng = ~ slon, popup = Torn1$date)
+  addCircleMarkers(data = Torn1, lat = ~ slat, lng = ~ slon, popup = Torn1$date)
 
 # Torn2 <- as_tibble(Torn1)
 
