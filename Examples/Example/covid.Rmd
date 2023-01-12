@@ -1,0 +1,133 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Fun example for learning dplyr and tidyr not to be used for interpretation or analysis. Customized from here: https://rpubs.com/cholland9/885458
+
+County population downloaded from here https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html#par_textimage
+
+Example data is for Cali and Indiana
+
+co-est2021-pop-06.xlsx - cali
+co-est2021-pop-18 (1) - Indy
+
+
+```{r}
+library(tidyverse)
+
+covid_raw <- read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv")
+
+
+
+```
+
+```{r}
+nrow (covid_raw)
+```
+
+
+```{r}
+ncol(covid_raw)
+```
+
+```{r}
+covid <- select(covid_raw, state= "Province_State", county= "Admin2", contains("/") )
+
+covid
+```
+
+```{r}
+nrow(covid)
+```
+
+```{r}
+ncol(covid)
+```
+
+```{r}
+covid <- filter(covid, state== "California")
+```
+
+```{r}
+nrow(covid)
+```
+
+```{r}
+ncol(covid)
+```
+
+```{r}
+covid_long <- pivot_longer(covid, names_to = "date", values_to = "c_cases", cols = contains("/"))
+
+covid_long
+```
+
+
+```{r}
+nrow(covid_long)
+```
+
+```{r}
+library(lubridate)
+covid_long <- mutate(covid_long, date=mdy(date))
+covid_long
+```
+
+```{r}
+covid_long <- filter(covid_long, date <= as.Date("2022-02-15"))
+```
+
+```{r}
+nrow(covid_long)
+```
+
+```{r}
+covid_long <- group_by(covid_long, county)
+```
+
+
+```{r}
+covid_long <- arrange(covid_long, date)
+```
+
+
+```{r}
+covid_long <- mutate(covid_long, cases = c_cases - lag(c_cases, n=1L, default=0))
+```
+
+
+```{r}
+covid_last <- summarize (covid_long, total_cases=sum(c_cases))
+nrow(covid_last)
+ncol(covid_last)
+
+covid_last
+```
+
+```{r}
+library(readxl)
+mnpops <- read_excel("co-est2021-pop-06.xlsx")
+mnpops
+
+```
+
+```{r}
+covid_last <- inner_join(covid_last, mnpops)
+covid_last
+```
+
+```{r}
+covid_last <- mutate(covid_last, per100k = total_cases / pop2020 * 100000)
+
+covid_last
+```
+
+
+```{r}
+top10 <- slice_max(covid_last, per100k, n=10)
+top10
+```
+
+
+
