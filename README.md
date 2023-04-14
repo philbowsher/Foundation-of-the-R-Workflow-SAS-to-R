@@ -1,4 +1,4 @@
-# Foundation of the R Workflow / SAS to R by Nichole Monhait, Derrick Kearney, Phil Bowsher
+# Foundation of the R Workflow / SAS to R by Shannon Hagerty, Jeremy Allen, Nichole Monhait, Derrick Kearney & Phil Bowsher
 
 Slides are here:
 
