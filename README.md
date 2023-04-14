@@ -2,7 +2,7 @@
 
 Slides are here:
 
-Presentations and code from workshop.
+https://github.com/philbowsher/Foundation-of-the-R-Workflow-SAS-to-R/raw/master/Foundation_of_the_R_Workflow_10272020.pdf
 
 Requires the following packages from CRAN:
 
