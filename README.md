@@ -1,4 +1,4 @@
-# Introduction to the Foundation of the R Workflow - Tidyverse, RMD & Notebooks by Nichole Monhait, Derrick Kearney, Phil Bowsher on Sept 06, 2019
+# Foundation of the R Workflow / SAS to R by Nichole Monhait, Derrick Kearney, Phil Bowsher
 
 Slides are here:
 
